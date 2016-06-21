@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Keywords>
+        <Keyword>
+        </Keyword>
+      </Keywords>
+      <SnippetTypes>
+        <SnippetType>SurroundsWith</SnippetType>
+      </SnippetTypes>
+      <Title>ModuleInstaller</Title>
+      <Author>Brago</Author>
+      <Description>ViewModel struct creation snippet.</Description>
+      <HelpUrl>
+      </HelpUrl>
+      <Shortcut>__MF_ModuleInstaller</Shortcut>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal Editable="true">
+          <ID>ModuleName</ID>
+          <ToolTip>Module Name</ToolTip>
+          <Default>ModuleName</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>ModuleConcrete</ID>
+          <ToolTip>Concrete Module Implementation</ToolTip>
+          <Default>ConcreateName</Default>
+          <Function>
+          </Function>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp" Delimiter="$" Kind="method body"><![CDATA[using System;
+using ModularFramework.Core;
+
+namespace ModularFramework.Modules {
+
+    public class $ModuleName$Module$ModuleConcrete$Installer : ModuleInstaller<I$ModuleName$Module> {
+        public $ModuleName$Module$ModuleConcrete$Settings settings;
+        public override I$ModuleName$Module InstallModule() {
+            var concreteInstance = new $ModuleName$Module$ModuleConcrete$() { Settings = settings };
+            if (concreteInstance != null)
+                ModuleActivationState = ModuleActivationStates.Activated;
+            return concreteInstance;
+        }
+    }
+}
+
+//// $ModuleName$Module Install
+//if (_gamemanagerGO.GetComponentInChildren<ModuleInstaller<I$ModuleName$Module>>()) {
+//    I$ModuleName$Module moduleInstance = _gamemanagerGO.GetComponentInChildren<ModuleInstaller<I$ModuleName$Module>>().InstallModule();
+//    $ModuleName$Module.SetupModule(moduleInstance, moduleInstance.Settings);
+//}
+
+
+/// <summary>
+/// Settings for this implementation of $ModuleName$Module.
+/// </summary>
+[Serializable]
+public class $ModuleName$Module$ModuleConcrete$Settings : IModuleSettings {
+    // Add Here setup settings properties (variables if you want to enable in editor)
+}]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

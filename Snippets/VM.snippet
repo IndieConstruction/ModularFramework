@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Keywords>
+        <Keyword>
+        </Keyword>
+      </Keywords>
+      <SnippetTypes>
+        <SnippetType>SurroundsWith</SnippetType>
+      </SnippetTypes>
+      <Title>ViewModel</Title>
+      <Author>Brago</Author>
+      <Description>ViewModel struct creation snippet.</Description>
+      <HelpUrl>
+      </HelpUrl>
+      <Shortcut>__VM</Shortcut>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal Editable="true">
+          <ID>ModelClassName</ID>
+          <ToolTip>Name of Model Class</ToolTip>
+          <Default>MyModelClassName</Default>
+          <Function>
+          </Function>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp" Delimiter="$" Kind="method body"><![CDATA[
+/// <summary>
+/// ViewModelDescription
+/// </summary>
+public class $ModelClassName$View : View<$ModelClassName$> {
+      
+}
+
+/// <summary>
+/// ModelModelDescription
+/// </summary>
+public class $ModelClassName$ : IModel {
+    public $ModelClassName$Settings $ModelClassName$Config;
+
+    #region $ModelClassName$ Config Section
+    [System.Serializable]
+    public class $ModelClassName$Settings : ViewModelSettings<$ModelClassName$> {
+        
+    } 
+    #endregion
+}]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

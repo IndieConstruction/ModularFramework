@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>MF_NewModuleClass</Title>
+      <Author>brago</Author>
+      <Description>
+      </Description>
+      <HelpUrl>
+      </HelpUrl>
+      <Shortcut>__MF_NewModuleClass</Shortcut>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal Editable="true">
+          <ID>ModuleName</ID>
+          <ToolTip>
+          </ToolTip>
+          <Default>NewModule</Default>
+          <Function>
+          </Function>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp" Delimiter="$"><![CDATA[using UnityEngine;
+using System;
+using System.Collections;
+using ModularFramework.Core;
+
+/// <summary>
+/// Modules System with strategy pattern implementation.
+/// </summary>
+namespace ModularFramework.Modules {
+    /// <summary>
+    /// This is the Context implementation of this Module type with all functionalities provided from the Strategy interface.
+    /// </summary>
+    public class $ModuleName$Module : I$ModuleName$Module {
+
+        #region IModule implementation
+        /// <summary>
+        /// Concrete Module Implementation.
+        /// </summary>
+        public I$ModuleName$Module ConcreteModuleImplementation { get; set; }
+        public IModuleSettings Settings { get; set; }
+
+        /// <summary>
+        /// Module Setup.
+        /// </summary>
+        /// <param name="_concreteModule">Concrete module implementation to set as active module behaviour.</param>
+        /// <returns></returns>
+        public I$ModuleName$Module SetupModule(I$ModuleName$Module _concreteModule, IModuleSettings _settings = null) {
+            ConcreteModuleImplementation = _concreteModule.SetupModule(_concreteModule, _settings);
+            return ConcreteModuleImplementation;
+        }
+        #endregion
+    }
+
+    /// <summary>
+    /// Strategy interface. 
+    /// Provide All the functionalities required for any Concrete implementation of the module.
+    /// </summary>
+    public interface I$ModuleName$Module : IModule<I$ModuleName$Module> {
+        // Add here functionalities for the module
+    }
+}]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>MF_NewModuleConcrete</Title>
+      <Author>brago</Author>
+      <Description>
+      </Description>
+      <HelpUrl>
+      </HelpUrl>
+      <Shortcut>__MF_NewModuleConcrete</Shortcut>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal Editable="true">
+          <ID>ConcreteImplementationName</ID>
+          <ToolTip>ConcreteImplementationName</ToolTip>
+          <Default>ConcreteImplName</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>ModuleName</ID>
+          <ToolTip>ModuleName</ToolTip>
+          <Default>ModuleName</Default>
+          <Function>
+          </Function>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp" Delimiter="$"><![CDATA[using UnityEngine;
+using System.Collections;
+using ModularFramework.Core;
+
+namespace ModularFramework.Modules {
+    /// <summary>
+    /// Concrete implementation for module type $ModuleName$Module.
+    /// </summary>
+    public class $ModuleName$Module$ConcreteImplementationName$ : I$ModuleName$Module {
+
+        #region IModule Implementation
+        public I$ModuleName$Module ConcreteModuleImplementation { get; set; }
+        public IModuleSettings Settings { get; set; }
+        
+        public I$ModuleName$Module SetupModule(I$ModuleName$Module _concreteModule, IModuleSettings _settings = null) {
+            Settings = _settings;
+            // Add Here setup stuffs for this concrete implementation
+            return this;
+        }
+        #endregion
+    }
+}
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>
