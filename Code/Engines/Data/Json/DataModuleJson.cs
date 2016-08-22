@@ -50,6 +50,7 @@ namespace ModularFramework.Modules {
         /// <param name="_dataToStore"></param>
         public void SaveData(ISerializableData _dataToStore, string _filename) {
             string serializedObject = string.Empty;
+// TODO: https://trello.com/c/wARYXa5q
 #if Newtonsoft
             serializedObject = JsonConvert.SerializeObject(_dataToStore);
 #else

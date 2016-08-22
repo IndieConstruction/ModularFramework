@@ -46,6 +46,7 @@ namespace ModularFramework.Modules {
 #endregion
 
         public string GetLocalizedString(string _locStringID) {
+// TODO: https://trello.com/c/KzVlkI9k
 #if Google2u
             LocalizationDataRow row = LocalizationData.Instance.GetRow(_locStringID);
             if (row == null)
