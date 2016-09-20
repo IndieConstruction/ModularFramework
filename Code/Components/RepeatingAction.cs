@@ -15,10 +15,14 @@ namespace ModularFramework.Components {
         protected string id;
         protected float timeCounter;
 
-        public RepeatingAction(float _amountTime, string _id, bool _play = false) {
+        public delegate void RepeatingActionDelegate();
+        protected RepeatingActionDelegate actionDelegate;
+
+        public RepeatingAction(float _amountTime, string _id, RepeatingActionDelegate _delegate, bool _play = false) {
             timeCounter = 0;
             id = _id;
             beat = _amountTime;
+            actionDelegate = _delegate;
             if (_play)
                 Play();
         }
@@ -28,9 +32,7 @@ namespace ModularFramework.Components {
         /// </summary>
         public void Play() {
             updateObserver = Observable.EveryUpdate().Subscribe(x => {
-                // place here update logic
                 Update();
-                
             });
         }
 
@@ -43,8 +45,8 @@ namespace ModularFramework.Components {
 
         public void Update() {
             timeCounter += Time.deltaTime;
-            if(timeCounter >= beat) { 
-                Debug.LogFormat("{0} {1} : {2}", id, beat, timeCounter);
+            if(timeCounter >= beat) {
+                actionDelegate();
                 timeCounter = 0;
             }
         }
