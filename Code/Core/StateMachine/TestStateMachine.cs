@@ -25,11 +25,11 @@ namespace ModularFramework.Test {
 
     public class TestStateMachine : MonoBehaviour {
 
-        StateManager bm;
+        StateMachine bm;
 
         // Use this for initialization
         void Start() {
-            bm = new StateManager(new List<IState> {
+            bm = new StateMachine(new List<IState> {
             new TestStateDummy1(),
             new TestStateDummy2(),
             new TestStateDummy3(),
@@ -40,7 +40,7 @@ namespace ModularFramework.Test {
         // Update is called once per frame
         void Update() {
             for (int i = 0; i < 4; i++) {
-                bm.Change(bm.Behaviours[Random.Range(0, 4)].GetType());
+                bm.Change(bm.States[Random.Range(0, 4)].GetType());
             }
         }
     }

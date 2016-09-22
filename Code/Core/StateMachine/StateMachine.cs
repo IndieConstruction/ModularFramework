@@ -20,25 +20,30 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using ModularFramework.Helpers;
 
 namespace ModularFramework.Core {
     /// <summary>
     /// Gestisce un behaviours generico.
     /// </summary>
-    public class StateManager {
+    public class StateMachine {
 
         public IState Actual;
-        public List<IState> Behaviours = new List<IState>();
+        public List<IState> States = new List<IState>();
         MonoBehaviour view;
 
         #region constructors
         /// <summary>
         /// Costruttore. Sarà necessario richiamare la funzione Init prima di utilizzarlo.
         /// </summary>
-        /// <param name="_behaviours"></param>
-        public StateManager(List<IState> _behaviours) {
-            Behaviours = _behaviours;
-            Actual = Behaviours[0];
+        /// <param name="_states"></param>
+        public StateMachine(List<IState> _states) {
+            States = _states;
+            foreach (IState state in States) {
+                state.TypeName = state.GetType().FullName;
+                TypeCache.GetType(state.TypeName);
+            }
+            Actual = States[0];
         }
 
         /// <summary>
@@ -46,7 +51,7 @@ namespace ModularFramework.Core {
         /// </summary>
         /// <param name="_behaviours"></param>
         /// <param name="_view"></param>
-        public StateManager(List<IState> _behaviours, MonoBehaviour _view) : this(_behaviours) {
+        public StateMachine(List<IState> _behaviours, MonoBehaviour _view) : this(_behaviours) {
             Init(_view);
         }
         #endregion
@@ -73,7 +78,7 @@ namespace ModularFramework.Core {
         /// <param name="_type"></param>
         public void Change(Type _type) {
             Actual.End();
-            Actual = Behaviours.Find(b => b.GetType() == _type);
+            Actual = States.Find(b => TypeCache.GetType(b.TypeName) /* b.GetType() */ == _type);
             Actual.Start(view);
         }
 

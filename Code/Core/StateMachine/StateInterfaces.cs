@@ -24,13 +24,15 @@ using System.Collections.Generic;
 namespace ModularFramework.Core {
 
     public interface IState {
+        string TypeName { get; set; }
         void Start(MonoBehaviour _view);
         void Update();
         void End();
     }
 
     public abstract class BaseState : IState {
-        MonoBehaviour view;
+        public string TypeName { get; set; }
+        protected MonoBehaviour view;
         public virtual void Start(MonoBehaviour _view) {
             view = _view;
         }
