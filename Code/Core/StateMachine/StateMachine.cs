@@ -43,7 +43,7 @@ namespace ModularFramework.Core {
                 state.TypeName = state.GetType().FullName;
                 TypeCache.GetType(state.TypeName);
             }
-            Actual = States[0];
+            Change(TypeCache.GetType(States[0].TypeName));
         }
 
         /// <summary>
@@ -77,7 +77,8 @@ namespace ModularFramework.Core {
         /// </summary>
         /// <param name="_type"></param>
         public void Change(Type _type) {
-            Actual.End();
+            if(Actual != null)
+                Actual.End();
             Actual = States.Find(b => TypeCache.GetType(b.TypeName) /* b.GetType() */ == _type);
             Actual.Start(view);
         }
