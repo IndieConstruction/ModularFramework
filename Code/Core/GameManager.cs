@@ -22,11 +22,16 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Assertions;
 using System.Collections.Generic;
 using ModularFramework.Modules;
+using DG.DemiLib.Attributes;
 
 namespace ModularFramework.Core
 {
-    public abstract class GameManager : Singleton<GameManager>
-    {
+    /// <summary>
+    /// Base GameManager class for creating own derived GameManager class.
+    /// Override 'GameSetup' function in derived class (and call base.GameSetup inside) and use it a game entry point.
+    /// </summary>
+    [ScriptExecutionOrder(-8000)]
+    public abstract class GameManager : Singleton<GameManager> {
 
         #region Game Settings
 
