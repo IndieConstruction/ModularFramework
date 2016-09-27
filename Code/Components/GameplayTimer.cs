@@ -7,7 +7,7 @@ using ModularFramework.Core;
 namespace ModularFramework.Components {
 
     /// <summary>
-    /// 
+    /// That component provide timer for gameplay. 
     /// </summary>
     public class GameplayTimer : Singleton<GameplayTimer> {
 
@@ -155,13 +155,13 @@ namespace ModularFramework.Components {
         /* ======== INSTRUCTIONS ========
         Provide a singleton implementation of timer for gameplay. 
         "Time" public var is amount of gameplay timer.
-        At start timer OnStartTimer event is called.
-        At end of Time amount timer stop and OnTimeOver event is called.
-        Start a singleton GameplayTimer by call StartTimer function:
+        At start timer "OnStartTimer" event is called.
+        At end of Time amount timer stop and "OnTimeOver" event is called.
+        Start a singleton GameplayTimer by call "StartTimer" function:
         ---------------------------------
         GameplayTimer.Instance.StartTimer(25.0f);
         ---------------------------------
-        If you want to call some events you can add a list of CustomEventData.
+        If you want to call some custom events during the timer run state you can add a list of CustomEventData:
         ---------------------------------
         GameplayTimer.Instance.StartTimer(25.0f,
                 new List<GameplayTimer.CustomEventData>()
