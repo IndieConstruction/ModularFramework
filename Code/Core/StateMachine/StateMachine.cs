@@ -22,14 +22,20 @@ using System;
 using System.Collections.Generic;
 using ModularFramework.Helpers;
 
-namespace ModularFramework.Core {
+namespace ModularFramework.Core.SM {
     /// <summary>
     /// Gestisce un behaviours generico.
     /// </summary>
-    public class StateMachine {
+    public class StateMachine : IStateMachine {
 
         public IState Actual;
-        public List<IState> States = new List<IState>();
+        /// <summary>
+        /// Cached list of available states for this state machine.
+        /// </summary>
+        public List<IState> States { get; set; }
+        /// <summary>
+        /// The model view.
+        /// </summary>
         MonoBehaviour view;
 
         #region constructors
@@ -47,7 +53,7 @@ namespace ModularFramework.Core {
         }
 
         /// <summary>
-        /// Costruttore.
+        /// Costruttore. Chiamata init automatica.
         /// </summary>
         /// <param name="_behaviours"></param>
         /// <param name="_view"></param>

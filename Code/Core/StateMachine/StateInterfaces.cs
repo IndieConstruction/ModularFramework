@@ -21,7 +21,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-namespace ModularFramework.Core {
+namespace ModularFramework.Core.SM {
 
     public interface IState {
         string TypeName { get; set; }

@@ -20,12 +20,13 @@
 using UnityEngine;
 using System.Collections.Generic;
 using ModularFramework.Core;
+using ModularFramework.Core.SM;
 
 namespace ModularFramework.Test {
 
     public class TestStateMachine : MonoBehaviour {
 
-        StateMachine bm;
+        IStateMachine bm;
 
         // Use this for initialization
         void Start() {
