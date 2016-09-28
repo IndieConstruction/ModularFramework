@@ -107,8 +107,7 @@ namespace ModularFramework.Core
         /// <summary>
         /// Game entry point.
         /// </summary>
-        protected override void GameSetup()
-        {
+        protected override void GameSetup() {
             if (setuped)
                 return;
             base.GameSetup();
@@ -120,11 +119,12 @@ namespace ModularFramework.Core
             setuped = true;
         }
 
-        void Start()
-        {
+        protected override void Awake() {
             DontDestroyOnLoad(this);
             // Assert.IsTrue(!string.IsNullOrEmpty(GameSettings.GameID), "Main Game ID Can not be null or empty");
+            base.Awake();
         }
+
 
         #endregion
 
