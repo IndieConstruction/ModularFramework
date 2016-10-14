@@ -18,6 +18,7 @@
 *   License along with this library.
 * -------------------------------------------------------------- */
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 
 namespace ModularFramework.Helpers {
@@ -36,6 +37,8 @@ namespace ModularFramework.Helpers {
 
         #region extensions
 
+        #region list
+
         /// <summary>
         /// Return random element of list.
         /// </summary>
@@ -48,6 +51,11 @@ namespace ModularFramework.Helpers {
 
         private static System.Random rng = new System.Random();
 
+        /// <summary>
+        /// Shuffles the specified list.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list">The list.</param>
         public static void Shuffle<T>(this IList<T> list) {
             int n = list.Count;
             while (n > 1) {
@@ -58,6 +66,26 @@ namespace ModularFramework.Helpers {
                 list[n] = value;
             }
         }
+
+        #endregion
+
+        #region Unity UI
+
+        /// <summary>
+        /// Loads the options from enum.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="_this">The this.</param>
+        public static void LoadOptionsFromEnum<T>(this Dropdown _this) {
+            _this.ClearOptions();
+            List<Dropdown.OptionData> optionsToAdd = new List<Dropdown.OptionData>();
+            foreach (var val in System.Enum.GetValues(typeof(T))) {
+                optionsToAdd.Add(new Dropdown.OptionData() { text = val.ToString() });
+            }
+            _this.options.AddRange(optionsToAdd);
+        }
+
+        #endregion
 
         #endregion
 
