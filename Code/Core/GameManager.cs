@@ -64,7 +64,7 @@ namespace ModularFramework.Core
         private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1) {
             if (IsDuplicatedInstance)
                 return;
-            Debug.Log("SceneLoaded",this);
+            Debug.LogFormat("SceneLoaded {0}",SceneManager.GetActiveScene().name);
             Modules.SceneModule.SceneLoadedBehaviour();
         }
         #endregion
@@ -106,6 +106,8 @@ namespace ModularFramework.Core
 
         /// <summary>
         /// Game entry point.
+        /// Override this in derived class to use your own code (always call before base.GameSetup).
+        /// This function automatically call Modules Setup and module auto installer override.
         /// </summary>
         protected override void GameSetup() {
             if (setuped)

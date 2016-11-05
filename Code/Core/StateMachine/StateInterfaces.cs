@@ -39,4 +39,28 @@ namespace ModularFramework.Core.SM {
         public virtual void Update() { }
         public virtual void End() { }
     }
+
+    /// <summary>
+    /// Base class for State for scene.
+    /// </summary>
+    /// <seealso cref="ModularFramework.Core.SM.BaseState" />
+    public abstract class SceneState : BaseState {
+
+        public string SceneName;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SceneState"/> class.
+        /// Is injected in construction call the name of the scene.
+        /// </summary>
+        /// <param name="_sceneName">Name of the scene.</param>
+        public SceneState(string _sceneName) {
+            SceneName = _sceneName;
+        }
+
+        public override void Start(MonoBehaviour _view) {
+            base.Start(_view);
+            GameManager.Instance.Modules.SceneModule.LoadSceneWithTransition(SceneName);
+        }
+
+    }
 }

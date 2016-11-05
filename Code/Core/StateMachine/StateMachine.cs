@@ -74,7 +74,7 @@ namespace ModularFramework.Core.SM {
         /// Setta come behaviour attivo il behaviour del tipo passato nel typeparam.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public void Change<T>() where T : Type {
+        public void Change<T>() where T : IState {
             Change(typeof(T));
         }
 

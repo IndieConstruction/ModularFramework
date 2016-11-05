@@ -27,6 +27,9 @@ namespace ModularFramework.Helpers {
 
         /// <summary>
         /// Return random float value around _value parameter + or - _variation.
+        /// Ex: 
+        /// (8, 2) = random from 6 and 10
+        /// (1.4f, 0.2f) = random from 1.2 and 1.6
         /// </summary>
         /// <param name="_value"></param>
         /// <param name="_variation"></param>
