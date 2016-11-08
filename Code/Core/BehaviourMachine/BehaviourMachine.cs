@@ -22,17 +22,17 @@ using System;
 using System.Collections.Generic;
 using ModularFramework.Helpers;
 
-namespace ModularFramework.Core.SM {
+namespace ModularFramework.Core.BM {
     /// <summary>
     /// Gestisce un behaviours generico.
     /// </summary>
-    public class StateMachine : IStateMachine {
+    public class BehaviourMachine : IBehaviourMachine {
 
-        public IState Actual;
+        public IBehaviour Actual;
         /// <summary>
         /// Cached list of available states for this state machine.
         /// </summary>
-        public List<IState> States { get; set; }
+        public List<IBehaviour> Behaviours { get; set; }
         /// <summary>
         /// The model view.
         /// </summary>
@@ -43,13 +43,13 @@ namespace ModularFramework.Core.SM {
         /// Costruttore. Sarà necessario richiamare la funzione Init prima di utilizzarlo.
         /// </summary>
         /// <param name="_states"></param>
-        public StateMachine(List<IState> _states) {
-            States = _states;
-            foreach (IState state in States) {
+        public BehaviourMachine(List<IBehaviour> _states) {
+            Behaviours = _states;
+            foreach (IBehaviour state in Behaviours) {
                 state.TypeName = state.GetType().FullName;
                 TypeCache.GetType(state.TypeName);
             }
-            Change(TypeCache.GetType(States[0].TypeName));
+            Change(TypeCache.GetType(Behaviours[0].TypeName));
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace ModularFramework.Core.SM {
         /// </summary>
         /// <param name="_behaviours"></param>
         /// <param name="_view"></param>
-        public StateMachine(List<IState> _behaviours, MonoBehaviour _view) : this(_behaviours) {
+        public BehaviourMachine(List<IBehaviour> _behaviours, MonoBehaviour _view) : this(_behaviours) {
             Init(_view);
         }
         #endregion
@@ -74,7 +74,7 @@ namespace ModularFramework.Core.SM {
         /// Setta come behaviour attivo il behaviour del tipo passato nel typeparam.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public void Change<T>() where T : IState {
+        public void Change<T>() where T : IBehaviour {
             Change(typeof(T));
         }
 
@@ -85,7 +85,7 @@ namespace ModularFramework.Core.SM {
         public void Change(Type _type) {
             if(Actual != null)
                 Actual.End();
-            Actual = States.Find(b => TypeCache.GetType(b.TypeName) /* b.GetType() */ == _type);
+            Actual = Behaviours.Find(b => TypeCache.GetType(b.TypeName) /* b.GetType() */ == _type);
             Actual.Start(view);
         }
 

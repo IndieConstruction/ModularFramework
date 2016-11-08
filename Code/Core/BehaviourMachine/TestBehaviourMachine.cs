@@ -20,17 +20,17 @@
 using UnityEngine;
 using System.Collections.Generic;
 using ModularFramework.Core;
-using ModularFramework.Core.SM;
+using ModularFramework.Core.BM;
 
 namespace ModularFramework.Test {
 
     public class TestStateMachine : MonoBehaviour {
 
-        IStateMachine bm;
+        IBehaviourMachine bm;
 
         // Use this for initialization
         void Start() {
-            bm = new StateMachine(new List<IState> {
+            bm = new BehaviourMachine(new List<IBehaviour> {
             new TestStateDummy1(),
             new TestStateDummy2(),
             new TestStateDummy3(),
@@ -41,12 +41,12 @@ namespace ModularFramework.Test {
         // Update is called once per frame
         void Update() {
             for (int i = 0; i < 4; i++) {
-                bm.Change(bm.States[Random.Range(0, 4)].GetType());
+                bm.Change(bm.Behaviours[Random.Range(0, 4)].GetType());
             }
         }
     }
 
-    public class TestStateDummy1 : BaseState {
+    public class TestStateDummy1 : BaseBehaviour {
         int count = 0;
         public override void Start(MonoBehaviour _view) {
             base.Start(_view);
@@ -59,7 +59,7 @@ namespace ModularFramework.Test {
         }
     }
 
-    public class TestStateDummy2 : BaseState {
+    public class TestStateDummy2 : BaseBehaviour {
         int count = 0;
         public override void Start(MonoBehaviour _view) {
             base.Start(_view);
@@ -74,14 +74,14 @@ namespace ModularFramework.Test {
         }
     }
 
-    public class TestStateDummy3 : BaseState {
+    public class TestStateDummy3 : BaseBehaviour {
         public override void Start(MonoBehaviour _view) {
             base.Start(_view);
             Debug.Log("B: " + GetType());
         }
     }
 
-    public class TestStateDummy4 : BaseState {
+    public class TestStateDummy4 : BaseBehaviour {
         public override void Start(MonoBehaviour _view) {
             base.Start(_view);
             Debug.Log("B: " + GetType());

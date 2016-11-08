@@ -21,16 +21,16 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-namespace ModularFramework.Core.SM {
+namespace ModularFramework.Core.BM {
 
-    public interface IState {
+    public interface IBehaviour {
         string TypeName { get; set; }
         void Start(MonoBehaviour _view);
         void Update();
         void End();
     }
 
-    public abstract class BaseState : IState {
+    public abstract class BaseBehaviour : IBehaviour {
         public string TypeName { get; set; }
         protected MonoBehaviour view;
         public virtual void Start(MonoBehaviour _view) {
@@ -42,18 +42,20 @@ namespace ModularFramework.Core.SM {
 
     /// <summary>
     /// Base class for State for scene.
+    /// Class features:
+    /// - Start base function automatic call the scene with name setted on constructor.
     /// </summary>
-    /// <seealso cref="ModularFramework.Core.SM.BaseState" />
-    public abstract class SceneState : BaseState {
+    /// <seealso cref="ModularFramework.Core.BM.BaseBehaviour" />
+    public abstract class SceneBehaviour : BaseBehaviour {
 
         public string SceneName;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SceneState"/> class.
+        /// Initializes a new instance of the <see cref="SceneBehaviour"/> class.
         /// Is injected in construction call the name of the scene.
         /// </summary>
         /// <param name="_sceneName">Name of the scene.</param>
-        public SceneState(string _sceneName) {
+        public SceneBehaviour(string _sceneName) {
             SceneName = _sceneName;
         }
 
