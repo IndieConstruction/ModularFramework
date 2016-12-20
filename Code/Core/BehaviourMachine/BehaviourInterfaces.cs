@@ -30,9 +30,18 @@ namespace ModularFramework.Core.BM {
         void End();
     }
 
+    /// <summary>
+    /// Base class for any behaviour.
+    /// </summary>
+    /// <seealso cref="ModularFramework.Core.BM.IBehaviour" />
     public abstract class BaseBehaviour : IBehaviour {
         public string TypeName { get; set; }
         protected MonoBehaviour view;
+
+        /// <summary>
+        /// Start the behaviour and inject the monobehaviour (view) in "view" variable.
+        /// </summary>
+        /// <param name="_view">The view.</param>
         public virtual void Start(MonoBehaviour _view) {
             view = _view;
         }
@@ -41,9 +50,9 @@ namespace ModularFramework.Core.BM {
     }
 
     /// <summary>
-    /// Base class for State for scene.
+    /// Base State class for scene.
     /// Class features:
-    /// - Start base function automatic call the scene with name setted on constructor.
+    /// - The Start base function automatic call the scene with name defined as parameters on constructor.
     /// </summary>
     /// <seealso cref="ModularFramework.Core.BM.BaseBehaviour" />
     public abstract class SceneBehaviour : BaseBehaviour {

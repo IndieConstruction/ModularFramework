@@ -42,9 +42,9 @@ namespace ModularFramework.Core.BM {
         /// <summary>
         /// Costruttore. Sarà necessario richiamare la funzione Init prima di utilizzarlo.
         /// </summary>
-        /// <param name="_states"></param>
-        public BehaviourMachine(List<IBehaviour> _states) {
-            Behaviours = _states;
+        /// <param name="_behaviours"></param>
+        public BehaviourMachine(List<IBehaviour> _behaviours) {
+            Behaviours = _behaviours;
             foreach (IBehaviour state in Behaviours) {
                 state.TypeName = state.GetType().FullName;
                 TypeCache.GetType(state.TypeName);
@@ -57,8 +57,14 @@ namespace ModularFramework.Core.BM {
         /// </summary>
         /// <param name="_behaviours"></param>
         /// <param name="_view"></param>
-        public BehaviourMachine(List<IBehaviour> _behaviours, MonoBehaviour _view) : this(_behaviours) {
+        public BehaviourMachine(List<IBehaviour> _behaviours, MonoBehaviour _view) {
             Init(_view);
+            Behaviours = _behaviours;
+            foreach (IBehaviour state in Behaviours) {
+                state.TypeName = state.GetType().FullName;
+                TypeCache.GetType(state.TypeName);
+            }
+            Change(TypeCache.GetType(Behaviours[0].TypeName));
         }
         #endregion
 
