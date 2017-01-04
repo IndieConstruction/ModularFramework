@@ -38,6 +38,21 @@ namespace ModularFramework.Helpers {
             return Random.Range(_value - _variation, _value + _variation);
         }
 
+        /// <summary>
+        /// Gets the value within limits. If value exceeds min or max limits, a respective returned. 
+        /// </summary>
+        /// <param name="_rawValue">The raw value.</param>
+        /// <param name="_minLimit">The minimum limit.</param>
+        /// <param name="_maxLimit">The maximum limit.</param>
+        /// <returns></returns>
+        public static float GetValueWithinLimits(float _rawValue, float _minLimit, float _maxLimit) {
+            if (_rawValue > _maxLimit)
+                _rawValue = _maxLimit;
+            else if (_rawValue < _minLimit)
+                _rawValue = _minLimit;
+            return _rawValue;
+        }
+
         #region extensions
 
         #region list
