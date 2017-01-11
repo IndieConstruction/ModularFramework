@@ -46,7 +46,7 @@ namespace ModularFramework.Test {
         }
     }
 
-    public class TestStateDummy1 : BaseBehaviour {
+    public class TestStateDummy1 : BaseBehaviour<GameManager> {
         int count = 0;
         public override void Start(MonoBehaviour _view) {
             base.Start(_view);
@@ -59,7 +59,7 @@ namespace ModularFramework.Test {
         }
     }
 
-    public class TestStateDummy2 : BaseBehaviour {
+    public class TestStateDummy2 : BaseBehaviour<GameManager> {
         int count = 0;
         public override void Start(MonoBehaviour _view) {
             base.Start(_view);
@@ -74,14 +74,14 @@ namespace ModularFramework.Test {
         }
     }
 
-    public class TestStateDummy3 : BaseBehaviour {
+    public class TestStateDummy3 : BaseBehaviour<GameManager> {
         public override void Start(MonoBehaviour _view) {
             base.Start(_view);
             Debug.Log("B: " + GetType());
         }
     }
 
-    public class TestStateDummy4 : BaseBehaviour {
+    public class TestStateDummy4 : BaseBehaviour<GameManager> {
         public override void Start(MonoBehaviour _view) {
             base.Start(_view);
             Debug.Log("B: " + GetType());
