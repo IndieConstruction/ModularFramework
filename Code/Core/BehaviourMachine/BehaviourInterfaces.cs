@@ -70,9 +70,21 @@ namespace ModularFramework.Core.BM {
             SceneName = _sceneName;
         }
 
+        /// <summary>
+        /// Start the behaviour and inject the monobehaviour (view) in "view" variable.
+        /// this occurs before scene loaded. OnSceneLoadedCompleted is called when the scene has loaded.
+        /// </summary>
+        /// <param name="_view">The view.</param>
         public override void Start(MonoBehaviour _view) {
             base.Start(_view);
-            GameManager.Instance.Modules.SceneModule.LoadSceneWithTransition(SceneName);
+            GameManager.Instance.Modules.SceneModule.LoadSceneWithTransition(SceneName, OnSceneLoadedCompleted);
+        }
+
+        /// <summary>
+        /// Called when [scene loaded completed].
+        /// </summary>
+        public virtual void OnSceneLoadedCompleted() {
+            Debug.LogFormat("Scene {0} loaded!", SceneName);
         }
 
     }

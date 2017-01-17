@@ -67,8 +67,8 @@ namespace ModularFramework.Modules {
         /// Load scene.
         /// </summary>
         /// <param name="_sceneToLoad"></param>
-        public void LoadSceneWithTransition(string _sceneToLoad) {
-            LoadSceneWithTransition(_sceneToLoad, TransitionSettings);
+        public void LoadSceneWithTransition(string _sceneToLoad, SceneCallback _OnLoadCompleteCallback = null) {
+            LoadSceneWithTransition(_sceneToLoad, TransitionSettings, _OnLoadCompleteCallback);
         }
 
         /// <summary>
@@ -76,8 +76,8 @@ namespace ModularFramework.Modules {
         /// </summary>
         /// <param name="_sceneToLoad"></param>
         /// <param name="_transitionSettings"></param>
-        public void LoadSceneWithTransition(string _sceneToLoad, SceneTransition _transitionSettings) {
-            ConcreteModuleImplementation.LoadSceneWithTransition(_sceneToLoad, _transitionSettings);
+        public void LoadSceneWithTransition(string _sceneToLoad, SceneTransition _transitionSettings, SceneCallback _OnLoadCompleteCallback = null) {
+            ConcreteModuleImplementation.LoadSceneWithTransition(_sceneToLoad, _transitionSettings, _OnLoadCompleteCallback);
         }
 
         /// <summary>
@@ -162,10 +162,12 @@ namespace ModularFramework.Modules {
     }
 
     public interface ISceneModule : IModule<ISceneModule> {
-        void LoadSceneWithTransition(string _sceneToLoad, SceneTransition _transitionSettings);
+        void LoadSceneWithTransition(string _sceneToLoad, SceneTransition _transitionSettings, SceneCallback _OnLoadCompleteCallback = null);
         void UnloadSceneWithTransition(SceneTransition _transitionSettings);
         void SceneLoadedBehaviour();
     }
+
+    public delegate void SceneCallback();
 
     public enum SceneType {
         Main,
