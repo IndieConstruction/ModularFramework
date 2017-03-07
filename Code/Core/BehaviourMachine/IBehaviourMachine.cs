@@ -23,10 +23,9 @@ using UnityEngine;
 
 namespace ModularFramework.Core.BM {
 
-    public interface IBehaviourMachine {
+    public interface IBehaviourMachine<TView> where TView : MonoBehaviour {
         List<IBehaviour> Behaviours { get; set; }
         void Change(Type _type);
         void Change<T>() where T : IBehaviour;
-        void Init(MonoBehaviour _view);
     }
 }

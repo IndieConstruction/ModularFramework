@@ -26,16 +26,16 @@ namespace ModularFramework.Test {
 
     public class TestStateMachine : MonoBehaviour {
 
-        IBehaviourMachine bm;
+        IBehaviourMachine<TestStateMachine> bm;
 
         // Use this for initialization
         void Start() {
-            bm = new BehaviourMachine(new List<IBehaviour> {
+            bm = new BehaviourMachine<TestStateMachine>(new List<IBehaviour> {
             new TestStateDummy1(),
             new TestStateDummy2(),
             new TestStateDummy3(),
             new TestStateDummy4(),
-        });
+        },this);
         }
 
         // Update is called once per frame
@@ -46,10 +46,9 @@ namespace ModularFramework.Test {
         }
     }
 
-    public class TestStateDummy1 : BaseBehaviour<GameManager> {
+    public class TestStateDummy1 : BaseBehaviour {
         int count = 0;
-        public override void Start(MonoBehaviour _view) {
-            base.Start(_view);
+        public override void Start() {
             Debug.Log("B: " + GetType());
         }
 
@@ -59,10 +58,9 @@ namespace ModularFramework.Test {
         }
     }
 
-    public class TestStateDummy2 : BaseBehaviour<GameManager> {
+    public class TestStateDummy2 : BaseBehaviour {
         int count = 0;
-        public override void Start(MonoBehaviour _view) {
-            base.Start(_view);
+        public override void Start() {
             Debug.Log("B: " + GetType());
             // initTest
             count = 0;
@@ -74,17 +72,16 @@ namespace ModularFramework.Test {
         }
     }
 
-    public class TestStateDummy3 : BaseBehaviour<GameManager> {
-        public override void Start(MonoBehaviour _view) {
-            base.Start(_view);
+    public class TestStateDummy3 : BaseBehaviour {
+        public override void Start() {
             Debug.Log("B: " + GetType());
         }
     }
 
-    public class TestStateDummy4 : BaseBehaviour<GameManager> {
-        public override void Start(MonoBehaviour _view) {
-            base.Start(_view);
+    public class TestStateDummy4 : BaseBehaviour {
+        public override void Start() {
             Debug.Log("B: " + GetType());
         }
     }
+
 }

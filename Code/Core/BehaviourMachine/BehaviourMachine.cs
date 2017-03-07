@@ -26,9 +26,9 @@ namespace ModularFramework.Core.BM {
     /// <summary>
     /// Gestisce un behaviours generico.
     /// </summary>
-    public class BehaviourMachine : IBehaviourMachine {
+    public class BehaviourMachine<TView> : IBehaviourMachine<TView> where TView : MonoBehaviour {
 
-        public IBehaviour Actual;
+        public IBehaviour Current;
         /// <summary>
         /// Cached list of available states for this state machine.
         /// </summary>
@@ -36,7 +36,7 @@ namespace ModularFramework.Core.BM {
         /// <summary>
         /// The model view.
         /// </summary>
-        MonoBehaviour view;
+        TView view;
 
         #region constructors
         /// <summary>
@@ -45,9 +45,9 @@ namespace ModularFramework.Core.BM {
         /// <param name="_behaviours"></param>
         public BehaviourMachine(List<IBehaviour> _behaviours) {
             Behaviours = _behaviours;
-            foreach (IBehaviour state in Behaviours) {
-                state.TypeName = state.GetType().FullName;
-                TypeCache.GetType(state.TypeName);
+            foreach (IBehaviour behaviour in Behaviours) {
+                behaviour.TypeName = behaviour.GetType().FullName;
+                TypeCache.GetType(behaviour.TypeName);
             }
             Change(TypeCache.GetType(Behaviours[0].TypeName));
         }
@@ -57,8 +57,8 @@ namespace ModularFramework.Core.BM {
         /// </summary>
         /// <param name="_behaviours"></param>
         /// <param name="_view"></param>
-        public BehaviourMachine(List<IBehaviour> _behaviours, MonoBehaviour _view) {
-            Init(_view);
+        public BehaviourMachine(List<IBehaviour> _behaviours, TView _view) {
+            injectView(_view);
             Behaviours = _behaviours;
             foreach (IBehaviour state in Behaviours) {
                 state.TypeName = state.GetType().FullName;
@@ -72,7 +72,7 @@ namespace ModularFramework.Core.BM {
         /// Inietta la view.
         /// </summary>
         /// <param name="_view"></param>
-        public void Init(MonoBehaviour _view)  {
+        void injectView(TView _view)  {
             view = _view;
         }
 
@@ -89,10 +89,10 @@ namespace ModularFramework.Core.BM {
         /// </summary>
         /// <param name="_type"></param>
         public void Change(Type _type) {
-            if(Actual != null)
-                Actual.End();
-            Actual = Behaviours.Find(b => TypeCache.GetType(b.TypeName) /* b.GetType() */ == _type);
-            Actual.Start(view);
+            if(Current != null)
+                Current.End();
+            Current = Behaviours.Find(b => TypeCache.GetType(b.TypeName) /* b.GetType() */ == _type);
+            Current.PreStart(view);
         }
 
     }

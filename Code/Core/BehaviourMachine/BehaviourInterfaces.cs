@@ -25,7 +25,8 @@ namespace ModularFramework.Core.BM {
 
     public interface IBehaviour {
         string TypeName { get; set; }
-        void Start(MonoBehaviour _view);
+        void PreStart(MonoBehaviour _view);
+        void Start();
         void Update();
         void End();
     }
@@ -34,19 +35,25 @@ namespace ModularFramework.Core.BM {
     /// Base class for any behaviour.
     /// </summary>
     /// <seealso cref="ModularFramework.Core.BM.IBehaviour" />
-    public abstract class BaseBehaviour<T> : IBehaviour where T : MonoBehaviour {
+    public abstract class BaseBehaviour : IBehaviour {
         public string TypeName { get; set; }
-        protected T view;
+        protected MonoBehaviour view;
 
         /// <summary>
-        /// Start the behaviour and inject the monobehaviour (view) in "view" variable.
+        /// Start the behaviour and inject the monobehaviour (view) in "view" variable..
         /// </summary>
+        /// <typeparam name="T">The type of the 1.</typeparam>
         /// <param name="_view">The view.</param>
-        public virtual void Start(MonoBehaviour _view) {
-            view = _view as T;
+        public void PreStart(MonoBehaviour _view) {
+            view = _view;
+            Start();
         }
+        public virtual void Start() { }
         public virtual void Update() { }
         public virtual void End() { }
+
+
+
     }
 
     /// <summary>
@@ -57,7 +64,7 @@ namespace ModularFramework.Core.BM {
     /// - The Start base function automatic call the scene with name defined as parameters on constructor.
     /// </summary>
     /// <seealso cref="ModularFramework.Core.BM.BaseBehaviour" />
-    public abstract class SceneBehaviour<T> : BaseBehaviour<T> where T : MonoBehaviour {
+    public abstract class SceneBehaviour : BaseBehaviour {
 
         public string SceneName;
 
@@ -75,8 +82,7 @@ namespace ModularFramework.Core.BM {
         /// this occurs before scene loaded. OnSceneLoadedCompleted is called when the scene has loaded.
         /// </summary>
         /// <param name="_view">The view.</param>
-        public override void Start(MonoBehaviour _view) {
-            base.Start(_view);
+        public override void Start() {
             GameManager.Instance.Modules.SceneModule.LoadSceneWithTransition(SceneName, OnSceneLoadedCompleted);
         }
 
