@@ -53,6 +53,21 @@ namespace ModularFramework.Helpers {
             return _rawValue;
         }
 
+        /// <summary>
+        /// Gets the list from enum.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static List<T> GetListFromEnum<T>() {
+            List<T> enumList = new List<T>();
+            System.Array enums = System.Enum.GetValues(typeof(T));
+            foreach (T e in enums) {
+                enumList.Add(e);
+            }
+            return enumList;
+        }
+
+
         #region extensions
 
         #region list
