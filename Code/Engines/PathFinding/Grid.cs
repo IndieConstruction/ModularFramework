@@ -9,6 +9,7 @@ namespace ModularFramework.AI {
     public abstract class Grid : MonoBehaviour {
         public LayerMask UnwalkableMask;
         public Dimension2d GridDimension;
+        public Dimension2d GridOffSet;
         public Vector2 GridWorldSize;
         public Vector2 GridCenterOffset;
         public float NodeRadius;
