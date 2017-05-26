@@ -22,11 +22,16 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Assertions;
 using System.Collections.Generic;
 using ModularFramework.Modules;
+using DG.DemiLib.Attributes;
 
 namespace ModularFramework.Core
 {
-    public abstract class GameManager : Singleton<GameManager>
-    {
+    /// <summary>
+    /// Base GameManager class for creating own derived GameManager class.
+    /// Override 'GameSetup' function in derived class (and call base.GameSetup inside) and use it a game entry point.
+    /// </summary>
+    [ScriptExecutionOrder(-8000)]
+    public abstract class GameManager : Singleton<GameManager> {
 
         #region Game Settings
 
@@ -59,7 +64,7 @@ namespace ModularFramework.Core
         private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1) {
             if (IsDuplicatedInstance)
                 return;
-            Debug.Log("SceneLoaded",this);
+            Debug.LogFormat("SceneLoaded {0}",SceneManager.GetActiveScene().name);
             Modules.SceneModule.SceneLoadedBehaviour();
         }
         #endregion
@@ -101,9 +106,10 @@ namespace ModularFramework.Core
 
         /// <summary>
         /// Game entry point.
+        /// Override this in derived class to use your own code (always call before base.GameSetup).
+        /// This function automatically call Modules Setup and module auto installer override.
         /// </summary>
-        protected override void GameSetup()
-        {
+        protected override void GameSetup() {
             if (setuped)
                 return;
             base.GameSetup();
@@ -115,11 +121,12 @@ namespace ModularFramework.Core
             setuped = true;
         }
 
-        void Start()
-        {
+        protected override void Awake() {
             DontDestroyOnLoad(this);
             // Assert.IsTrue(!string.IsNullOrEmpty(GameSettings.GameID), "Main Game ID Can not be null or empty");
+            base.Awake();
         }
+
 
         #endregion
 

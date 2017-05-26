@@ -26,7 +26,9 @@ namespace ModularFramework.Modules {
 
     public class SceneModuleDefault : ISceneModule {
 
-        #region IModule
+        SceneCallback OnSceneLoadedCallback;
+
+        #region IModule 
         public ISceneModule ConcreteModuleImplementation { get; set; }
         public IModuleSettings Settings { get; set; }
 
@@ -36,15 +38,27 @@ namespace ModularFramework.Modules {
         }
         #endregion
 
-        public virtual void LoadSceneWithTransition(string _sceneToLoad, SceneTransition _transitionSettings) {
+        public virtual void LoadSceneWithTransition(string _sceneToLoad, SceneTransition _transitionSettings, SceneCallback _OnLoadCompleteCallback = null) {
+            if (_OnLoadCompleteCallback != null) {
+                OnSceneLoadedCallback = _OnLoadCompleteCallback;
+                UnityEngine.SceneManagement.SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+            }
             UnityEngine.SceneManagement.SceneManager.LoadScene(_sceneToLoad);
         }
 
+        private void SceneManager_sceneLoaded(UnityEngine.SceneManagement.Scene arg0, UnityEngine.SceneManagement.LoadSceneMode arg1) {
+            OnSceneLoadedCallback();
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
+        }
+
         public void UnloadSceneWithTransition(SceneTransition _transitionSettings) {
+            
         }
 
         public virtual void SceneLoadedBehaviour() {
+
         }
+
     }
 
 }
