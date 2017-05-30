@@ -38,7 +38,7 @@ namespace ModularFramework.AI {
         /// - fornire la dimensione della griglia
         /// </summary>
         public virtual void Setup() {
-            GridWorldSize = new Vector2(GridDimension.W * NodeRadius, GridDimension.H * NodeRadius);
+            GridWorldSize = new Vector2(GridDimension.x * NodeRadius, GridDimension.y * NodeRadius);
 
             if (OnSetupDone != null)
                 OnSetupDone(this);
@@ -55,18 +55,25 @@ namespace ModularFramework.AI {
 
             // Grid bounds
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireCube(transform.position + (Vector3)GridCenterOffset, new Vector3(Mathf.RoundToInt(GridDimension.W * NodeRadius), Mathf.RoundToInt(GridDimension.H * NodeRadius), 1));
+            Gizmos.DrawWireCube(
+                transform.position + (Vector3)GridCenterOffset, 
+                new Vector3(Mathf.RoundToInt(GridDimension.x * NodeRadius),
+                            Mathf.RoundToInt(GridDimension.y * NodeRadius), 
+                            1)
+                );
 
             foreach (var node in grid) {
+                if (node == null)
+                    continue;
                 // Grid
                 if (node.NodeType == 0) {
-                    GPointSize = 0.25f;
-                    Gizmos.color = new Color(Color.black.r, Color.black.g, Color.black.b, 0.5f);
+                    GPointSize = 0.8f;
+                    Gizmos.color = new Color(Color.green.r, Color.green.g, Color.green.b, 0.5f);
                     Gizmos.DrawCube(node.WorldPosition, new Vector3(NodeRadius * GPointSize, NodeRadius * GPointSize, NodeRadius * GPointSize));
                 } else {
-                    GPointSize = 0.25f;
-                    Gizmos.color = new Color(Color.gray.r, Color.gray.g, Color.gray.b, 0.5f);
-                    Gizmos.DrawWireCube(node.WorldPosition, new Vector3(NodeRadius * GPointSize, NodeRadius * GPointSize, NodeRadius * GPointSize));
+                    GPointSize = 0.8f;
+                    Gizmos.color = new Color(Color.red.r, Color.red.g, Color.red.b, 0.5f);
+                    Gizmos.DrawCube(node.WorldPosition, new Vector3(NodeRadius * GPointSize, NodeRadius * GPointSize, NodeRadius * GPointSize));
                 }
                 if (TagsGizmos) { 
                     if (node.ContainsTag("walkable")) {
@@ -80,6 +87,7 @@ namespace ModularFramework.AI {
 
 
         }
+
         #endregion
 
         #region API
@@ -103,10 +111,10 @@ namespace ModularFramework.AI {
                     if (x == 0 && y == 0)
                         continue;
 
-                    int checkX = node.PositionOnGrid.Col + x;
-                    int checkY = node.PositionOnGrid.Row + y;
+                    int checkX = node.PositionOnGrid.y + x;
+                    int checkY = node.PositionOnGrid.x + y;
 
-                    if (checkX >= 0 && checkX < GridDimension.W && checkY >= 0 && checkY < GridDimension.H) {
+                    if (checkX >= 0 && checkX < GridDimension.x && checkY >= 0 && checkY < GridDimension.y) {
                         neighbours.Add(grid[checkY, checkX]);
                     }
                 }
@@ -120,32 +128,32 @@ namespace ModularFramework.AI {
             Node returnNode = null;
             switch (_direction) {
                 case GridDirection.left:
-                    if (_node.PositionOnGrid.Col > 0)
-                        returnNode = grid[_node.PositionOnGrid.Row, _node.PositionOnGrid.Col - 1];
+                    if (_node.PositionOnGrid.y > 0)
+                        returnNode = grid[_node.PositionOnGrid.x, _node.PositionOnGrid.y - 1];
                     break;
                 //case GridDirection.up_right:
                 //    if (_node.PositionOnGrid.Row < GridDimension.W && _node.PositionOnGrid.Col > 0)
                 //        returnNode = grid[_node.PositionOnGrid.Row + 1, _node.PositionOnGrid.Col - 1];
                 //    break;
                 case GridDirection.down:
-                    if (_node.PositionOnGrid.Row < GridDimension.H -1)
-                        returnNode = grid[_node.PositionOnGrid.Row + 1, _node.PositionOnGrid.Col];
+                    if (_node.PositionOnGrid.x < GridDimension.y -1)
+                        returnNode = grid[_node.PositionOnGrid.x + 1, _node.PositionOnGrid.y];
                     break;
                 //case GridDirection.down_right:
                 //    if (_node.PositionOnGrid.Row < GridDimension.W && _node.PositionOnGrid.Col < GridDimension.H)
                 //        returnNode = grid[_node.PositionOnGrid.Row + 1, _node.PositionOnGrid.Col + 1];
                 //    break;
                 case GridDirection.right:
-                    if (_node.PositionOnGrid.Col < GridDimension.W -1)
-                        returnNode = grid[_node.PositionOnGrid.Row, _node.PositionOnGrid.Col + 1];
+                    if (_node.PositionOnGrid.y < GridDimension.x -1)
+                        returnNode = grid[_node.PositionOnGrid.x, _node.PositionOnGrid.y + 1];
                     break;
                 //case GridDirection.down_left:
                 //    if (_node.PositionOnGrid.Row > 0 && _node.PositionOnGrid.Col < GridDimension.H)
                 //        returnNode = grid[_node.PositionOnGrid.Row - 1, _node.PositionOnGrid.Col + 1];
                 //    break;
                 case GridDirection.up:
-                    if (_node.PositionOnGrid.Row > 0)
-                        returnNode = grid[_node.PositionOnGrid.Row - 1, _node.PositionOnGrid.Col];
+                    if (_node.PositionOnGrid.x > 0)
+                        returnNode = grid[_node.PositionOnGrid.x - 1, _node.PositionOnGrid.y];
                     break;
                 //case GridDirection.up_left:
                 //    if (_node.PositionOnGrid.Row > 0 && _node.PositionOnGrid.Col > 0)
@@ -170,24 +178,24 @@ namespace ModularFramework.AI {
     #region structs for grid evn
 
     public struct Position2d {
-        public int Row;
-        public int Col;
-        public Position2d(int _row, int _col) {
-            Row = _row;
-            Col = _col;
+        public int x;
+        public int y;
+        public Position2d(int _x, int _y) {
+            x = _x;
+            y = _y;
         }
         public override string ToString() {
-            return string.Format("(r:{0},c:{1})", Row, Col); 
+            return string.Format("(x:{0},y:{1})", x, y); 
         }
 
     }
 
     public struct Dimension2d {
-        public int W;
-        public int H;
-        public Dimension2d(int _w, int _h) {
-            W = _w;
-            H = _h;
+        public int x;
+        public int y;
+        public Dimension2d(int _x, int _y) {
+            x = _x;
+            y = _y;
         }
 
     }

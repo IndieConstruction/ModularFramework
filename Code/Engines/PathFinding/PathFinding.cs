@@ -219,8 +219,8 @@ namespace ModularFramework.AI {
         /// <param name="nodeB"></param>
         /// <returns></returns>
         int GetDistance(Node nodeA, Node nodeB, PathFindingSettings _pathFindingSettings) {
-            int dstX = Mathf.Abs(nodeA.PositionOnGrid.Col - nodeB.PositionOnGrid.Col);
-            int dstY = Mathf.Abs(nodeA.PositionOnGrid.Row - nodeB.PositionOnGrid.Row);
+            int dstX = Mathf.Abs(nodeA.PositionOnGrid.y - nodeB.PositionOnGrid.y);
+            int dstY = Mathf.Abs(nodeA.PositionOnGrid.x - nodeB.PositionOnGrid.x);
 
             if (dstX > dstY)
                 return _pathFindingSettings.DiagonalMoveCost * dstY + _pathFindingSettings.StraightMoveCost * (dstX - dstY);
