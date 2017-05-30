@@ -128,32 +128,32 @@ namespace ModularFramework.AI {
             Node returnNode = null;
             switch (_direction) {
                 case GridDirection.left:
-                    if (_node.PositionOnGrid.y > 0)
-                        returnNode = grid[_node.PositionOnGrid.x, _node.PositionOnGrid.y - 1];
+                    if (_node.PositionOnGrid.x > 0)
+                        returnNode = grid[_node.PositionOnGrid.x - 1, _node.PositionOnGrid.y];
                     break;
                 //case GridDirection.up_right:
                 //    if (_node.PositionOnGrid.Row < GridDimension.W && _node.PositionOnGrid.Col > 0)
                 //        returnNode = grid[_node.PositionOnGrid.Row + 1, _node.PositionOnGrid.Col - 1];
                 //    break;
                 case GridDirection.down:
-                    if (_node.PositionOnGrid.x < GridDimension.y -1)
-                        returnNode = grid[_node.PositionOnGrid.x + 1, _node.PositionOnGrid.y];
+                    if (_node.PositionOnGrid.y > 0)
+                        returnNode = grid[_node.PositionOnGrid.x, _node.PositionOnGrid.y - 1];
                     break;
                 //case GridDirection.down_right:
                 //    if (_node.PositionOnGrid.Row < GridDimension.W && _node.PositionOnGrid.Col < GridDimension.H)
                 //        returnNode = grid[_node.PositionOnGrid.Row + 1, _node.PositionOnGrid.Col + 1];
                 //    break;
                 case GridDirection.right:
-                    if (_node.PositionOnGrid.y < GridDimension.x -1)
-                        returnNode = grid[_node.PositionOnGrid.x, _node.PositionOnGrid.y + 1];
+                    if (_node.PositionOnGrid.x < GridDimension.x - 1)
+                        returnNode = grid[_node.PositionOnGrid.x + 1, _node.PositionOnGrid.y];
                     break;
                 //case GridDirection.down_left:
                 //    if (_node.PositionOnGrid.Row > 0 && _node.PositionOnGrid.Col < GridDimension.H)
                 //        returnNode = grid[_node.PositionOnGrid.Row - 1, _node.PositionOnGrid.Col + 1];
                 //    break;
                 case GridDirection.up:
-                    if (_node.PositionOnGrid.x > 0)
-                        returnNode = grid[_node.PositionOnGrid.x - 1, _node.PositionOnGrid.y];
+                    if (_node.PositionOnGrid.y < GridDimension.y - 1)
+                        returnNode = grid[_node.PositionOnGrid.x, _node.PositionOnGrid.y + 1];
                     break;
                 //case GridDirection.up_left:
                 //    if (_node.PositionOnGrid.Row > 0 && _node.PositionOnGrid.Col > 0)

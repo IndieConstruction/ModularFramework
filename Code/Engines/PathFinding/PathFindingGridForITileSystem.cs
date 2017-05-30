@@ -62,10 +62,9 @@ namespace ModularFramework.AI {
                 }
             }
 
-            // TODO: fix le assi invertite provocano AOR 
-            //foreach (Node node in grid) {
-            //    extraNodeInfo(node);
-            //}
+            foreach (Node node in grid) {
+                extraNodeInfo(node);
+            }
 
             base.Setup();
         }
@@ -75,6 +74,8 @@ namespace ModularFramework.AI {
         }
 
         void extraNodeInfo(Node _node) {
+            // TODO: fix le assi invertite provocano AOR 
+            // https://trello.com/c/Fk8oPOxe
             Node nNode = GetNeighbour(_node, GridDirection.down);
             if (nNode != null && nNode.NodeType == 0 && _node.NodeType == 1) {
                 _node.AddTag("walkable");
