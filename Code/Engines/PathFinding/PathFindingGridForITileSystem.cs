@@ -29,15 +29,17 @@ namespace ModularFramework.AI {
             
             // variables init
             NodeRadius = level.CellSize.x;
-            GridDimension = new Dimension2d(Mathf.Abs(level.MinGridX) + Mathf.Abs(level.MaxGridX), Mathf.Abs(level.MinGridY) + Mathf.Abs(level.MaxGridY));
+            GridDimension = new Dimension2d(Mathf.Abs(level.MinGridX) + Mathf.Abs(level.MaxGridX) + 1, Mathf.Abs(level.MinGridY) + Mathf.Abs(level.MaxGridY) + 1);
             // TODO: Usare limiti massimi e minimi per ogni dimensione
-            GridOffSet = new Dimension2d(level.MaxGridX - level.MinGridX, level.MaxGridY - level.MinGridY);
+            GridOffSet = new Dimension2d(level.MinGridX, level.MinGridY);
             //GridCenterOffset = new Vector2(Mathf.RoundToInt(level.ColumnCount * NodeRadius)/2, -Mathf.RoundToInt(level.RowCount * NodeRadius)/2);
             // TODO: leggere dinamicamente
             GridCenterOffset = new Vector2(0, Mathf.RoundToInt(GridDimension.y * NodeRadius) / 2);
             // grid init
-            grid = new Node[GridDimension.x, GridDimension.y];
+            Nodes = new Node[GridDimension.x, GridDimension.y];
+            int counter = 0;
             for (int x = 0; x < GridDimension.x; x++) {
+                counter++;
                 for (int y = 0; y < GridDimension.y; y++) {
                     Position2d normalizedPosition = GetPositionWithOffset(x, y);
                     if (normalizedPosition.x == -9 || normalizedPosition.x == -8) {
@@ -50,11 +52,11 @@ namespace ModularFramework.AI {
                         else
                             nodeType = 1;
 
-                        grid[x, y] = new Node(
+                        Nodes[x, y] = new Node(
                             nodeType,
                             new Position2d(normalizedPosition.x, normalizedPosition.y),
-                            level.GetTileWorldPosition(x, y) 
-                            - new Vector3(Mathf.RoundToInt(GridOffSet.x * NodeRadius) / 2, 0, 0)
+                            level.GetTileWorldPosition(normalizedPosition.x, normalizedPosition.y)
+                            // - new Vector3(Mathf.RoundToInt(GridOffSet.x * NodeRadius) / 2, 0, 0)
                             );
                     } else {
                         Debug.LogFormat("N ({0},{1}) ({2},{3}) not exist", x,y,normalizedPosition.x, normalizedPosition.y);
@@ -62,16 +64,14 @@ namespace ModularFramework.AI {
                 }
             }
 
-            foreach (Node node in grid) {
+            foreach (Node node in Nodes) {
                 extraNodeInfo(node);
             }
 
             base.Setup();
         }
 
-        Position2d GetPositionWithOffset(int x, int y) {
-            return new Position2d(x + level.MinGridX, y + level.MinGridY);
-        }
+
 
         void extraNodeInfo(Node _node) {
             // TODO: fix le assi invertite provocano AOR 

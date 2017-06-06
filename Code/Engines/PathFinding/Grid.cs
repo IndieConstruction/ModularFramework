@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using UnityEditor;
 
 namespace ModularFramework.AI {
     /// <summary>
@@ -16,7 +17,11 @@ namespace ModularFramework.AI {
         /// <summary>
         /// Row / Col
         /// </summary>
-        public Node[,] grid;
+        private Node[,] _nodes;
+        public Node[,] Nodes {
+            get { return _nodes; }
+            set { _nodes = value; }
+        }
 
         public bool IsInitialized;
 
@@ -58,11 +63,11 @@ namespace ModularFramework.AI {
             Gizmos.DrawWireCube(
                 transform.position + (Vector3)GridCenterOffset, 
                 new Vector3(Mathf.RoundToInt(GridDimension.x * NodeRadius),
-                            Mathf.RoundToInt(GridDimension.y * NodeRadius), 
+                            Mathf.RoundToInt(GridDimension.y * NodeRadius),
                             1)
                 );
 
-            foreach (var node in grid) {
+            foreach (var node in Nodes) {
                 if (node == null)
                     continue;
                 // Grid
@@ -70,6 +75,12 @@ namespace ModularFramework.AI {
                     GPointSize = 0.8f;
                     Gizmos.color = new Color(Color.green.r, Color.green.g, Color.green.b, 0.5f);
                     Gizmos.DrawCube(node.WorldPosition, new Vector3(NodeRadius * GPointSize, NodeRadius * GPointSize, NodeRadius * GPointSize));
+#if UNITY_EDITOR
+                    //Handles.color = Color.blue;
+                    //Handles.Label(node.WorldPosition + new Vector2(-0.4f, 0.1f), string.Format("{0}", node.PositionOnGrid), new GUIStyle() { alignment = TextAnchor.LowerRight });
+                    //Handles.color = Color.black;
+                    //Handles.Label(node.WorldPosition + new Vector2(-0.4f, -0.1f), string.Format("{0}:{1}", node.WorldPosition.x, node.WorldPosition.y), new GUIStyle() { alignment = TextAnchor.LowerRight });
+#endif
                 } else {
                     GPointSize = 0.8f;
                     Gizmos.color = new Color(Color.red.r, Color.red.g, Color.red.b, 0.5f);
@@ -91,6 +102,23 @@ namespace ModularFramework.AI {
         #endregion
 
         #region API
+
+        /// <summary>
+        /// Ritorna il nodo alla posizione richiesta.
+        /// Accetta anche indici negativi, verranno riconvertiti in base zero per poter essere letti dall'array bidimensionale basandosi sugli estremi del tileset.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public Node GetNode(int x, int y) {
+            Position2d zeroBasedPosition = GetPositionZeroBased(x, y);
+            //Debug.LogFormat("{0}:{1}", x, y);
+            Node returnNode = Nodes[zeroBasedPosition.x, zeroBasedPosition.y];
+            return returnNode;
+        }
+
+
+
         /// <summary>
         /// Return node point in specific world position.
         /// </summary>
@@ -100,7 +128,7 @@ namespace ModularFramework.AI {
             int row = Mathf.Abs(Mathf.RoundToInt((worldPosition.y + NodeRadius / 2) / NodeRadius));
             int col = Mathf.Abs(Mathf.RoundToInt((worldPosition.x - NodeRadius / 2) / NodeRadius));
             // for visual test in gizmos
-            return grid[row, col];
+            return GetNode(row, col);
         }
 
         public List<Node> GetNeighbours(Node node) {
@@ -111,11 +139,13 @@ namespace ModularFramework.AI {
                     if (x == 0 && y == 0)
                         continue;
 
-                    int checkX = node.PositionOnGrid.y + x;
-                    int checkY = node.PositionOnGrid.x + y;
+                    //Node neighbourNode = GetNode(node.PositionOnGrid.x, node.PositionOnGrid.y);
+
+                    int checkX = node.PositionOnGrid.x + x;
+                    int checkY = node.PositionOnGrid.y + y;
 
                     if (checkX >= 0 && checkX < GridDimension.x && checkY >= 0 && checkY < GridDimension.y) {
-                        neighbours.Add(grid[checkY, checkX]);
+                        neighbours.Add(GetNode(checkX, checkY));
                     }
                 }
             }
@@ -124,36 +154,39 @@ namespace ModularFramework.AI {
         }
 
         public enum GridDirection { up, up_right, right, down_right, down, down_left, left, up_left }
+
         public Node GetNeighbour(Node _node, GridDirection _direction) {
             Node returnNode = null;
+            // tengo conto del possibile indice negativo
+            Position2d realPosition = _node.PositionOnGrid;
             switch (_direction) {
                 case GridDirection.left:
-                    if (_node.PositionOnGrid.x > 0)
-                        returnNode = grid[_node.PositionOnGrid.x - 1, _node.PositionOnGrid.y];
+                    if (realPosition.x > 0)
+                        returnNode = GetNode(realPosition.x - 1, realPosition.y);
                     break;
                 //case GridDirection.up_right:
                 //    if (_node.PositionOnGrid.Row < GridDimension.W && _node.PositionOnGrid.Col > 0)
                 //        returnNode = grid[_node.PositionOnGrid.Row + 1, _node.PositionOnGrid.Col - 1];
                 //    break;
                 case GridDirection.down:
-                    if (_node.PositionOnGrid.y > 0)
-                        returnNode = grid[_node.PositionOnGrid.x, _node.PositionOnGrid.y - 1];
+                    if (realPosition.y > 0)
+                        returnNode = GetNode(realPosition.x, realPosition.y - 1);
                     break;
                 //case GridDirection.down_right:
                 //    if (_node.PositionOnGrid.Row < GridDimension.W && _node.PositionOnGrid.Col < GridDimension.H)
                 //        returnNode = grid[_node.PositionOnGrid.Row + 1, _node.PositionOnGrid.Col + 1];
                 //    break;
                 case GridDirection.right:
-                    if (_node.PositionOnGrid.x < GridDimension.x - 1)
-                        returnNode = grid[_node.PositionOnGrid.x + 1, _node.PositionOnGrid.y];
+                    if (realPosition.x < GridDimension.x - 1)
+                        returnNode = GetNode(realPosition.x + 1, realPosition.y);
                     break;
                 //case GridDirection.down_left:
                 //    if (_node.PositionOnGrid.Row > 0 && _node.PositionOnGrid.Col < GridDimension.H)
                 //        returnNode = grid[_node.PositionOnGrid.Row - 1, _node.PositionOnGrid.Col + 1];
                 //    break;
                 case GridDirection.up:
-                    if (_node.PositionOnGrid.y < GridDimension.y - 1)
-                        returnNode = grid[_node.PositionOnGrid.x, _node.PositionOnGrid.y + 1];
+                    if (realPosition.y < GridDimension.y - 1)
+                        returnNode = GetNode(realPosition.x, realPosition.y + 1);
                     break;
                 //case GridDirection.up_left:
                 //    if (_node.PositionOnGrid.Row > 0 && _node.PositionOnGrid.Col > 0)
@@ -164,6 +197,31 @@ namespace ModularFramework.AI {
             }
             return returnNode;
         }
+
+        /// <summary>
+        /// Restituisce la posizione della griglia con l'offset della griglia. Consente di avere celle con indice negativo. 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        protected Position2d GetPositionWithOffset(int x, int y) {
+            int _x = x - Mathf.Abs(GridOffSet.x);
+            int _y = y - Mathf.Abs(GridOffSet.y);
+            return new Position2d(_x, _y);
+        }
+
+        /// <summary>
+        /// Trasforma un eventuale posizione con anche indici negativi in una coppia di indici positivi (per la lettura dall'array bidimensionale).
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        protected Position2d GetPositionZeroBased(int x, int y) {
+            int _x = x + Mathf.Abs(GridOffSet.x);
+            int _y = y + Mathf.Abs(GridOffSet.y);
+            return new Position2d(_x, _y);
+        }
+
         #endregion
 
         #region Events
@@ -185,7 +243,7 @@ namespace ModularFramework.AI {
             y = _y;
         }
         public override string ToString() {
-            return string.Format("(x:{0},y:{1})", x, y); 
+            return string.Format("[{0}:{1}]", x, y); 
         }
 
     }
