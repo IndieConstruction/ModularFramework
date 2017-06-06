@@ -211,7 +211,7 @@ namespace ModularFramework.AI {
         }
 
         /// <summary>
-        /// Trasforma un eventuale posizione con anche indici negativi in una coppia di indici positivi (per la lettura dall'array bidimensionale).
+        /// Trasforma un eventuale posizione, con anche indici negativi, in una coppia di indici base zero (per la lettura dall'array bidimensionale).
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -228,7 +228,7 @@ namespace ModularFramework.AI {
 
         public delegate void PathFindingGridEventHandler(Grid _grid);
 
-        public static event PathFindingGridEventHandler OnSetupDone;
+        public event PathFindingGridEventHandler OnSetupDone;
 
         #endregion
     }

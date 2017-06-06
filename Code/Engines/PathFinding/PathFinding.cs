@@ -32,11 +32,11 @@ namespace ModularFramework.AI {
 
         #region subsciptions
         void OnEnable() {
-            Grid.OnSetupDone += Grid_OnSetupDone;
+            grid.OnSetupDone += Grid_OnSetupDone;
         }
 
         void OnDisable() {
-            Grid.OnSetupDone -= Grid_OnSetupDone;
+            grid.OnSetupDone -= Grid_OnSetupDone;
         }
         #endregion
 

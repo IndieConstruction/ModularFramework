@@ -5,21 +5,25 @@ namespace ModularFramework.AI {
 
     public class Agent : MonoBehaviour {
 
+        Grid grid;
+
         #region Events
 
         #region subsciptions
         void OnEnable() {
-            Grid.OnSetupDone += Grid_OnSetupDone;
+            
         }
 
         void OnDisable() {
-            Grid.OnSetupDone -= Grid_OnSetupDone;
+            grid.OnSetupDone -= Grid_OnSetupDone;
         }
         #endregion
 
         #region delegates
         private void Grid_OnSetupDone(Grid _grid) {
             Debug.Log("GridSetup Done!");
+            grid = _grid;
+            grid.OnSetupDone += Grid_OnSetupDone;
         }
         #endregion
 
