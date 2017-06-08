@@ -10,7 +10,7 @@ namespace ModularFramework.AI {
         #region Events
 
         #region subsciptions
-        void OnEnable() {
+        void OnEnable() { 
             
         }
 
