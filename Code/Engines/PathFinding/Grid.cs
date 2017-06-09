@@ -115,9 +115,7 @@ namespace ModularFramework.AI {
             Node returnNode = Nodes[zeroBasedPosition.x, zeroBasedPosition.y];
             return returnNode;
         }
-
-
-
+        
         /// <summary>
         /// Return node point in specific world position.
         /// </summary>

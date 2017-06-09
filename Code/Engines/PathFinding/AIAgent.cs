@@ -6,7 +6,7 @@ using DG.Tweening;
 
 namespace ModularFramework.AI {
 
-    public class PathFinding : MonoBehaviour {
+    public class AIAgent : MonoBehaviour, IAgent {
 
         #region Properties
         public List<Transform> PathTargets = new List<Transform>();
@@ -19,9 +19,10 @@ namespace ModularFramework.AI {
         #region AI Settings
         [Header("Health Settings")]
         public bool Patroling = true;
+        public bool Loop = true;
         public bool Reversable = true;
         public float MoveSpeed = 0.5f;
-        public bool AutoFindPathTargets = true;
+        public bool AutoFindPathTargets = false;
         public AIType AIAptitude = AIType.FullMover;
         #endregion
 
@@ -32,7 +33,11 @@ namespace ModularFramework.AI {
 
         #region subsciptions
         void OnEnable() {
-            grid.OnSetupDone += Grid_OnSetupDone;
+            grid = GetComponentInParent<PathFindingGridForITileSystem>();
+            if (grid != null)
+                grid.OnSetupDone += Grid_OnSetupDone;
+            else
+                Debug.LogWarningFormat("Component Grid not found in parent hierarchy!");
         }
 
         void OnDisable() {
@@ -46,31 +51,19 @@ namespace ModularFramework.AI {
         /// </summary>
         /// <param name="_grid"></param>
         private void Grid_OnSetupDone(Grid _grid) {
-            grid = _grid;
 
-            if (AutoFindPathTargets) { // TODO To be optimized
-                GameObject[] patrolGO = GameObject.FindGameObjectsWithTag("AIPatrolNodes");
-                int rndNodeCount = 0;
-                rndNodeCount = Random.Range(2, patrolGO.Count() - 1);
-                PathTargets = new List<Transform>();
-                for (int i = 0; i < rndNodeCount; i++) {
-                    List<Node> testPath = new List<Node>();
-                    Transform randomTransform = patrolGO[Random.Range(0, patrolGO.Count() - 1)].transform;
-                    if (PathTargets.Count == 0)
-                        testPath = FindPath(transform.position, randomTransform.position, AISettings);
-                    else
-                        testPath = FindPath(PathTargets[PathTargets.Count - 1].position, randomTransform.position, AISettings);
-                    if (testPath.Count > 0)
-                        PathTargets.Add(randomTransform);
-                    else
-                        i--;
-                }
-            }
+            // Monitoring every PathTargets changes
+            this.ObserveEveryValueChanged(th => th.PathTargets.Count).Subscribe(_ => {
+                if (grid == null)
+                    return;
+                if(PathTargets.Count > 1)
+                    createPatrolPath(PathTargets);
+            });
 
             // Todo: il target verrà selezionato a seconda della situazione.
             //Target = FindObjectOfType<PlayerController>().transform;
             //GoToTarget(Target);
-            createPatrolPath(PathTargets);
+            //createPatrolPath(PathTargets);
         }
 
         /// <summary>
@@ -80,6 +73,7 @@ namespace ModularFramework.AI {
             // PATROLING
             if (Patroling) { 
                 patrolPathIndex++;
+                // TODO: insert patrol loop logic here
                 if (patrolPathIndex >= PatrolPath.Count)
                     patrolPathIndex = 0;
                 GoToNodeTarget(PatrolPath[patrolPathIndex]);
@@ -92,36 +86,31 @@ namespace ModularFramework.AI {
         #region Init
         void Awake() {
 
-
-            this.ObserveEveryValueChanged(th => th.PathTargets.Count).Subscribe(_ => {
-                if (grid == null)
-                    return;
-                createPatrolPath(PathTargets);
-            });
-
             gizmoColor = new Color(Random.value, Random.value, Random.value, 1.0f);
         }
         #endregion
 
         #region AI API
 
+        public void SetupPatrolPoints(List<Transform> _patrolPoints, bool _andStartPatroling) {
+            PathTargets = _patrolPoints;
+        }
+
         public PathFindingSettings AISettings { get { return GetAISettingsFromAIType(AIAptitude); } }
 
         public enum AIType {
-            None,
-            FullMover,
-            LockedToGround,
-        }
-
-        PathFindingSettings GetAISettingsFromAIType(AIType _AIType) {
-            switch (_AIType) {
-                case AIType.FullMover:
-                    return PathFindingSettings.FullMover;
-                case AIType.LockedToGround:
-                    return PathFindingSettings.LockedToGround;
-                default:
-                    return PathFindingSettings.FullMover;
-            }
+            /// <summary>
+            /// no moves
+            /// </summary>
+            None = 0,
+            /// <summary>
+            /// move everywhere
+            /// </summary>
+            FullMover = 1,
+            /// <summary>
+            /// locked to ground (TODO)
+            /// </summary>
+            LockedToGround = 2,
         }
 
         /// <summary>
@@ -147,10 +136,29 @@ namespace ModularFramework.AI {
             }
             moveOnPath();
         }
+
         #endregion
 
         #region internal functions
+
         #region PathFinding
+
+        /// <summary>
+        /// GetAISettingsFromAIType
+        /// </summary>
+        /// <param name="_AIType"></param>
+        /// <returns></returns>
+        PathFindingSettings GetAISettingsFromAIType(AIType _AIType) {
+            switch (_AIType) {
+                case AIType.FullMover:
+                    return PathFindingSettings.FullMover;
+                case AIType.LockedToGround:
+                    return PathFindingSettings.LockedToGround;
+                default:
+                    return PathFindingSettings.FullMover;
+            }
+        }
+
         /// <summary>
         /// Find path from start position to end posision i accord to pathfindingSettings.
         /// If not found path return empty node list.
@@ -241,6 +249,13 @@ namespace ModularFramework.AI {
         }
         #endregion
 
+        #region Movements
+
+        /// <summary>
+        /// Set patrol path and start it if requested by startAfterCreation.
+        /// </summary>
+        /// <param name="_targets"></param>
+        /// <param name="startAfterCreation"></param>
         void createPatrolPath(List<Transform> _targets, bool startAfterCreation = true) {
             if (PathTargets == null || PathTargets.Count <= 0) 
                 return;
@@ -286,12 +301,45 @@ namespace ModularFramework.AI {
                 moveOnPath();
             }).SetEase(Ease.Linear));
         }
+
+        #endregion
+
+        #region Patrol nodes
+
+        /// <summary>
+        /// Select random patrol nodes from all gameobject with tag "AIPatrolNodes". Usually for testing...
+        /// </summary>
+        void autoFindPathPoints() {
+            if (AutoFindPathTargets) { // TODO To be optimized
+                GameObject[] patrolGO = GameObject.FindGameObjectsWithTag("AIPatrolNodes");
+                int rndNodeCount = 0;
+                rndNodeCount = Random.Range(2, patrolGO.Count() - 1);
+                PathTargets = new List<Transform>();
+                for (int i = 0; i < rndNodeCount; i++) {
+                    List<Node> testPath = new List<Node>();
+                    Transform randomTransform = patrolGO[Random.Range(0, patrolGO.Count() - 1)].transform;
+                    if (PathTargets.Count == 0)
+                        testPath = FindPath(transform.position, randomTransform.position, AISettings);
+                    else
+                        testPath = FindPath(PathTargets[PathTargets.Count - 1].position, randomTransform.position, AISettings);
+                    if (testPath.Count > 0)
+                        PathTargets.Add(randomTransform);
+                    else
+                        i--;
+                }
+            }
+        }
+
+
+        #endregion
+
+
         #endregion
 
         #region Gizmos
         Color gizmoColor;
         void OnDrawGizmos() {
-            if (!grid.PathFindingGizmos)
+            if (!grid || !grid.PathFindingGizmos)
                 return;
             float GPointSize = 1;
             if (ActivePath != null) {

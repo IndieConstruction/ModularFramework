@@ -3,15 +3,27 @@ using System;
 
 namespace ModularFramework.AI {
 
+    /// <summary>
+    /// Grid created for pathfinding based on Tilemap level.
+    /// This component must be added to same gameobject with ITileSystem
+    /// Features:
+    /// - Auto search and subscribe to ITileSystem's OnSetupEnded event (ITileSystem component on same gameobject is needed)
+    /// - Build non visual grid with a list of Node for pathfinding
+    /// - ExtraNodeInfo to any node adding tags (...TBC)
+    /// </summary>
     public class PathFindingGridForITileSystem : Grid {
 
         ITileSystem level;
 
         private void OnEnable() {
             level = GetComponent<ITileSystem>();
+
             if (level != null) {
                 level.OnSetupEnded += Level_OnSetupEnd;
+            } else {
+                Debug.LogWarningFormat("Component implementing ITileSystem interface not found on gameobject {0}", gameObject.name);
             }
+                    
         }
 
         private void Level_OnSetupEnd(ISetupable tileSystem) {
@@ -30,7 +42,6 @@ namespace ModularFramework.AI {
             // variables init
             NodeRadius = level.CellSize.x;
             GridDimension = new Dimension2d(Mathf.Abs(level.MinGridX) + Mathf.Abs(level.MaxGridX) + 1, Mathf.Abs(level.MinGridY) + Mathf.Abs(level.MaxGridY) + 1);
-            // TODO: Usare limiti massimi e minimi per ogni dimensione
             GridOffSet = new Dimension2d(level.MinGridX, level.MinGridY);
             //GridCenterOffset = new Vector2(Mathf.RoundToInt(level.ColumnCount * NodeRadius)/2, -Mathf.RoundToInt(level.RowCount * NodeRadius)/2);
             // TODO: leggere dinamicamente
@@ -42,9 +53,6 @@ namespace ModularFramework.AI {
                 counter++;
                 for (int y = 0; y < GridDimension.y; y++) {
                     Position2d normalizedPosition = GetPositionWithOffset(x, y);
-                    if (normalizedPosition.x == -9 || normalizedPosition.x == -8) {
-                        //Debug.Log("");
-                    }
                     int nodeType = 1;
                     if (level.TileExist(normalizedPosition.x, normalizedPosition.y)) {
                         if (level.IsTraversable(normalizedPosition.x, normalizedPosition.y))
@@ -56,7 +64,6 @@ namespace ModularFramework.AI {
                             nodeType,
                             new Position2d(normalizedPosition.x, normalizedPosition.y),
                             level.GetTileWorldPosition(normalizedPosition.x, normalizedPosition.y)
-                            // - new Vector3(Mathf.RoundToInt(GridOffSet.x * NodeRadius) / 2, 0, 0)
                             );
                     } else {
                         Debug.LogFormat("N ({0},{1}) ({2},{3}) not exist", x,y,normalizedPosition.x, normalizedPosition.y);
@@ -70,8 +77,6 @@ namespace ModularFramework.AI {
 
             base.Setup();
         }
-
-
 
         void extraNodeInfo(Node _node) {
             // TODO: fix le assi invertite provocano AOR 
