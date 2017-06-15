@@ -137,8 +137,6 @@ namespace ModularFramework.AI {
         /// <param name="_node"></param>
         void GoToNodeTarget(Node _node) {
             ActivePath = FindPath(transform.position, _node.WorldPosition, AISettings);
-            new GameObject("Start").transform.position = transform.position;
-            new GameObject("End").transform.position = _node.WorldPosition;
 
             if (ActivePath == null || ActivePath.Count == 0) {
                 // OnPathEnded();
