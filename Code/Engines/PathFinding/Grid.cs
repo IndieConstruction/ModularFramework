@@ -111,8 +111,9 @@ namespace ModularFramework.AI {
         /// <returns></returns>
         public Node GetNode(int x, int y) {
             Position2d zeroBasedPosition = GetPositionZeroBased(x, y);
-            //Debug.LogFormat("{0}:{1}", x, y);
+            // Debug.LogFormat("{0}:{1} ({2}:{3})", zeroBasedPosition.x, zeroBasedPosition.y, x, y);
             Node returnNode = Nodes[zeroBasedPosition.x, zeroBasedPosition.y];
+            //Debug.LogFormat("{0}:{1} ({2}:{3}) -> {4}", zeroBasedPosition.x, zeroBasedPosition.y, x, y, returnNode.WorldPosition);
             return returnNode;
         }
         
@@ -122,10 +123,48 @@ namespace ModularFramework.AI {
         /// <param name="worldPosition"></param>
         /// <returns></returns>
         public Node NodeFromWorldPoint(Vector3 worldPosition) {
-            int row = Mathf.Abs(Mathf.RoundToInt((worldPosition.y + NodeRadius / 2) / NodeRadius));
-            int col = Mathf.Abs(Mathf.RoundToInt((worldPosition.x - NodeRadius / 2) / NodeRadius));
-            // for visual test in gizmos
-            return GetNode(row, col);
+            int x = Mathf.RoundToInt((
+                    (worldPosition.x - transform.position.x)
+                    - NodeRadius / 2)
+                / NodeRadius);
+            int y = Mathf.RoundToInt((
+                    (worldPosition.y - transform.position.y)
+                    - NodeRadius / 2)
+                / NodeRadius);
+
+            //float xDiff = 0;
+            //if (transform.position.x < worldPosition.x) {
+            //    // il nodo ha un indice x negativo
+            //    xDiff = transform.position.x + worldPosition.x;
+            //} else {
+            //    // il nodo ha un indice x positivo
+            //    xDiff = transform.position.x - worldPosition.x;
+            //}
+
+            //float yDiff = 0;
+            //if (transform.position.y < worldPosition.y) {
+            //    // il nodo ha un indice y negativo
+            //    yDiff = transform.position.y + worldPosition.y;
+            //} else {
+            //    // il nodo ha un indice y positivo
+            //    yDiff = transform.position.y - worldPosition.y;
+            //}
+
+            //int x = Mathf.RoundToInt((
+            //        worldPosition.x - xDiff - (NodeRadius / 2))
+            //        / NodeRadius);
+            //int y = Mathf.RoundToInt((
+            //        worldPosition.y - yDiff - (NodeRadius / 2))
+            //    / NodeRadius);
+
+
+            Debug.LogFormat("Target ({0}:{1} => ({2}))", x, y, worldPosition);
+            Node returnNode = GetNode(x, y);
+            return returnNode;
+
+            //Position2d pos = GetPositionWithOffset(x, y);
+            //Debug.LogFormat("Target ({0}:{1}({2}) => ({3}))", x, y, pos, worldPosition);
+            //return GetNode(pos.x, pos.y);
         }
 
         public List<Node> GetNeighbours(Node node) {
@@ -141,7 +180,7 @@ namespace ModularFramework.AI {
                     int checkX = node.PositionOnGrid.x + x;
                     int checkY = node.PositionOnGrid.y + y;
 
-                    if (checkX >= 0 && checkX < GridDimension.x && checkY >= 0 && checkY < GridDimension.y) {
+                    if (checkX >= GridOffSet.x && checkX < GridDimension.x && checkY >= GridOffSet.y && checkY < GridDimension.y) {
                         neighbours.Add(GetNode(checkX, checkY));
                     }
                 }

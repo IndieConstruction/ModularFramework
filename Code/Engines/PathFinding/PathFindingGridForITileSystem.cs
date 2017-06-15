@@ -10,6 +10,7 @@ namespace ModularFramework.AI {
     /// - Auto search and subscribe to ITileSystem's OnSetupEnded event (ITileSystem component on same gameobject is needed)
     /// - Build non visual grid with a list of Node for pathfinding
     /// - ExtraNodeInfo to any node adding tags (...TBC)
+    /// 
     /// </summary>
     public class PathFindingGridForITileSystem : Grid {
 
@@ -28,6 +29,7 @@ namespace ModularFramework.AI {
 
         private void Level_OnSetupEnd(ISetupable tileSystem) {
             Setup();
+            AIAgentSetup();
         }
 
         private void OnDisable() {
@@ -53,15 +55,9 @@ namespace ModularFramework.AI {
                 counter++;
                 for (int y = 0; y < GridDimension.y; y++) {
                     Position2d normalizedPosition = GetPositionWithOffset(x, y);
-                    int nodeType = 1;
                     if (level.TileExist(normalizedPosition.x, normalizedPosition.y)) {
-                        if (level.IsTraversable(normalizedPosition.x, normalizedPosition.y))
-                            nodeType = 0;
-                        else
-                            nodeType = 1;
-
                         Nodes[x, y] = new Node(
-                            nodeType,
+                            level.IsTraversable(normalizedPosition.x, normalizedPosition.y),
                             new Position2d(normalizedPosition.x, normalizedPosition.y),
                             level.GetTileWorldPosition(normalizedPosition.x, normalizedPosition.y)
                             );
@@ -82,8 +78,14 @@ namespace ModularFramework.AI {
             // TODO: fix le assi invertite provocano AOR 
             // https://trello.com/c/Fk8oPOxe
             Node nNode = GetNeighbour(_node, GridDirection.down);
-            if (nNode != null && nNode.NodeType == 0 && _node.NodeType == 1) {
+            if (nNode != null && nNode.NodeType == 1 && _node.NodeType == 0) {
                 _node.AddTag("walkable");
+            }
+        }
+
+        void AIAgentSetup() {
+            foreach (IAgent agent in GetComponentsInChildren<AIAgent>()) {
+                agent.Setup(this);
             }
         }
 

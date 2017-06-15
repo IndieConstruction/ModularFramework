@@ -46,15 +46,20 @@ namespace ModularFramework.AI {
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="_nodeType"></param>
+        /// <param name="_isTraversable"></param>
         /// <param name="_position"></param>
-        public Node(int _nodeType, Position2d _position, Vector3 _worldPosition) {
-            NodeType = _nodeType;
+        public Node(bool _isTraversable, Position2d _position, Vector3 _worldPosition) {
+            if (_isTraversable)
+                AddTag("traversable");
             PositionOnGrid = _position;
             WorldPosition = _worldPosition;
         }
 
         #region Tags
+        /// <summary>
+        /// Tags:
+        /// traversable, walkable
+        /// </summary>
         public string[] Tags = new string[] { };
 
         public void AddTag(string _tag) {

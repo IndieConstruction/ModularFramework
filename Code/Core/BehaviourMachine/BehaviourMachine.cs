@@ -57,14 +57,15 @@ namespace ModularFramework.Core.BM {
         /// </summary>
         /// <param name="_behaviours"></param>
         /// <param name="_view"></param>
-        public BehaviourMachine(List<IBehaviour> _behaviours, TView _view) {
+        public BehaviourMachine(List<IBehaviour> _behaviours, TView _view, bool _init = true) {
             injectView(_view);
             Behaviours = _behaviours;
             foreach (IBehaviour state in Behaviours) {
                 state.TypeName = state.GetType().FullName;
                 TypeCache.GetType(state.TypeName);
             }
-            Change(TypeCache.GetType(Behaviours[0].TypeName));
+            if(_init)
+                Change(TypeCache.GetType(Behaviours[0].TypeName));
         }
         #endregion
 

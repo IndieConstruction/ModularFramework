@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UniRx;
 using DG.Tweening;
+using System.Linq;
 
 namespace ModularFramework.AI {
 
@@ -52,13 +53,7 @@ namespace ModularFramework.AI {
         /// <param name="_grid"></param>
         private void Grid_OnSetupDone(Grid _grid) {
 
-            // Monitoring every PathTargets changes
-            this.ObserveEveryValueChanged(th => th.PathTargets.Count).Subscribe(_ => {
-                if (grid == null)
-                    return;
-                if(PathTargets.Count > 1)
-                    createPatrolPath(PathTargets);
-            });
+
 
             // Todo: il target verrà selezionato a seconda della situazione.
             //Target = FindObjectOfType<PlayerController>().transform;
@@ -86,14 +81,23 @@ namespace ModularFramework.AI {
         #region Init
         void Awake() {
 
-            gizmoColor = new Color(Random.value, Random.value, Random.value, 1.0f);
+            gizmoColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1.0f);
         }
         #endregion
 
         #region AI API
 
-        public void SetupPatrolPoints(List<Transform> _patrolPoints, bool _andStartPatroling) {
-            PathTargets = _patrolPoints;
+        public void SetupPatrolPoints(List<Transform> _patrolPoints = null, bool _andStartPatroling = false) {
+            if (_patrolPoints != null) {
+                PathTargets = _patrolPoints;
+            } else {
+                // AutoFind Nodes
+                _patrolPoints = new List<Transform>();
+                foreach (var node in GameObject.FindGameObjectsWithTag("AIPatrolNodes")) {
+                    _patrolPoints.Add(node.transform);
+                }
+                PathTargets = _patrolPoints;
+            }
         }
 
         public PathFindingSettings AISettings { get { return GetAISettingsFromAIType(AIAptitude); } }
@@ -119,8 +123,10 @@ namespace ModularFramework.AI {
         /// <param name="_target"></param>
         public void GoToTarget(Transform _target) {
             ActivePath = FindPath(transform.position, _target.position, AISettings);
-            if (ActivePath == null || ActivePath.Count == 0) { 
-                OnPathEnded();
+            if (ActivePath == null || ActivePath.Count == 0) {
+                // OnPathEnded();
+                Debug.LogFormat("Path for target {0} from {1} not found!", _target.position, transform.position);
+                return;
             }
             moveOnPath();
         }
@@ -131,8 +137,13 @@ namespace ModularFramework.AI {
         /// <param name="_node"></param>
         void GoToNodeTarget(Node _node) {
             ActivePath = FindPath(transform.position, _node.WorldPosition, AISettings);
+            new GameObject("Start").transform.position = transform.position;
+            new GameObject("End").transform.position = _node.WorldPosition;
+
             if (ActivePath == null || ActivePath.Count == 0) {
-                OnPathEnded();
+                // OnPathEnded();
+                Debug.LogFormat("Path for target {0} from {1} not found!", _node.WorldPosition, transform.position);
+                return;
             }
             moveOnPath();
         }
@@ -168,7 +179,7 @@ namespace ModularFramework.AI {
         /// <param name="_settings"></param>
         /// <returns></returns>
         List<Node> FindPath(Vector3 _startPos, Vector3 _targetPos, PathFindingSettings _settings) {
-            Node startNode = grid.NodeFromWorldPoint(_startPos);
+            Node startNode = grid.NodeFromWorldPoint(new Vector3(_startPos.x, _startPos.y, 0));
             Node targetNode = grid.NodeFromWorldPoint(_targetPos);
 
             List<Node> openSet = new List<Node>();
@@ -201,8 +212,9 @@ namespace ModularFramework.AI {
                 // ---------------------------------
 
                 foreach (Node neighbour in nNodes) {
-                    if (neighbour.NodeType == 0 || closedSet.Contains(neighbour)) {
-                        continue;
+                    if (!neighbour.ContainsTag("traversable") || closedSet.Contains(neighbour)) {
+                    //if (closedSet.Contains(neighbour)) {
+                            continue;
                     }
 
                     int newCostToNeighbour = node.G_Cost + GetDistance(node, neighbour, _settings);
@@ -313,11 +325,11 @@ namespace ModularFramework.AI {
             if (AutoFindPathTargets) { // TODO To be optimized
                 GameObject[] patrolGO = GameObject.FindGameObjectsWithTag("AIPatrolNodes");
                 int rndNodeCount = 0;
-                rndNodeCount = Random.Range(2, patrolGO.Count() - 1);
+                rndNodeCount = UnityEngine.Random.Range(2, patrolGO.Count() - 1);
                 PathTargets = new List<Transform>();
                 for (int i = 0; i < rndNodeCount; i++) {
                     List<Node> testPath = new List<Node>();
-                    Transform randomTransform = patrolGO[Random.Range(0, patrolGO.Count() - 1)].transform;
+                    Transform randomTransform = patrolGO[UnityEngine.Random.Range(0, patrolGO.Count() - 1)].transform;
                     if (PathTargets.Count == 0)
                         testPath = FindPath(transform.position, randomTransform.position, AISettings);
                     else
@@ -338,6 +350,7 @@ namespace ModularFramework.AI {
 
         #region Gizmos
         Color gizmoColor;
+
         void OnDrawGizmos() {
             if (!grid || !grid.PathFindingGizmos)
                 return;
@@ -351,6 +364,44 @@ namespace ModularFramework.AI {
                     }
                 }
             }
+        }
+
+        private void OnDrawGizmosSelected() {
+            if (!grid || !grid.PathFindingGizmos)
+                return;
+
+            // Test to delete
+
+            List<Node> targetNodes = new List<Node>();
+            foreach (Transform target in PathTargets) {
+                Node nodeToAdd = grid.NodeFromWorldPoint(target.transform.position);
+                targetNodes.Add(nodeToAdd);
+            }
+            float GPointSize = 1f;
+            Gizmos.color = Color.black;
+            if (ActivePath != null) {
+                foreach (Node node in targetNodes) {
+                    Gizmos.color = gizmoColor;
+                    Gizmos.DrawSphere(node.WorldPosition, grid.NodeRadius * GPointSize);
+                }
+            }
+            // -----            
+        }
+
+        public void Setup(Grid _grid) {
+
+            grid = _grid;
+
+            // Monitoring every PathTargets changes
+            this.ObserveEveryValueChanged(th => th.PathTargets.Count).Subscribe(_ => {
+                if (grid == null)
+                    return;
+                if (PathTargets.Count > 1)
+                    createPatrolPath(PathTargets);
+            });
+
+            SetupPatrolPoints();
+
         }
         #endregion
     }
