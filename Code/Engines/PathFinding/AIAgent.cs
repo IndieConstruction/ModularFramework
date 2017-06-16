@@ -10,11 +10,27 @@ namespace ModularFramework.AI {
     public class AIAgent : MonoBehaviour, IAgent {
 
         #region Properties
+
+        #region Patroling
+        //public PatrolData Patrol = new PatrolData();
+        #endregion
+
         public List<Transform> PathTargets = new List<Transform>();
+        
+        /// <summary>
+        /// Grid.
+        /// </summary>
+        Grid grid;
+
+        /// <summary>
+        /// Lista dei nodi che compongono il patrolling path.
+        /// </summary>
         public List<Node> PatrolPath = new List<Node>();
         int patrolPathIndex = 0;
         
-        Grid grid;
+        /// <summary>
+        /// Lista degli step (nodi) del path patrol attuale.
+        /// </summary>
         List<Node> ActivePath = null;
 
         #region AI Settings
@@ -26,8 +42,7 @@ namespace ModularFramework.AI {
         public bool AutoFindPathTargets = false;
         public AIType AIAptitude = AIType.FullMover;
         #endregion
-
-
+        
         #endregion
 
         #region Events
@@ -80,7 +95,6 @@ namespace ModularFramework.AI {
 
         #region Init
         void Awake() {
-
             gizmoColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1.0f);
         }
         #endregion
