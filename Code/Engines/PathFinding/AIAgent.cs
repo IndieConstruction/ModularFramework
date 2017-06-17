@@ -11,11 +11,9 @@ namespace ModularFramework.AI {
 
         #region Properties
 
-        #region Patroling
-        //public PatrolData Patrol = new PatrolData();
-        #endregion
+        
 
-        public List<Transform> PathTargets = new List<Transform>();
+        public List<PatrolPoint> PathTargets = new List<PatrolPoint>();
         
         /// <summary>
         /// Grid.
@@ -34,15 +32,25 @@ namespace ModularFramework.AI {
         List<Node> ActivePath = null;
 
         #region AI Settings
-        [Header("Health Settings")]
+        [Header("AI Settings")]
+        public float MoveSpeed = 0.5f;
         public bool Patroling = true;
         public bool Loop = true;
         public bool Reversable = true;
-        public float MoveSpeed = 0.5f;
+        
         public bool AutoFindPathTargets = false;
         public AIType AIAptitude = AIType.FullMover;
         #endregion
-        
+
+        #endregion
+
+        #region Pluggable Abilities
+
+        #region Patroling
+        IPatroller patrolController;
+        public PatrolData Patrol = new PatrolData();
+        #endregion
+
         #endregion
 
         #region Events
@@ -97,22 +105,33 @@ namespace ModularFramework.AI {
         void Awake() {
             gizmoColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1.0f);
         }
+
+        public void Setup(Grid _grid) {
+            grid = _grid;
+
+            // Monitoring every PathTargets changes
+            this.ObserveEveryValueChanged(th => th.PathTargets.Count).Subscribe(_ => {
+                if (grid == null)
+                    return;
+                if (PathTargets.Count > 1)
+                    createPatrolPath(PathTargets);
+            });
+
+            patrolController = GetComponent<IPatroller>();
+            if(patrolController != null)
+                SetupPatrolPoints(patrolController.GetPatrolData());
+
+        }
         #endregion
 
         #region AI API
 
-        public void SetupPatrolPoints(List<Transform> _patrolPoints = null, bool _andStartPatroling = false) {
-            if (_patrolPoints != null) {
-                PathTargets = _patrolPoints;
-            } else {
+        public void SetupPatrolPoints(PatrolData patrolData) {
                 // AutoFind Nodes
-                _patrolPoints = new List<Transform>();
-                foreach (var node in GameObject.FindGameObjectsWithTag("AIPatrolNodes")) {
-                    _patrolPoints.Add(node.transform);
+                foreach (PatrolPoint position in patrolData.PatrolPoints) {
+                    PathTargets.Add(position);
                 }
-                PathTargets = _patrolPoints;
             }
-        }
 
         public PathFindingSettings AISettings { get { return GetAISettingsFromAIType(AIAptitude); } }
 
@@ -280,7 +299,7 @@ namespace ModularFramework.AI {
         /// </summary>
         /// <param name="_targets"></param>
         /// <param name="startAfterCreation"></param>
-        void createPatrolPath(List<Transform> _targets, bool startAfterCreation = true) {
+        void createPatrolPath(List<PatrolPoint> _targets, bool startAfterCreation = true) {
             if (PathTargets == null || PathTargets.Count <= 0) 
                 return;
             PatrolPath = TransformTargetsToNodeList(_targets);
@@ -295,10 +314,10 @@ namespace ModularFramework.AI {
         /// </summary>
         /// <param name="_targets"></param>
         /// <returns></returns>
-        List<Node> TransformTargetsToNodeList(List<Transform> _targets) {
+        List<Node> TransformTargetsToNodeList(List<PatrolPoint> _targets) {
             List<Node> returnList = new List<Node>();
-            foreach (Transform t in PathTargets) {
-                returnList.Add(grid.NodeFromWorldPoint(t.position));
+            foreach (var t in _targets) {
+                returnList.Add(grid.NodeFromWorldPoint(t.Position));
             }
             return returnList;
         }
@@ -328,34 +347,7 @@ namespace ModularFramework.AI {
 
         #endregion
 
-        #region Patrol nodes
 
-        /// <summary>
-        /// Select random patrol nodes from all gameobject with tag "AIPatrolNodes". Usually for testing...
-        /// </summary>
-        void autoFindPathPoints() {
-            if (AutoFindPathTargets) { // TODO To be optimized
-                GameObject[] patrolGO = GameObject.FindGameObjectsWithTag("AIPatrolNodes");
-                int rndNodeCount = 0;
-                rndNodeCount = UnityEngine.Random.Range(2, patrolGO.Count() - 1);
-                PathTargets = new List<Transform>();
-                for (int i = 0; i < rndNodeCount; i++) {
-                    List<Node> testPath = new List<Node>();
-                    Transform randomTransform = patrolGO[UnityEngine.Random.Range(0, patrolGO.Count() - 1)].transform;
-                    if (PathTargets.Count == 0)
-                        testPath = FindPath(transform.position, randomTransform.position, AISettings);
-                    else
-                        testPath = FindPath(PathTargets[PathTargets.Count - 1].position, randomTransform.position, AISettings);
-                    if (testPath.Count > 0)
-                        PathTargets.Add(randomTransform);
-                    else
-                        i--;
-                }
-            }
-        }
-
-
-        #endregion
 
 
         #endregion
@@ -385,8 +377,8 @@ namespace ModularFramework.AI {
             // Test to delete
 
             List<Node> targetNodes = new List<Node>();
-            foreach (Transform target in PathTargets) {
-                Node nodeToAdd = grid.NodeFromWorldPoint(target.transform.position);
+            foreach (var target in PathTargets) {
+                Node nodeToAdd = grid.NodeFromWorldPoint(target.Position);
                 targetNodes.Add(nodeToAdd);
             }
             float GPointSize = 1f;
@@ -400,21 +392,6 @@ namespace ModularFramework.AI {
             // -----            
         }
 
-        public void Setup(Grid _grid) {
-
-            grid = _grid;
-
-            // Monitoring every PathTargets changes
-            this.ObserveEveryValueChanged(th => th.PathTargets.Count).Subscribe(_ => {
-                if (grid == null)
-                    return;
-                if (PathTargets.Count > 1)
-                    createPatrolPath(PathTargets);
-            });
-
-            SetupPatrolPoints();
-
-        }
         #endregion
     }
 

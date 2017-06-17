@@ -9,9 +9,9 @@ namespace ModularFramework.AI {
     /// </summary>
     public interface IPatroller : IAgent {
         Transform transform { get; }
-        //PatrolData Data { get; set; }
         List<Vector3> PatrolPoints { get; set; }
         List<Node> PatrolPath { get; set; }
+        PatrolData GetPatrolData();
     }
 
 }

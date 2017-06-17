@@ -2,6 +2,9 @@
 using UnityEditor;
 namespace ModularFramework.AI {
 
+    /// <summary>
+    /// Define how to display in editor a PatrolPoint.
+    /// </summary>
     [CustomPropertyDrawer(typeof(PatrolPoint))]
     public class PatrolPointDrawer : PropertyDrawer {
 

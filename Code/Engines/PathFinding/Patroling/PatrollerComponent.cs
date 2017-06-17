@@ -11,7 +11,11 @@ namespace ModularFramework.AI {
         public List<Vector3> PatrolPoints { get; set; }
         public List<Node> PatrolPath { get; set; }
 
-        public void Setup(Grid grid) {  
+        public PatrolData GetPatrolData() {
+            return Data;
+        }
+
+        public void Setup(Grid grid) {
             
         }
     }

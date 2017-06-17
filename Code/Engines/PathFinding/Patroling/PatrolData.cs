@@ -9,11 +9,12 @@ namespace ModularFramework.AI {
     /// </summary>
     [System.Serializable]
     public class PatrolData {
-
+        /// <summary>
+        /// List of patrol points ordered by step sequence.
+        /// </summary>
         public List<PatrolPoint> PatrolPoints = new List<PatrolPoint>();
-        //public PatrolPoint PatrolPoint;
-
     }
+
     [System.Serializable]
     public class PatrolPoint {
         public int Order;
