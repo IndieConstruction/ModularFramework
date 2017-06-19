@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using UniRx;
 using DG.Tweening;
 using System.Linq;
+using ModularFramework.Data;
+using System;
 
 namespace ModularFramework.AI {
 
-    public class AIAgent : MonoBehaviour, IAgent {
+    public class AIAgent : MonoBehaviour, IAgent, IDataContainer {
 
         #region Properties
-
-        
 
         public List<PatrolPoint> PathTargets = new List<PatrolPoint>();
         
@@ -32,7 +32,7 @@ namespace ModularFramework.AI {
         List<Node> ActivePath = null;
 
         [Header("AI Settings")]
-        public AIAgentData Data;
+        
         #region AI Settings
         [Header("AI Settings")]
 
@@ -47,11 +47,24 @@ namespace ModularFramework.AI {
 
         #region Data
 
+        public AIAgentData Data = new AIAgentData();
 
-        public class AIAgentData {
+        public virtual IData GetDataForSave() {
+            // TODO: preparazione dati...
+
+            return Data;
+        }
+
+
+        /// <summary>
+        /// IData Type.
+        /// </summary>
+        [Serializable]
+        public class AIAgentData : IData {
             public string AgentID;
             public float MoveSpeed = 0.5f;
-            public bool Patroling = true;
+            public bool IsPatroller = true;
+
         }
 
         #endregion
@@ -60,7 +73,6 @@ namespace ModularFramework.AI {
 
         #region Patroling
         IPatroller patrolController;
-        public PatrolData Patrol = new PatrolData();
         #endregion
 
         #endregion
@@ -101,7 +113,7 @@ namespace ModularFramework.AI {
         /// </summary>
         private void OnPathEnded() {
             // PATROLING
-            if (Data.Patroling) { 
+            if (Data.IsPatroller) { 
                 patrolPathIndex++;
                 // TODO: insert patrol loop logic here
                 if (patrolPathIndex >= PatrolPath.Count)

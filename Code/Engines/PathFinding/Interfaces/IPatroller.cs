@@ -1,16 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ModularFramework.Data;
 
 namespace ModularFramework.AI {
 
     /// <summary>
     /// Add patrol functionality.
     /// </summary>
-    public interface IPatroller : IAgent {
-        Transform transform { get; }
-        List<Vector3> PatrolPoints { get; set; }
-        List<Node> PatrolPath { get; set; }
+    public interface IPatroller : IDataContainer {
+        IPatroller PatrollerComponent{ get; }
+        //Transform transform { get; }
+        //List<Vector3> PatrolPoints { get; set; }
+        //List<Node> PatrolPath { get; set; }
         PatrolData GetPatrolData();
     }
 

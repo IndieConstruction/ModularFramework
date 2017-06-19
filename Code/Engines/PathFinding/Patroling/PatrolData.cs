@@ -1,14 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
+using ModularFramework.Data;
 
 namespace ModularFramework.AI {
 
     /// <summary>
     /// Data structure needed to define patrol behaviour.
     /// </summary>
-    [System.Serializable]
-    public class PatrolData {
+    [Serializable]
+    public class PatrolData : IData {
         /// <summary>
         /// List of patrol points ordered by step sequence.
         /// </summary>
