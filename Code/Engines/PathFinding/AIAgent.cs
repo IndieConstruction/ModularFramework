@@ -31,16 +31,28 @@ namespace ModularFramework.AI {
         /// </summary>
         List<Node> ActivePath = null;
 
+        [Header("AI Settings")]
+        public AIAgentData Data;
         #region AI Settings
         [Header("AI Settings")]
-        public float MoveSpeed = 0.5f;
-        public bool Patroling = true;
+
         public bool Loop = true;
         public bool Reversable = true;
         
         public bool AutoFindPathTargets = false;
         public AIType AIAptitude = AIType.FullMover;
         #endregion
+
+        #endregion
+
+        #region Data
+
+
+        public class AIAgentData {
+            public string AgentID;
+            public float MoveSpeed = 0.5f;
+            public bool Patroling = true;
+        }
 
         #endregion
 
@@ -89,7 +101,7 @@ namespace ModularFramework.AI {
         /// </summary>
         private void OnPathEnded() {
             // PATROLING
-            if (Patroling) { 
+            if (Data.Patroling) { 
                 patrolPathIndex++;
                 // TODO: insert patrol loop logic here
                 if (patrolPathIndex >= PatrolPath.Count)
@@ -339,17 +351,14 @@ namespace ModularFramework.AI {
         /// <param name="_node"></param>
         void moveToNode(Node _node) {
             Sequence PathSequence = DOTween.Sequence();
-            PathSequence.Append(transform.DOMove(_node.WorldPosition, MoveSpeed).OnComplete(delegate() {
+            PathSequence.Append(transform.DOMove(_node.WorldPosition, Data.MoveSpeed).OnComplete(delegate() {
                 ActivePath.Remove(_node);
                 moveOnPath();
             }).SetEase(Ease.Linear));
         }
 
         #endregion
-
-
-
-
+        
         #endregion
 
         #region Gizmos
@@ -435,4 +444,6 @@ namespace ModularFramework.AI {
 
         #endregion
     }
+
+
 }
