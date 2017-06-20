@@ -84,7 +84,7 @@ namespace ModularFramework.AI {
         }
 
         void AIAgentSetup() {
-            foreach (IAgent agent in GetComponentsInChildren<AIAgent>()) {
+            foreach (AIAgent agent in GetComponentsInChildren<AIAgent>()) {
                 agent.Setup(this);
             }
         }

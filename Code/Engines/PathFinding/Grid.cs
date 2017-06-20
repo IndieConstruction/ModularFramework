@@ -46,6 +46,12 @@ namespace ModularFramework.AI {
 
             if (OnSetupDone != null)
                 OnSetupDone(this);
+
+            // Direct call pathfinding grid setup done for any sub component.
+            foreach (var pfComponent in GetComponentsInChildren<IPathfindComponent>()) {
+                pfComponent.OnPathfindingGridSetupDone(this);
+            }
+
             IsInitialized = true;
         }
 

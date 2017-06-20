@@ -7,11 +7,11 @@ namespace ModularFramework.AI {
     /// Features:
     /// - Add, (remove) and move patrol point ordered priority.
     /// </summary>
-    [CustomEditor(typeof(PatrollerComponent))]
-    public class PatrollerComponentEditor : Editor {
+    [CustomEditor(typeof(PatrolComponent))]
+    public class PatrolComponentEditor : Editor {
 
         protected virtual void OnSceneGUI() {
-            PatrollerComponent component = target as PatrollerComponent;
+            PatrolComponent component = target as PatrolComponent;
             Handles.color = Color.red;
             Handles.FreeMoveHandle(component.transform.position, Quaternion.identity, 0.4f, Vector3.one, Handles.CircleHandleCap);
 
@@ -53,7 +53,7 @@ namespace ModularFramework.AI {
 
         public override void OnInspectorGUI() {
             DrawDefaultInspector();
-            PatrollerComponent component = target as PatrollerComponent;
+            PatrolComponent component = target as PatrolComponent;
 
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button(string.Format("Add", new GUILayoutOption[] { GUILayout.Width(80), GUILayout.Height(100) }))) {
@@ -73,7 +73,7 @@ namespace ModularFramework.AI {
         /// </summary>
         /// <param name="component"></param>
         /// <param name="onMousePosition"></param>
-        void AddPatrolPoint(PatrollerComponent component, bool onMousePosition = false) {
+        void AddPatrolPoint(PatrolComponent component, bool onMousePosition = false) {
             PatrolPoint newPP = new PatrolPoint();
             if (onMousePosition)
                 newPP.Position = GetMousePositionInEditor(component.transform);
@@ -101,7 +101,7 @@ namespace ModularFramework.AI {
         /// Remove last patrol point.
         /// </summary>
         /// <param name="component"></param>
-        void RemovePatrolPoint(PatrollerComponent component) {
+        void RemovePatrolPoint(PatrolComponent component) {
             if (component.Data.PatrolPoints.Count > 0)
                 component.Data.PatrolPoints.RemoveAt(component.Data.PatrolPoints.Count - 1);
         }

@@ -3,31 +3,28 @@ using System.Linq;
 using System.Collections.Generic;
 using UniRx;
 using DG.Tweening;
-using System.Linq;
 using ModularFramework.Data;
 using System;
 
 namespace ModularFramework.AI {
 
-    public class AIAgent : MonoBehaviour, IAgent, IDataContainer {
+    /// <summary>
+    /// Classe base per intelligenza artificiale.
+    /// - Settings per comportamenti di intelligenza artificila.
+    /// - Pathfiding.
+    /// -- Create grid based on Tilemap stage.
+    /// </summary>
+    public class AIAgent : MonoBehaviour, IPathfindComponent {
 
         #region Properties
-
-        /// <summary>
-        /// Patrol points che determinano il percorso di patrolling.
-        /// </summary>
-        public List<PatrolPoint> PathTargets = new List<PatrolPoint>();
         
         /// <summary>
         /// Grid.
         /// </summary>
         Grid grid;
+        PatrolComponent patrolComponent;
 
-        /// <summary>
-        /// Lista dei nodi che compongono il patrolling path.
-        /// </summary>
-        public List<Node> PatrolPath = new List<Node>();
-        int patrolPathIndex = 0;
+        int pathStepIndex = 0;
         
         /// <summary>
         /// Lista degli step (nodi) del path patrol attuale.
@@ -61,72 +58,24 @@ namespace ModularFramework.AI {
         }
 
 
-        /// <summary>
-        /// IData Type.
-        /// </summary>
-        [Serializable]
-        public class AIAgentData : IData {
-            public string AgentID;
-            public float MoveSpeed = 0.5f;
-            public bool IsPatroller = true;
 
-        }
 
         #endregion
 
         #region Pluggable Abilities
 
-        #region Patroling
-        IPatroller patrolController;
-        #endregion
-
         #endregion
 
         #region Events
 
-        #region subsciptions
-        void OnEnable() {
-            grid = GetComponentInParent<PathFindingGridForITileSystem>();
-            if (grid != null)
-                grid.OnSetupDone += Grid_OnSetupDone;
-            else
-                Debug.LogWarningFormat("Component Grid not found in parent hierarchy!");
-        }
-
-        void OnDisable() {
-            grid.OnSetupDone -= Grid_OnSetupDone;
-        }
-        #endregion
-
-        #region delegates
         /// <summary>
-        /// It occurs when grid setup done.
+        /// It occurs when pathfinding grid setup done.
         /// </summary>
         /// <param name="_grid"></param>
-        private void Grid_OnSetupDone(Grid _grid) {
-
-
-
-            // Todo: il target verrà selezionato a seconda della situazione.
-            //Target = FindObjectOfType<PlayerController>().transform;
-            //GoToTarget(Target);
-            //createPatrolPath(PathTargets);
+        public void OnPathfindingGridSetupDone(Grid _grid) {
+            patrolComponent = GetComponent<PatrolComponent>();
         }
 
-        /// <summary>
-        /// It occurs when a target node has been reached.
-        /// </summary>
-        private void OnPathEnded() {
-            // PATROLING
-            if (Data.IsPatroller) { 
-                patrolPathIndex++;
-                // TODO: insert patrol loop logic here
-                if (patrolPathIndex >= PatrolPath.Count)
-                    patrolPathIndex = 0;
-                GoToNodeTarget(PatrolPath[patrolPathIndex]);
-            }
-        }
-        #endregion
 
         #endregion
 
@@ -137,35 +86,11 @@ namespace ModularFramework.AI {
 
         public void Setup(Grid _grid) {
             grid = _grid;
-
-            // Monitoring every PathTargets changes
-            this.ObserveEveryValueChanged(th => th.PathTargets.Count).Subscribe(_ => {
-                if (grid == null)
-                    return;
-                if (PathTargets.Count > 1)
-                    createPatrolPath(PathTargets);
-            });
-
-            patrolController = GetComponent<IPatroller>();
-            if(patrolController != null)
-                SetupPatrolPoints(patrolController.GetPatrolData());
-
         }
         #endregion
 
         #region AI API
-
-        /// <summary>
-        /// Usa come fonte patrolData.PatrolPoints per riempire PathTargets dopo le dovute modifiche.
-        /// </summary>
-        /// <param name="patrolData"></param>
-        public void SetupPatrolPoints(PatrolData patrolData) {
-            // AutoFind Nodes
-            foreach (PatrolPoint position in patrolData.PatrolPoints) {
-                PathTargets.Add(position);
-            }
-        }
-
+        
         public PathFindingSettings AISettings { get { return GetAISettingsFromAIType(AIAptitude); } }
 
         public enum AIType {
@@ -201,7 +126,7 @@ namespace ModularFramework.AI {
         /// Imposta il pathfinding attuale per raggiungere il target e inizia il movimento.
         /// </summary>
         /// <param name="_node"></param>
-        void GoToNodeTarget(Node _node) {
+        public void GoToNodeTarget(Node _node) {
             ActivePath = FindPath(transform.position, _node.WorldPosition, AISettings);
 
             if (ActivePath == null || ActivePath.Count == 0) {
@@ -327,42 +252,19 @@ namespace ModularFramework.AI {
 
         #region Movements
 
-        /// <summary>
-        /// Set patrol path and start it if requested by startAfterCreation.
-        /// </summary>
-        /// <param name="_targets"></param>
-        /// <param name="startAfterCreation"></param>
-        void createPatrolPath(List<PatrolPoint> _targets, bool startAfterCreation = true) {
-            if (PathTargets == null || PathTargets.Count <= 0) 
-                return;
-            PatrolPath = TransformTargetsToNodeList(_targets);
-            patrolPathIndex = 0;
-            if (startAfterCreation)
-                GoToNodeTarget(PatrolPath[patrolPathIndex]);
-        }
+
+
+
 
         /// <summary>
-        /// Data una lista di Transform restituisce una lista di node. 
-        /// Usata per generalemente per creare un patrol path.
-        /// </summary>
-        /// <param name="_targets"></param>
-        /// <returns></returns>
-        List<Node> TransformTargetsToNodeList(List<PatrolPoint> _targets) {
-            List<Node> returnList = new List<Node>();
-            foreach (var t in _targets) {
-                returnList.Add(grid.NodeFromWorldPoint(t.Position));
-            }
-            return returnList;
-        }
-
-        /// <summary>
-        /// Percorre tutto il path attuale fino al termine.
+        /// Inizia a percorrere il path di nodi verso il target.
         /// </summary>
         void moveOnPath() {
-            if (ActivePath.Count <= 0) {
-                OnPathEnded();
+            if (pathStepIndex > ActivePath.Count - 1) {
+                patrolComponent.OnPatrolPathStepEnded();
                 return;
             }
+            // Altrimenti proseguo nel percorrere il path
             moveToNode(ActivePath[0]);
         }
 
@@ -373,7 +275,7 @@ namespace ModularFramework.AI {
         void moveToNode(Node _node) {
             Sequence PathSequence = DOTween.Sequence();
             PathSequence.Append(transform.DOMove(_node.WorldPosition, Data.MoveSpeed).OnComplete(delegate() {
-                ActivePath.Remove(_node);
+                pathStepIndex++;
                 moveOnPath();
             }).SetEase(Ease.Linear));
         }
@@ -403,26 +305,20 @@ namespace ModularFramework.AI {
         private void OnDrawGizmosSelected() {
             if (!grid || !grid.PathFindingGizmos)
                 return;
-
-            // Test to delete
-
-            List<Node> targetNodes = new List<Node>();
-            foreach (var target in PathTargets) {
-                Node nodeToAdd = grid.NodeFromWorldPoint(target.Position);
-                targetNodes.Add(nodeToAdd);
-            }
-            float GPointSize = 1f;
-            Gizmos.color = Color.black;
-            if (ActivePath != null) {
-                foreach (Node node in targetNodes) {
-                    Gizmos.color = gizmoColor;
-                    Gizmos.DrawSphere(node.WorldPosition, grid.NodeRadius * GPointSize);
-                }
-            }
-            // -----            
         }
 
         #endregion
+    }
+
+    /// <summary>
+    /// IData Type.
+    /// </summary>
+    [Serializable]
+    public class AIAgentData : IData {
+        public string AgentID;
+        public float MoveSpeed = 0.5f;
+        public bool IsPatroller = true;
+
     }
 
     /// <summary>
