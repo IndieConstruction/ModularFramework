@@ -13,6 +13,9 @@ namespace ModularFramework.AI {
 
         #region Properties
 
+        /// <summary>
+        /// Patrol points che determinano il percorso di patrolling.
+        /// </summary>
         public List<PatrolPoint> PathTargets = new List<PatrolPoint>();
         
         /// <summary>
@@ -49,9 +52,11 @@ namespace ModularFramework.AI {
 
         public AIAgentData Data = new AIAgentData();
 
+        /// <summary>
+        /// Restituisce i dati, se necessario elaborati, per il salvataggio.
+        /// </summary>
+        /// <returns></returns>
         public virtual IData GetDataForSave() {
-            // TODO: preparazione dati...
-
             return Data;
         }
 
@@ -150,12 +155,16 @@ namespace ModularFramework.AI {
 
         #region AI API
 
+        /// <summary>
+        /// Usa come fonte patrolData.PatrolPoints per riempire PathTargets dopo le dovute modifiche.
+        /// </summary>
+        /// <param name="patrolData"></param>
         public void SetupPatrolPoints(PatrolData patrolData) {
-                // AutoFind Nodes
-                foreach (PatrolPoint position in patrolData.PatrolPoints) {
-                    PathTargets.Add(position);
-                }
+            // AutoFind Nodes
+            foreach (PatrolPoint position in patrolData.PatrolPoints) {
+                PathTargets.Add(position);
             }
+        }
 
         public PathFindingSettings AISettings { get { return GetAISettingsFromAIType(AIAptitude); } }
 
