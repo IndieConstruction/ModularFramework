@@ -9,8 +9,8 @@ namespace ModularFramework.AI {
 
     public class PatrolComponent : MonoBehaviour, IPathfindComponent {
 
-        Grid grid;
-        AIAgent aiAgent;
+        PathfindingGrid grid;
+        AIAgentComponent aiAgent;
 
         /// <summary>
         /// PatrolData.
@@ -117,9 +117,9 @@ namespace ModularFramework.AI {
             });
         }
 
-        public void OnPathfindingGridSetupDone(Grid _grid) {
+        public void OnPathfindingGridSetupDone(PathfindingGrid _grid) {
             grid = _grid;
-            aiAgent = GetComponent<AIAgent>();
+            aiAgent = GetComponent<AIAgentComponent>();
         }
 
         /// <summary>

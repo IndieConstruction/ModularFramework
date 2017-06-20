@@ -12,7 +12,7 @@ namespace ModularFramework.AI {
     /// - ExtraNodeInfo to any node adding tags (...TBC)
     /// 
     /// </summary>
-    public class PathFindingGridForITileSystem : Grid {
+    public class PathFindingGridForITileSystem : PathfindingGrid {
 
         ITileSystem level;
 
@@ -84,7 +84,7 @@ namespace ModularFramework.AI {
         }
 
         void AIAgentSetup() {
-            foreach (AIAgent agent in GetComponentsInChildren<AIAgent>()) {
+            foreach (AIAgentComponent agent in GetComponentsInChildren<AIAgentComponent>()) {
                 agent.Setup(this);
             }
         }

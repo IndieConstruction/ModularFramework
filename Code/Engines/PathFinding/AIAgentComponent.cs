@@ -14,14 +14,14 @@ namespace ModularFramework.AI {
     /// - Pathfiding.
     /// -- Create grid based on Tilemap stage.
     /// </summary>
-    public class AIAgent : MonoBehaviour, IPathfindComponent {
+    public class AIAgentComponent : MonoBehaviour, IPathfindComponent {
 
         #region Properties
         
         /// <summary>
         /// Grid.
         /// </summary>
-        Grid grid;
+        PathfindingGrid grid;
         PatrolComponent patrolComponent;
 
         int pathStepIndex = 0;
@@ -72,7 +72,7 @@ namespace ModularFramework.AI {
         /// It occurs when pathfinding grid setup done.
         /// </summary>
         /// <param name="_grid"></param>
-        public void OnPathfindingGridSetupDone(Grid _grid) {
+        public void OnPathfindingGridSetupDone(PathfindingGrid _grid) {
             patrolComponent = GetComponent<PatrolComponent>();
         }
 
@@ -84,7 +84,7 @@ namespace ModularFramework.AI {
             gizmoColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1.0f);
         }
 
-        public void Setup(Grid _grid) {
+        public void Setup(PathfindingGrid _grid) {
             grid = _grid;
         }
         #endregion
@@ -265,7 +265,7 @@ namespace ModularFramework.AI {
                 return;
             }
             // Altrimenti proseguo nel percorrere il path
-            moveToNode(ActivePath[0]);
+            moveToNode(ActivePath[pathStepIndex]);
         }
 
         /// <summary>

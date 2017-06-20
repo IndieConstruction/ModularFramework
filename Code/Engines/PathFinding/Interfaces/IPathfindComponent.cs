@@ -12,6 +12,6 @@ namespace ModularFramework.AI {
         /// Viene chiamata al termine del setup della grid del pathfinding.
         /// </summary>
         /// <param name="_grid"></param>
-        void OnPathfindingGridSetupDone(Grid _grid);
+        void OnPathfindingGridSetupDone(PathfindingGrid _grid);
     }
 }

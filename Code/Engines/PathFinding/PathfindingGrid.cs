@@ -6,7 +6,7 @@ namespace ModularFramework.AI {
     /// <summary>
     /// Rappresenta la grilia dati utilizzata per il pathfinding.
     /// </summary>
-    public abstract class Grid : MonoBehaviour {
+    public abstract class PathfindingGrid : MonoBehaviour {
         public LayerMask UnwalkableMask;
         public Dimension2d GridDimension;
         public Dimension2d GridOffSet;
@@ -238,7 +238,7 @@ namespace ModularFramework.AI {
 
         #region Events
 
-        public delegate void PathFindingGridEventHandler(Grid _grid);
+        public delegate void PathFindingGridEventHandler(PathfindingGrid _grid);
 
         public event PathFindingGridEventHandler OnSetupDone;
 

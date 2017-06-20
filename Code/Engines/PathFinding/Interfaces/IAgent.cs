@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ModularFramework.AI {
 
     public interface IAgent {
-        void Setup(Grid grid);
+        void Setup(PathfindingGrid grid);
     }
 
 }
