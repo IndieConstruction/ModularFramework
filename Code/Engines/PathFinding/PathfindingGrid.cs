@@ -24,13 +24,6 @@ namespace ModularFramework.AI {
 
         public bool IsInitialized;
 
-        #region Gizmos
-        [Header("Gizmos Settings")]
-        public bool PathFindingGizmos = false;
-        public bool TagsGizmos = false;
-        protected Color GizmoColor;
-        #endregion
-
         #region Pathfinding system settins
         public bool DrawGizmos;
         #endregion
@@ -56,6 +49,10 @@ namespace ModularFramework.AI {
         }
 
         #region Gizmos
+        [Header("Gizmos Settings")]
+        public bool PathFindingGizmos = false;
+        public bool TagsGizmos = false;
+        protected Color GizmoColor;
 
         //public List<Node> Path;
         private void OnDrawGizmosSelected() {

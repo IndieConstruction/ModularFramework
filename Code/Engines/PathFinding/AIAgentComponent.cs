@@ -27,7 +27,7 @@ namespace ModularFramework.AI {
         int pathStepIndex = 0;
         
         /// <summary>
-        /// Lista degli step (nodi) del path patrol attuale.
+        /// Lista degli step (nodi) del path finding attuale.
         /// </summary>
         List<Node> ActivePath = null;
 
@@ -56,14 +56,7 @@ namespace ModularFramework.AI {
         public virtual IData GetDataForSave() {
             return Data;
         }
-
-
-
-
-        #endregion
-
-        #region Pluggable Abilities
-
+        
         #endregion
 
         #region Events
@@ -75,7 +68,6 @@ namespace ModularFramework.AI {
         public void OnPathfindingGridSetupDone(PathfindingGrid _grid) {
             patrolComponent = GetComponent<PatrolComponent>();
         }
-
 
         #endregion
 
@@ -112,28 +104,28 @@ namespace ModularFramework.AI {
         /// Imposta il pathfinding attuale per raggiungere il target e inizia il movimento.
         /// </summary>
         /// <param name="_target"></param>
-        public void GoToTarget(Transform _target) {
-            ActivePath = FindPath(transform.position, _target.position, AISettings);
-            if (ActivePath == null || ActivePath.Count == 0) {
-                // OnPathEnded();
-                Debug.LogFormat("Path for target {0} from {1} not found!", _target.position, transform.position);
-                return;
-            }
-            moveOnPath();
+        public void FindPathToTarget(Transform _target) {
+            FindPathToTarget(grid.NodeFromWorldPoint(_target.position));
         }
 
         /// <summary>
         /// Imposta il pathfinding attuale per raggiungere il target e inizia il movimento.
         /// </summary>
         /// <param name="_node"></param>
-        public void GoToNodeTarget(Node _node) {
+        public void FindPathToTarget(Node _node) {
             ActivePath = FindPath(transform.position, _node.WorldPosition, AISettings);
-
-            if (ActivePath == null || ActivePath.Count == 0) {
+            pathStepIndex = 0;
+            Debug.LogFormat("... Path from {2}[{3}] to target {0}[{1}].", _node.WorldPosition, _node.PositionOnGrid, transform.position, grid.NodeFromWorldPoint(transform.position).PositionOnGrid);
+            if (ActivePath == null) {
                 // OnPathEnded();
-                Debug.LogFormat("Path for target {0} from {1} not found!", _node.WorldPosition, transform.position);
+                Debug.LogFormat("Path from {2}[{3}] to target {0}[{1}] not found!", _node.WorldPosition, _node.PositionOnGrid, transform.position, grid.NodeFromWorldPoint(transform.position).PositionOnGrid);
                 return;
             }
+            if (ActivePath.Count < 2) {
+                Debug.LogFormat("Path count < 2 elements... from {2}[{3}] to {0}[{1}].", _node.WorldPosition, _node.PositionOnGrid, transform.position, grid.NodeFromWorldPoint(transform.position).PositionOnGrid);
+                return;
+            }
+
             moveOnPath();
         }
 
@@ -251,11 +243,7 @@ namespace ModularFramework.AI {
         #endregion
 
         #region Movements
-
-
-
-
-
+        
         /// <summary>
         /// Inizia a percorrere il path di nodi verso il target.
         /// </summary>
@@ -310,6 +298,7 @@ namespace ModularFramework.AI {
         #endregion
     }
 
+    #region Enemy Data Structure
     /// <summary>
     /// IData Type.
     /// </summary>
@@ -361,6 +350,6 @@ namespace ModularFramework.AI {
 
         #endregion
     }
-
+    #endregion
 
 }
