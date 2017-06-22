@@ -115,7 +115,7 @@ namespace ModularFramework.AI {
         public void FindPathToTarget(Node _node) {
             ActivePath = FindPath(transform.position, _node.WorldPosition, AISettings);
             pathStepIndex = 0;
-            Debug.LogFormat("... Path from {2}[{3}] to target {0}[{1}].", _node.WorldPosition, _node.PositionOnGrid, transform.position, grid.NodeFromWorldPoint(transform.position).PositionOnGrid);
+            // Debug.LogFormat("... Path from {2}[{3}] to target {0}[{1}].", _node.WorldPosition, _node.PositionOnGrid, transform.position, grid.NodeFromWorldPoint(transform.position).PositionOnGrid);
             if (ActivePath == null) {
                 // OnPathEnded();
                 Debug.LogFormat("Path from {2}[{3}] to target {0}[{1}] not found!", _node.WorldPosition, _node.PositionOnGrid, transform.position, grid.NodeFromWorldPoint(transform.position).PositionOnGrid);
