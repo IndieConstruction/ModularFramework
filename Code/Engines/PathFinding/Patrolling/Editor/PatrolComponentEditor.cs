@@ -15,19 +15,25 @@ namespace ModularFramework.AI {
             Handles.color = Color.red;
             Handles.FreeMoveHandle(component.transform.position, Quaternion.identity, 0.4f, Vector3.one, Handles.CircleHandleCap);
 
-            Handles.color = Color.yellow;
+            Handles.color = Color.green;
             EditorGUI.BeginChangeCheck();
             for (int i = 0; i < component.Data.PatrolPoints.Count; i++) {
                 PatrolPoint pp = component.Data.PatrolPoints[i];
-                //Vector3 newTargetPosition = Handles.DoPositionHandle(pp.Position, Quaternion.identity);
+                
                 Vector3 newTargetPosition = Handles.FreeMoveHandle(pp.Position, Quaternion.identity, 0.4f, Vector3.one, Handles.CircleHandleCap);
                 pp.Position = newTargetPosition;
                 pp.Order = i;
                 Handles.Label(newTargetPosition, pp.Order.ToString(),
                     new GUIStyle() { fontSize = 20, fontStyle = FontStyle.BoldAndItalic, alignment = TextAnchor.MiddleCenter, });
-                Handles.DrawDottedLine(i > 0 ? component.Data.PatrolPoints[i - 1].Position : component.transform.position, pp.Position, 5.0f);
+                if (component.Data.Type == PatrolType.LINEAR) {
+                    Handles.color = Color.cyan;
+                    Handles.DrawDottedLine(i > 0 ? component.Data.PatrolPoints[i - 1].Position : component.transform.position, pp.Position, 2.5f);
+                } else {
+                    Handles.color = Color.yellow;
+                    Handles.DrawDottedLine(i > 0 ? component.Data.PatrolPoints[i - 1].Position : component.transform.position, pp.Position, 5.0f);
+                }
             }
-            
+
             if (EditorGUI.EndChangeCheck()) {
                 //Undo.RecordObject(patrolData, "Change Look At Target Position");
                 

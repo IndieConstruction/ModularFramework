@@ -15,6 +15,12 @@ namespace ModularFramework.AI {
         /// List of patrol points ordered by step sequence.
         /// </summary>
         public List<PatrolPoint> PatrolPoints = new List<PatrolPoint>();
+        public PatrolType Type;
+    }
+
+    public enum PatrolType {
+        PATHFINDING = 10,
+        LINEAR = 20,
     }
 
     [System.Serializable]

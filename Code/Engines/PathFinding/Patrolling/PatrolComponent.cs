@@ -44,6 +44,8 @@ namespace ModularFramework.AI {
                 };
                 returnData.PatrolPoints.Add(newPatrolPoint);
             }
+            // dati senza modifiche
+            returnData.Type = Data.Type;
             return returnData;
         }
 
@@ -52,14 +54,16 @@ namespace ModularFramework.AI {
         /// </summary>
         /// <returns></returns>
         public PatrolData GetDataFromDisk(IData _inputData) {
+            PatrolData dataFromDisk = _inputData as PatrolData;
             PatrolData returnData = new PatrolData();
-            foreach (PatrolPoint pp in (_inputData as PatrolData).PatrolPoints) {
+            foreach (PatrolPoint pp in dataFromDisk.PatrolPoints) {
                 PatrolPoint newPatrolPoint = new PatrolPoint() {
                     Order = pp.Order,
                     Position = pp.Position + transform.position
                 };
                 returnData.PatrolPoints.Add(newPatrolPoint);
             }
+            returnData.Type = dataFromDisk.Type;
             return returnData;
         }
         #endregion
@@ -147,7 +151,17 @@ namespace ModularFramework.AI {
             // TODO: insert patrol loop logic here
             if (patrolPathIndex > PatrolPath.Count - 1 || patrolPathIndex < 0)
                 patrolPathIndex = 0;
-            agent.FindPathToTarget(PatrolPath[patrolPathIndex]);
+            switch (Data.Type) {
+                case PatrolType.PATHFINDING:
+                    agent.FindPathToTarget(PatrolPath[patrolPathIndex]);
+                    break;
+                case PatrolType.LINEAR:
+                    agent.LinearMoveToNode(PatrolPath[patrolPathIndex]);
+                    break;
+                default:
+                    break;
+            }
+            
         }
         #endregion
 

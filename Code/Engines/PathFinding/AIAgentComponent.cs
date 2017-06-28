@@ -129,6 +129,16 @@ namespace ModularFramework.AI {
             moveOnPath();
         }
 
+        /// <summary>
+        /// Esegue un movimento lineare verso il nodo.
+        /// </summary>
+        /// <param name="_node"></param>
+        public void LinearMoveToNode(Node _node) {
+            moveToNode(_node, delegate () {
+                patrolComponent.OnPatrolPathStepEnded();
+            });
+        }
+
         #endregion
 
         #region internal functions
@@ -253,19 +263,22 @@ namespace ModularFramework.AI {
                 return;
             }
             // Altrimenti proseguo nel percorrere il path
-            moveToNode(ActivePath[pathStepIndex]);
+            moveToNode(ActivePath[pathStepIndex], delegate () {
+                pathStepIndex++;
+                //Debug.LogFormat("{0} [{1}]", pathStepIndex, Time.time);
+                moveOnPath();
+            });
         }
 
         /// <summary>
         /// Effettua l'effettivo movimento dello step attuale del path.
         /// </summary>
         /// <param name="_node"></param>
-        void moveToNode(Node _node) {
+        void moveToNode(Node _node, TweenCallback _callbackAction) {
             Sequence PathSequence = DOTween.Sequence();
-            PathSequence.Append(transform.DOMove(_node.WorldPosition, Data.MoveSpeed).OnComplete(delegate() {
-                pathStepIndex++;
-                moveOnPath();
-            }).SetEase(Ease.Linear));
+            PathSequence.Append(transform.DOMove(_node.WorldPosition, Data.MoveSpeed).SetEase(Ease.Linear));
+            if(_callbackAction != null)
+                PathSequence.OnComplete(_callbackAction);
         }
 
         #endregion
