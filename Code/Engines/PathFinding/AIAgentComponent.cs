@@ -275,10 +275,13 @@ namespace ModularFramework.AI {
         /// </summary>
         /// <param name="_node"></param>
         void moveToNode(Node _node, TweenCallback _callbackAction) {
-            Sequence PathSequence = DOTween.Sequence();
-            PathSequence.Append(transform.DOMove(_node.WorldPosition, Data.MoveSpeed).SetEase(Ease.Linear));
+            Tweener twMovement = transform.DOMove(_node.WorldPosition, Data.MoveSpeed)
+                .SetEase(Ease.Linear)
+                .SetSpeedBased(true)
+                ;
+                
             if(_callbackAction != null)
-                PathSequence.OnComplete(_callbackAction);
+                twMovement.OnComplete(_callbackAction);
         }
 
         #endregion
