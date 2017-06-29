@@ -15,7 +15,8 @@ namespace ModularFramework.AI {
         /// List of patrol points ordered by step sequence.
         /// </summary>
         public List<PatrolPoint> PatrolPoints = new List<PatrolPoint>();
-        public PatrolType Type;
+        public PatrolType Type = PatrolType.PATHFINDING;
+        public Vector3 Position;
     }
 
     public enum PatrolType {

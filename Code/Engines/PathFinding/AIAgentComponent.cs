@@ -317,7 +317,7 @@ namespace ModularFramework.AI {
     /// </summary>
     [Serializable]
     public class AIAgentData : IData {
-        public string AgentID;
+        public string AgentID = "";
         public float MoveSpeed = 0.5f;
         public bool IsPatroller = true;
 

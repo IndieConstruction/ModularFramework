@@ -255,6 +255,14 @@ namespace ModularFramework.AI {
             return string.Format("[{0}:{1}]", x, y); 
         }
 
+        public static bool operator ==(Position2d c1, Position2d c2) {
+            return c1.Equals(c2);
+        }
+
+        public static bool operator !=(Position2d c1, Position2d c2) {
+            return !c1.Equals(c2);
+        }
+
     }
 
     public struct Dimension2d {

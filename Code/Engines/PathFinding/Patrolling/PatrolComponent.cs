@@ -46,6 +46,7 @@ namespace ModularFramework.AI {
             }
             // dati senza modifiche
             returnData.Type = Data.Type;
+            returnData.Position = transform.position;
             return returnData;
         }
 
@@ -64,6 +65,7 @@ namespace ModularFramework.AI {
                 returnData.PatrolPoints.Add(newPatrolPoint);
             }
             returnData.Type = dataFromDisk.Type;
+            returnData.Position = transform.position;
             return returnData;
         }
         #endregion
