@@ -9,6 +9,7 @@ namespace ModularFramework.AI {
 
     public class PatrolComponent : MonoBehaviour, IPathfindComponent {
 
+        #region properties and variables
         PathfindingGrid grid;
         AIAgentComponent agent;
 
@@ -26,9 +27,35 @@ namespace ModularFramework.AI {
         }
         private List<Node> _patrolPath;
 
-        int patrolPathIndex = 0;
+        public int PatrolPathIndex {
+            get { return _patrolPathIndex; }
+            set { _patrolPathIndex = value; }
+        }
+        private int _patrolPathIndex = 0;
+
+        public Node CurrentPatrolNode {
+            get {
+                if (PatrolPath != null)
+                    return PatrolPath[PatrolPathIndex];
+                else
+                    return null;
+            }
+        }
+        
+        /// <summary>
+        /// Rappresenta l'ultimo nodo raggiunto dall'agent.
+        /// </summary>
+        public Node LastNode {
+            get { return _lastNode; }
+            set { _lastNode = value; }
+        }
+        private Node _lastNode;
+
+
+        #endregion
 
         #region Internal Functions
+
         #region Data transformation for load and save to/from disk
         /// <summary>
         /// Elabora i dati attuali e li restituisce nel foramto corretto per il salvataggio.
@@ -86,8 +113,8 @@ namespace ModularFramework.AI {
         void createPatrolPath(List<PatrolPoint> _patrolPoints) {
             if (_patrolPoints.Count <= 0)
                 return;
-            PatrolPath = TransformPatrolPintsToNodeList(_patrolPoints);
-            patrolPathIndex = 0;
+            PatrolPath = TransformPatrolPointsToNodeList(_patrolPoints);
+            PatrolPathIndex = 0;
         }
 
         /// <summary>
@@ -96,7 +123,7 @@ namespace ModularFramework.AI {
         /// </summary>
         /// <param name="_targets"></param>
         /// <returns></returns>
-        List<Node> TransformPatrolPintsToNodeList(List<PatrolPoint> _targets) {
+        List<Node> TransformPatrolPointsToNodeList(List<PatrolPoint> _targets) {
             List<Node> returnList = new List<Node>();
             foreach (var t in _targets) {
                 returnList.Add(grid.NodeFromWorldPoint(t.Position));
@@ -143,22 +170,25 @@ namespace ModularFramework.AI {
             // Primo accesso, non c'è ancora il patrolling path.
             if (PatrolPath == null) {
                 createPatrolPath(Data.PatrolPoints);
-                patrolPathIndex = 0;
+                PatrolPathIndex = 0;
             } else {
                 if (_nodeIndex != -1)
-                    patrolPathIndex = _nodeIndex;
-                else
-                    patrolPathIndex++;
+                    PatrolPathIndex = _nodeIndex;
+                else {
+                    // Salvo l'ultimo nodo raggiunto
+                    LastNode = PatrolPath[PatrolPathIndex];
+                    PatrolPathIndex++;
+                }
             }
             // TODO: insert patrol loop logic here
-            if (patrolPathIndex > PatrolPath.Count - 1 || patrolPathIndex < 0)
-                patrolPathIndex = 0;
+            if (PatrolPathIndex > PatrolPath.Count - 1 || PatrolPathIndex < 0)
+                PatrolPathIndex = 0;
             switch (Data.Type) {
                 case PatrolType.PATHFINDING:
-                    agent.FindPathToTarget(PatrolPath[patrolPathIndex]);
+                    agent.FindPathToTarget(PatrolPath[PatrolPathIndex]);
                     break;
                 case PatrolType.LINEAR:
-                    agent.LinearMoveToNode(PatrolPath[patrolPathIndex]);
+                    agent.LinearMoveToNode(PatrolPath[PatrolPathIndex]);
                     break;
                 default:
                     break;
