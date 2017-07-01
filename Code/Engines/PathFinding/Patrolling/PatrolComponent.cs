@@ -47,10 +47,25 @@ namespace ModularFramework.AI {
         /// </summary>
         public Node LastNode {
             get { return _lastNode; }
-            set { _lastNode = value; }
+            set {
+                LastStepEnded = new PatrolStepInfo() {
+                    CurrentNode = CurrentPatrolNode,
+                    LastNodeReached = value,
+                    IsLastNodeOfPath = PatrolPathIndex == PatrolPath.Count - 1 ? true : false,
+                };
+                _lastNode = value;
+            }
         }
         private Node _lastNode;
 
+        /// <summary>
+        /// Contiene tutte le info sull'ultimo step effettuato.
+        /// </summary>
+        public PatrolStepInfo LastStepEnded {
+            get { return _lastStepEnded; }
+            set { _lastStepEnded = value; }
+        }
+        private PatrolStepInfo _lastStepEnded;
 
         #endregion
 
@@ -64,16 +79,19 @@ namespace ModularFramework.AI {
         /// <returns></returns>
         public IData GetDataForSave() {
             PatrolData returnData = new PatrolData();
-            foreach (PatrolPoint pp in Data.PatrolPoints) {
+            returnData = Data;
+            returnData.Position = transform.position;
+            List<PatrolPoint> bkPatrolPoints = new List<PatrolPoint>(Data.PatrolPoints);
+            returnData.PatrolPoints = new List<PatrolPoint>();
+            // modifica dei PatrolPoints in modo da fargli avere posizione relativa.
+            foreach (PatrolPoint pp in bkPatrolPoints) {
                 PatrolPoint newPatrolPoint = new PatrolPoint() {
                     Order = pp.Order,
                     Position = pp.Position - transform.position
                 };
                 returnData.PatrolPoints.Add(newPatrolPoint);
             }
-            // dati senza modifiche
-            returnData.Type = Data.Type;
-            returnData.Position = transform.position;
+            
             return returnData;
         }
 
@@ -82,17 +100,18 @@ namespace ModularFramework.AI {
         /// </summary>
         /// <returns></returns>
         public PatrolData GetDataFromDisk(IData _inputData) {
-            PatrolData dataFromDisk = _inputData as PatrolData;
-            PatrolData returnData = new PatrolData();
-            foreach (PatrolPoint pp in dataFromDisk.PatrolPoints) {
+            PatrolData returnData = _inputData as PatrolData;
+            // modifica dei PatrolPoints in modo da fargli avere posizione relativa.
+            List<PatrolPoint> bkPatrolPointToDisk = new List<PatrolPoint>(returnData.PatrolPoints);
+            returnData.Position = transform.position;
+            returnData.PatrolPoints = new List<PatrolPoint>();
+            foreach (PatrolPoint pp in bkPatrolPointToDisk) {
                 PatrolPoint newPatrolPoint = new PatrolPoint() {
                     Order = pp.Order,
                     Position = pp.Position + transform.position
                 };
                 returnData.PatrolPoints.Add(newPatrolPoint);
             }
-            returnData.Type = dataFromDisk.Type;
-            returnData.Position = transform.position;
             return returnData;
         }
         #endregion
@@ -197,5 +216,13 @@ namespace ModularFramework.AI {
         }
         #endregion
 
+        /// <summary>
+        /// Questa struttura contiene le informazioni dello step appena terminato.
+        /// </summary>
+        public struct PatrolStepInfo {
+            public Node CurrentNode;
+            public Node LastNodeReached;
+            public bool IsLastNodeOfPath;
+        }
     }
 }
