@@ -48,11 +48,7 @@ namespace ModularFramework.AI {
         public Node LastNode {
             get { return _lastNode; }
             set {
-                LastStepEnded = new PatrolStepInfo() {
-                    CurrentNode = CurrentPatrolNode,
-                    LastNodeReached = value,
-                    IsLastNodeOfPath = PatrolPathIndex == PatrolPath.Count - 1 ? true : false,
-                };
+
                 _lastNode = value;
             }
         }
@@ -61,11 +57,11 @@ namespace ModularFramework.AI {
         /// <summary>
         /// Contiene tutte le info sull'ultimo step effettuato.
         /// </summary>
-        public PatrolStepInfo LastStepEnded {
-            get { return _lastStepEnded; }
-            set { _lastStepEnded = value; }
+        public PatrolStepInfo LastStepInfo {
+            get { return _lastStepInfo; }
+            set { _lastStepInfo = value; }
         }
-        private PatrolStepInfo _lastStepEnded;
+        private PatrolStepInfo _lastStepInfo;
 
         #endregion
 
@@ -148,7 +144,48 @@ namespace ModularFramework.AI {
                 returnList.Add(grid.NodeFromWorldPoint(t.Position));
             }
             return returnList;
-        } 
+        }
+        #endregion
+
+        #region State machine
+        public enum State { NOT_READY, READY, MOVE_TO_NODE, WAITING_FOR_INSTRUCTIONS }
+
+        public State CurrentState {
+            get { return _currentState; }
+            set {
+                if (_currentState != value) {
+                    State oldState = _currentState;
+                    _currentState = value;
+                    OnStatusChanged(_currentState, oldState);
+                }
+            }
+        }
+
+        private State _currentState = State.NOT_READY;
+
+        void OnStatusChanged(State newState, State oldState) {
+            switch (newState) {
+                case State.NOT_READY:
+                    break;
+                case State.READY:
+                    break;
+                case State.MOVE_TO_NODE:
+                    break;
+                case State.WAITING_FOR_INSTRUCTIONS:
+                    break;
+                default:
+                    break;
+            }
+            if (OnStateChanged != null)
+                OnStateChanged(newState, oldState);
+        }
+
+        public delegate void StateChanged(State newState, State oldState);
+        /// <summary>
+        /// Happens when state changed.
+        /// </summary>
+        public event StateChanged OnStateChanged;
+
         #endregion
 
         #region Events
@@ -160,14 +197,19 @@ namespace ModularFramework.AI {
         public void OnPathfindingGridSetupDone(PathfindingGrid _grid) {
             grid = _grid;
             agent = GetComponent<AIAgentComponent>();
+            CurrentState = State.READY;
         }
 
         /// <summary>
         /// Accade quando è stato raggiunto un patrol point.
         /// </summary>
         public void OnPatrolPathStepEnded() {
-            // TODO: eventuali check per il loop del patrolling... etc
-            GoToNextPatrollingNode();
+            LastStepInfo = new PatrolStepInfo() {
+                CurrentNode = CurrentPatrolNode,
+                LastNodeReached = LastNode,
+                IsLastNodeOfPath = PatrolPathIndex == PatrolPath.Count - 1 ? true : false,
+            };
+            CurrentState = State.WAITING_FOR_INSTRUCTIONS;
         }
 
         #endregion
@@ -191,10 +233,10 @@ namespace ModularFramework.AI {
                 createPatrolPath(Data.PatrolPoints);
                 PatrolPathIndex = 0;
             } else {
-                if (_nodeIndex != -1)
+                if (_nodeIndex != -1) {
                     PatrolPathIndex = _nodeIndex;
-                else {
-                    // Salvo l'ultimo nodo raggiunto
+                } else {
+                    // Salvo l'ultimo nodo raggiunto e aggiorno i dati ...
                     LastNode = PatrolPath[PatrolPathIndex];
                     PatrolPathIndex++;
                 }
@@ -204,16 +246,18 @@ namespace ModularFramework.AI {
                 PatrolPathIndex = 0;
             switch (Data.Type) {
                 case PatrolType.PATHFINDING:
-                    agent.FindPathToTarget(PatrolPath[PatrolPathIndex]);
+                    CurrentState = State.MOVE_TO_NODE;
+                    agent.FindPathToTargetAndMove(PatrolPath[PatrolPathIndex]);
                     break;
                 case PatrolType.LINEAR:
-                    agent.LinearMoveToNode(PatrolPath[PatrolPathIndex]);
+                    CurrentState = State.MOVE_TO_NODE;
+                    agent.MoveLinearyToNode(PatrolPath[PatrolPathIndex]);
                     break;
                 default:
                     break;
             }
-            
         }
+
         #endregion
 
         /// <summary>

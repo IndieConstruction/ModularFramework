@@ -104,15 +104,15 @@ namespace ModularFramework.AI {
         /// Imposta il pathfinding attuale per raggiungere il target e inizia il movimento.
         /// </summary>
         /// <param name="_target"></param>
-        public void FindPathToTarget(Transform _target) {
-            FindPathToTarget(grid.NodeFromWorldPoint(_target.position));
+        public void FindPathToTargetAndMove(Transform _target) {
+            FindPathToTargetAndMove(grid.NodeFromWorldPoint(_target.position));
         }
 
         /// <summary>
         /// Imposta il pathfinding attuale per raggiungere il target e inizia il movimento.
         /// </summary>
         /// <param name="_node"></param>
-        public void FindPathToTarget(Node _node) {
+        public void FindPathToTargetAndMove(Node _node) {
             ActivePath = FindPath(transform.position, _node.WorldPosition, AISettings);
             pathStepIndex = 0;
             // Debug.LogFormat("... Path from {2}[{3}] to target {0}[{1}].", _node.WorldPosition, _node.PositionOnGrid, transform.position, grid.NodeFromWorldPoint(transform.position).PositionOnGrid);
@@ -125,7 +125,6 @@ namespace ModularFramework.AI {
                 Debug.LogFormat("Path count < 2 elements... from {2}[{3}] to {0}[{1}].", _node.WorldPosition, _node.PositionOnGrid, transform.position, grid.NodeFromWorldPoint(transform.position).PositionOnGrid);
                 return;
             }
-
             moveOnPath();
         }
 
@@ -133,7 +132,7 @@ namespace ModularFramework.AI {
         /// Esegue un movimento lineare verso il nodo.
         /// </summary>
         /// <param name="_node"></param>
-        public void LinearMoveToNode(Node _node) {
+        public void MoveLinearyToNode(Node _node) {
             moveToNode(_node, delegate () {
                 patrolComponent.OnPatrolPathStepEnded();
             });
@@ -260,6 +259,7 @@ namespace ModularFramework.AI {
         void moveOnPath() {
             if (pathStepIndex > ActivePath.Count - 1) {
                 patrolComponent.OnPatrolPathStepEnded();
+                Debug.Log("PATH TERMINATO");
                 return;
             }
             // Altrimenti proseguo nel percorrere il path
