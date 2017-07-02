@@ -259,13 +259,13 @@ namespace ModularFramework.AI {
         void moveOnPath() {
             if (pathStepIndex > ActivePath.Count - 1) {
                 patrolComponent.OnPatrolPathStepEnded();
-                Debug.Log("PATH TERMINATO");
+                // Debug.Log("PATH TERMINATO");
                 return;
             }
             // Altrimenti proseguo nel percorrere il path
             moveToNode(ActivePath[pathStepIndex], delegate () {
                 pathStepIndex++;
-                //Debug.LogFormat("{0} [{1}]", pathStepIndex, Time.time);
+                // Debug.LogFormat("{0} [{1}]", pathStepIndex, Time.time);
                 moveOnPath();
             });
         }
