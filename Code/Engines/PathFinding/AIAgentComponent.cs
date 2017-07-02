@@ -30,6 +30,10 @@ namespace ModularFramework.AI {
         /// Lista degli step (nodi) del path finding attuale.
         /// </summary>
         List<Node> ActivePath = null;
+        /// <summary>
+        /// Tween for movement.
+        /// </summary>
+        Tweener twMovement;
 
         [Header("AI Settings")]
         
@@ -136,6 +140,13 @@ namespace ModularFramework.AI {
             moveToNode(_node, delegate () {
                 patrolComponent.OnPatrolPathStepEnded();
             });
+        }
+
+        /// <summary>
+        /// Stoppa qualsiasi movimento stia eseguendo l'agent.
+        /// </summary>
+        public void StopAnyMovement() {
+            twMovement.Kill();
         }
 
         #endregion
@@ -275,7 +286,7 @@ namespace ModularFramework.AI {
         /// </summary>
         /// <param name="_node"></param>
         void moveToNode(Node _node, TweenCallback _callbackAction) {
-            Tweener twMovement = transform.DOMove(_node.WorldPosition, Data.MoveSpeed)
+            twMovement = transform.DOMove(_node.WorldPosition, Data.MoveSpeed)
                 .SetEase(Ease.Linear)
                 .SetSpeedBased(true)
                 ;
