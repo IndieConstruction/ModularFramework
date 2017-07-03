@@ -10,6 +10,7 @@ namespace ModularFramework.AI {
     public class PatrolComponent : MonoBehaviour, IPathfindComponent {
 
         #region properties and variables
+
         PathfindingGrid grid;
         AIAgentComponent agent;
 
@@ -62,6 +63,11 @@ namespace ModularFramework.AI {
             set { _lastStepInfo = value; }
         }
         private PatrolStepInfo _lastStepInfo;
+
+        /// <summary>
+        /// Se true il senso di percorrenza del path è inverso.
+        /// </summary>
+        private bool IsReversed = false;
 
         #endregion
 
@@ -255,6 +261,21 @@ namespace ModularFramework.AI {
                     break;
                 default:
                     break;
+            }
+        }
+
+        /// <summary>
+        /// Inverte il senso di patrolling.
+        /// TODO: non funziona correttamente... 
+        /// </summary>
+        public void Reverse() {
+            if (PatrolPath == null)
+                return;
+            agent.StopAnyMovement();
+            PatrolPath.Reverse();
+            if (CurrentState == State.MOVE_TO_NODE) {
+                PatrolPathIndex++;
+                GoToNextPatrollingNode();
             }
         }
 
