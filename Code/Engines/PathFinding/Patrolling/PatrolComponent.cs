@@ -132,8 +132,10 @@ namespace ModularFramework.AI {
         /// <param name="_patrolPoints"></param>
         /// <param name="startAfterCreation"></param>
         void createPatrolPath(List<PatrolPoint> _patrolPoints) {
-            if (_patrolPoints.Count <= 0)
+            if (_patrolPoints.Count <= 0) {
+                PatrolPath = new List<Node>();
                 return;
+            }
             PatrolPath = TransformPatrolPointsToNodeList(_patrolPoints);
             PatrolPathIndex = 0;
         }
@@ -237,6 +239,11 @@ namespace ModularFramework.AI {
             // Primo accesso, non c'è ancora il patrolling path.
             if (PatrolPath == null) {
                 createPatrolPath(Data.PatrolPoints);
+                if (PatrolPath.Count < 2) {
+                    // Ci sono meno di 2 patrol points non è possibile fare il patroling
+                    CurrentState = State.WAITING_FOR_INSTRUCTIONS;
+                    return;
+                }
                 PatrolPathIndex = 0;
             } else {
                 if (_nodeIndex != -1) {
@@ -247,7 +254,8 @@ namespace ModularFramework.AI {
                     PatrolPathIndex++;
                 }
             }
-            // TODO: insert patrol loop logic here
+
+            // faccio un modo che l'index non vada mai fuori range e se succede lo assegno al limite più vicino.
             if (PatrolPathIndex > PatrolPath.Count - 1 || PatrolPathIndex < 0)
                 PatrolPathIndex = 0;
             switch (Data.Type) {
