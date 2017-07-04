@@ -289,6 +289,8 @@ namespace ModularFramework.AI {
 
         #endregion
 
+        #region structures
+
         /// <summary>
         /// Questa struttura contiene le informazioni dello step appena terminato.
         /// </summary>
@@ -297,5 +299,7 @@ namespace ModularFramework.AI {
             public Node LastNodeReached;
             public bool IsLastNodeOfPath;
         }
+
+        #endregion
     }
 }
