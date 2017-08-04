@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ModularFramework.Core;
 
 namespace ModularFramework.AI {
 
-    public interface ITileSystem : ISetupable {
+    public interface ITileSystem : ISetuppable {
 
         Vector3 CellSize { get; }
         int RowCount { get; }

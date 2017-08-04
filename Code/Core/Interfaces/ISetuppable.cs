@@ -35,6 +35,24 @@ namespace ModularFramework.Core {
         /// <param name="_settings"></param>
         void Setup(ISetupSettings _settings);
 
+        /// <summary>
+        /// Usare come funziona interna al termine del setup.
+        /// </summary>
+        /// <param name="_this"></param>
+        void SetupEnded();
+
+        /// <summary>
+        /// Evento da chiamare dopo che tutte le operazioni di setup sono terminate.
+        /// </summary>
+        event ISetuppableEvents.Event OnSetupCompleted;
+    }
+    
+    public static class ISetuppableEvents {
+        /// <summary>
+        /// Chiamato quando il setup è terminato.
+        /// </summary>
+        /// <param name="iSetupable"></param>
+        public delegate void Event(ISetuppable iSetupable);
     }
 
 }

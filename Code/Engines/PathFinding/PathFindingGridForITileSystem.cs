@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using ModularFramework.Core;
 
 namespace ModularFramework.AI {
 
@@ -20,20 +21,20 @@ namespace ModularFramework.AI {
             level = GetComponent<ITileSystem>();
 
             if (level != null) {
-                level.OnSetupEnded += Level_OnSetupEnd;
+                level.OnSetupCompleted += Level_OnSetupEnd;
             } else {
                 Debug.LogWarningFormat("Component implementing ITileSystem interface not found on gameobject {0}", gameObject.name);
             }
                     
         }
 
-        private void Level_OnSetupEnd(ISetupable tileSystem) {
+        private void Level_OnSetupEnd(ISetuppable tileSystem) {
             Setup();
             AIAgentSetup();
         }
 
         private void OnDisable() {
-            level.OnSetupEnded -= Level_OnSetupEnd;
+            level.OnSetupCompleted -= Level_OnSetupEnd;
         }
 
         /// <summary>
