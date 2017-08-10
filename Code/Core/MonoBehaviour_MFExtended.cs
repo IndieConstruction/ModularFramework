@@ -26,11 +26,28 @@ namespace ModularFramework.Core {
 
     public class MonoBehaviour_MFExtended : MonoBehaviour {
 
-        public void AddComponentAndSetup<T>(ISetupSettings _settings) where T : MonoBehaviour, ISetuppable {
+        public T AddComponentAndSetup<T>(ISetupSettings _settings) where T : MonoBehaviour, ISetuppable {
             T newComponent =  gameObject.AddComponent<T>();
             newComponent.Setup(_settings);
+            return newComponent;
         }
 
+        /// <summary>
+        /// Create new instance of <typeparamref name="T"/> object as child of "this" and setup it with <paramref name="_setupSettings"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="_original"></param>
+        /// <param name="_parent"></param>
+        /// <param name="_worldPositionStays"></param>
+        public T InstantiateAndSetup<T>(T _original, ISetupSettings _setupSettings) where T : ISetuppable {
+            GameObject newGOInstance = Instantiate<GameObject>(_original as GameObject, transform);
+            T newInstance = newGOInstance.GetComponent<T>();
+            if (newInstance == null) {
+                Debug.LogWarningFormat("Prefab {0} don't contain component of type {1}", _original, _original.GetType());
+                return default(T);
+            }
+            newInstance.Setup(_setupSettings);
+            return newInstance;
+        }
     }
-
 }
