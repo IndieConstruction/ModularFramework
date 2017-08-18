@@ -17,42 +17,12 @@
 *   You should have received a copy of the GNU Lesser General Public
 *   License along with this library.
 * -------------------------------------------------------------- */
-
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace ModularFramework.Core {
-
     /// <summary>
-    /// Provides a setup function with custom settings.
+    /// Interface for any manager class.
     /// </summary>
-    public interface ISetuppable {
-
-        /// <summary>
-        /// Setup functions with custom settings.
-        /// </summary>
-        /// <param name="_settings"></param>
-        ISetuppable Setup(ISetupSettings _settings);
-
-        /// <summary>
-        /// Usare come funziona interna al termine del setup.
-        /// </summary>
-        /// <param name="_this"></param>
-        void SetupEnded();
-
-        /// <summary>
-        /// Evento da chiamare dopo che tutte le operazioni di setup sono terminate.
-        /// </summary>
-        event ISetuppableEvents.Event OnSetupCompleted;
+    public interface IManager {
+        void Activated();
+        void Deactivated();
     }
-    
-    public static class ISetuppableEvents {
-        /// <summary>
-        /// Chiamato quando il setup è terminato.
-        /// </summary>
-        /// <param name="iSetupable"></param>
-        public delegate void Event(ISetuppable iSetupable);
-    }
-
 }

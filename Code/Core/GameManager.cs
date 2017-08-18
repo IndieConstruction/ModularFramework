@@ -23,6 +23,7 @@ using UnityEngine.Assertions;
 using System.Collections.Generic;
 using ModularFramework.Modules;
 using DG.DemiLib.Attributes;
+using System.Linq;
 
 namespace ModularFramework.Core
 {
@@ -51,6 +52,41 @@ namespace ModularFramework.Core
         /// Setted to true after first setup.
         /// </summary>
         bool setuped = false;
+
+        #region Managers
+
+        protected List<IManager> managers = new List<IManager>();
+
+        /// <summary>
+        /// Aggiunge il manager del tipo indicato nella lista dei manager solo se non è già presente.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="_managerToAdd"></param>
+        /// <returns></returns>
+        public T AddManager<T>(T _managerToAdd) where T : IManager {
+            T manager = GetManager<T>();
+            if (manager != null) {
+                managers.Add(_managerToAdd);
+                return _managerToAdd;
+            } else {
+                Debug.LogFormat("Manager {0} already present.", manager);
+                return manager;
+            }
+        }
+
+        /// <summary>
+        /// Restituisce il manager del tipo richiesto, se presente nella lista dei manager, altrimenti restituisce null.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public T GetManager<T>() where T : IManager {
+            T manager = managers.OfType<T>().First();
+            if (manager == null) {
+                Debug.LogErrorFormat("Manager {0} not found in list of managers");
+            }
+            return manager;
+        }
+
+        #endregion
 
         #region Events
 
