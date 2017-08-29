@@ -88,6 +88,32 @@ namespace ModularFramework.Helpers {
             return newInstance;
         }
 
+        #region Colors
+
+        /// <summary>
+        /// Restituisce un oggetto color partendo dall'rgb.
+        /// </summary>
+        /// <param name="red"></param>
+        /// <param name="green"></param>
+        /// <param name="blue"></param>
+        /// <returns></returns>
+        public static Color ColorFromRGB(float red, float green, float blue) {
+            return new Color(red / 255, green / 255, blue / 255);
+        }
+
+        /// <summary>
+        /// Restituisce un oggetto color partendo dall'rgb + alpha.
+        /// </summary>
+        /// <param name="red"></param>
+        /// <param name="green"></param>
+        /// <param name="blue"></param>
+        /// <returns></returns>
+        public static Color ColorFromRGB(float red, float green, float blue, float alpha) {
+            return new Color(red / 255, green / 255, blue / 255, alpha);
+        }
+
+        #endregion
+
         #region extensions
 
         #region list
