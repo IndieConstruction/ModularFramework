@@ -19,12 +19,18 @@
 * -------------------------------------------------------------- */
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 using System.Collections.Generic;
 using ModularFramework.Core;
+using System.Linq;
 
 namespace ModularFramework.Helpers {
-
+    /// <summary>
+    /// Generic helerper class.
+    /// </summary>
     public static class GenericHelper {
+
+        #region Common
 
         /// <summary>
         /// Return random float value around _value parameter + or - _variation.
@@ -36,7 +42,7 @@ namespace ModularFramework.Helpers {
         /// <param name="_variation"></param>
         /// <returns></returns>
         public static float GetValueWithRandomVariation(float _value, float _variation) {
-            return Random.Range(_value - _variation, _value + _variation);
+            return UnityEngine.Random.Range(_value - _variation, _value + _variation);
         }
 
         /// <summary>
@@ -68,25 +74,7 @@ namespace ModularFramework.Helpers {
             return enumList;
         }
 
-        /// <summary>
-        /// Create a new instance of <typeparamref name="T"/> based on <paramref name="_original"/> prefab as child of <paramref name="_parent"/> gameobject.
-        /// If new instance creation gone lounch <typeparamref name="T"/> Setup with <paramref name="_setupSettings"/>.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="_original"></param>
-        /// <param name="_parent"></param>
-        /// <param name="_setupSettings"></param>
-        /// <returns></returns>
-        public static T InstantiateAndSetup<T>(T _original, GameObject _parent, ISetupSettings _setupSettings) where T : ISetuppable {
-            GameObject newGOInstance = GameObject.Instantiate<GameObject>(_original as GameObject, _parent.transform);
-            T newInstance = newGOInstance.GetComponent<T>();
-            if (newInstance == null) {
-                Debug.LogWarningFormat("Prefab {0} don't contain component of type {1}", _original, _original.GetType());
-                return default(T);
-            }
-            newInstance.Setup(_setupSettings);
-            return newInstance;
-        }
+        #endregion
 
         #region Colors
 
@@ -114,9 +102,68 @@ namespace ModularFramework.Helpers {
 
         #endregion
 
+        #region Setup behaviour
+
+        /// <summary>
+        /// Create a new instance of <typeparamref name="T"/> based on <paramref name="_original"/> prefab as child of <paramref name="_parent"/> gameobject.
+        /// If new instance creation gone lounch <typeparamref name="T"/> Setup with <paramref name="_setupSettings"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="_original"></param>
+        /// <param name="_parent"></param>
+        /// <param name="_setupSettings"></param>
+        /// <returns></returns>
+        public static T InstantiateAndSetup<T>(T _original, GameObject _parent, ISetupSettings _setupSettings) where T : ISetuppable {
+            GameObject newGOInstance = GameObject.Instantiate<GameObject>(_original as GameObject, _parent.transform);
+            T newInstance = newGOInstance.GetComponent<T>();
+            if (newInstance == null) {
+                Debug.LogWarningFormat("Prefab {0} don't contain component of type {1}", _original, _original.GetType());
+                return default(T);
+            }
+            newInstance.Setup(_setupSettings);
+            return newInstance;
+        }
+
+        #endregion
+
+        #region Editor
+
+        /// <summary>
+        /// Returns the list of type class that implement the interface indicated as <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static List<Type> InterfaceImplmenter<T>() {
+            List<Type> returnTypes = new List<Type>();
+            var type = typeof(T);
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => type.IsAssignableFrom(p));
+            foreach (var t in types) {
+                returnTypes.Add(t);
+            }
+            return returnTypes;
+        }
+
+        /// <summary>
+        /// Returns the list of class names that implement the interface indicated as <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static List<string> InterfaceImplmenterName<T>() {
+            List<string> returnString = new List<string>();
+            List<Type> types = InterfaceImplmenter<T>();
+            foreach (Type type in types) {
+                returnString.Add(type.Name);
+            }
+            return returnString;
+        }
+
+        #endregion
+
         #region extensions
 
-        #region list
+        #region list extension
 
         /// <summary>
         /// Return random element of list.
@@ -125,7 +172,7 @@ namespace ModularFramework.Helpers {
         /// <param name="_thisList"></param>
         /// <returns></returns>
         public static T GetRandomElement<T>(this List<T> _thisList) {
-            return _thisList[Random.Range(0, _thisList.Count)];
+            return _thisList[UnityEngine.Random.Range(0, _thisList.Count)];
         }
 
         private static System.Random rng = new System.Random();
