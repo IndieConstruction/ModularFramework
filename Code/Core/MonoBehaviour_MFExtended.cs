@@ -21,6 +21,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ModularFramework.Helpers;
 
 namespace ModularFramework.Core {
 
@@ -40,13 +41,7 @@ namespace ModularFramework.Core {
         /// <param name="_parent"></param>
         /// <param name="_worldPositionStays"></param>
         public T InstantiateAndSetup<T>(T _original, ISetupSettings _setupSettings) where T : ISetuppable {
-            GameObject newGOInstance = Instantiate<GameObject>(_original as GameObject, transform);
-            T newInstance = newGOInstance.GetComponent<T>();
-            if (newInstance == null) {
-                Debug.LogWarningFormat("Prefab {0} don't contain component of type {1}", _original, _original.GetType());
-                return default(T);
-            }
-            newInstance.Setup(_setupSettings);
+            T newInstance = GenericHelper.InstantiateAndSetup<T>(_original, gameObject, _setupSettings);
             return newInstance;
         }
     }

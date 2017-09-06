@@ -114,7 +114,7 @@ namespace ModularFramework.Helpers {
         /// <param name="_setupSettings"></param>
         /// <returns></returns>
         public static T InstantiateAndSetup<T>(T _original, GameObject _parent, ISetupSettings _setupSettings) where T : ISetuppable {
-            GameObject newGOInstance = GameObject.Instantiate<GameObject>(_original as GameObject, _parent.transform);
+            MonoBehaviour newGOInstance = GameObject.Instantiate<MonoBehaviour>(_original as MonoBehaviour, _parent.transform);
             T newInstance = newGOInstance.GetComponent<T>();
             if (newInstance == null) {
                 Debug.LogWarningFormat("Prefab {0} don't contain component of type {1}", _original, _original.GetType());
