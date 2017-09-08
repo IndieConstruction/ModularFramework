@@ -36,14 +36,31 @@ namespace ModularFramework.Core
 
         #region Game Settings
 
-        public GameSettings GameSettings = new GameSettings();
+#if UNITY_EDITOR
+
+        private static GameManager _instance;
+
+        public new static GameManager Instance {
+            get {
+                //if (_instance == null) {
+                    _instance = FindObjectOfType<GameManager>();
+                    _instance.GameSetup(); 
+                //}
+                return _instance;
+            }
+            set { _instance = value; }
+        }
+
+#endif
+
+    public GameSettings GameSettings = new GameSettings();
         [Tooltip("To add new SubGame enable 'MultiGame' (if disabled) and add it to list")]
         public bool MultiGame = false;
         public List<GameSettings> Games = new List<GameSettings>();
 
         #endregion
 
-        [HideInInspector]
+        [HideInInspector] 
         public ModuleManager Modules = new ModuleManager();
         [HideInInspector]
         protected GameSettings ActualSubGame = new GameSettings();
@@ -51,7 +68,18 @@ namespace ModularFramework.Core
         /// Prevent multiple setup.
         /// Setted to true after first setup.
         /// </summary>
-        bool setuped = false;
+
+        private bool _setupped = false; 
+        /// <summary>
+        /// Avoid duplicate setup.
+        /// </summary>
+        protected bool setuped {
+            get { return _setupped; }
+            set {
+                _setupped = value;
+            } 
+        }
+
 
         #region Managers
 
@@ -65,7 +93,7 @@ namespace ModularFramework.Core
         /// <returns></returns>
         public T AddManager<T>(T _managerToAdd) where T : IManager {
             T manager = GetManager<T>();
-            if (manager != null) {
+            if (manager == null) {
                 managers.Add(_managerToAdd);
                 return _managerToAdd;
             } else {
@@ -79,9 +107,9 @@ namespace ModularFramework.Core
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public T GetManager<T>() where T : IManager {
-            T manager = managers.OfType<T>().First();
+            T manager = managers.OfType<T>().FirstOrDefault();
             if (manager == null) {
-                Debug.LogErrorFormat("Manager {0} not found in list of managers");
+                // Debug.LogErrorFormat("Manager {0} not found in list of managers", manager);
             }
             return manager;
         }

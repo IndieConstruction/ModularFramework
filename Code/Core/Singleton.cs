@@ -23,8 +23,17 @@ using System.Collections;
 namespace ModularFramework.Core {
 
     public class Singleton<T> : MonoBehaviour where T : Component {
-        // Static singleton property
-        public static T Instance { get; private set; }
+
+        private static T _instance;
+        /// <summary>
+        /// Singleton instance.
+        /// </summary>
+        public static T Instance {
+            get { 
+                return _instance; }
+            set { _instance = value; }
+        }
+
         public string TypeName { get; private set; }
 
         public static bool IsActive {
