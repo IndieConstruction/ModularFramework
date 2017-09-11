@@ -42,10 +42,10 @@ namespace ModularFramework.Core
 
         public new static GameManager Instance {
             get {
-                //if (_instance == null) {
+                if (_instance == null) {
                     _instance = FindObjectOfType<GameManager>();
                     _instance.GameSetup(); 
-                //}
+                }
                 return _instance;
             }
             set { _instance = value; }
