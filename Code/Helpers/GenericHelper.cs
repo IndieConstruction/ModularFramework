@@ -106,7 +106,7 @@ namespace ModularFramework.Helpers {
 
         /// <summary>
         /// Create a new instance of <typeparamref name="T"/> based on <paramref name="_original"/> prefab as child of <paramref name="_parent"/> gameobject.
-        /// If new instance creation gone lounch <typeparamref name="T"/> Setup with <paramref name="_setupSettings"/>.
+        /// If new instance creation gone launch <typeparamref name="T"/> Setup with <paramref name="_setupSettings"/>.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="_original"></param>
@@ -114,12 +114,31 @@ namespace ModularFramework.Helpers {
         /// <param name="_setupSettings"></param>
         /// <returns></returns>
         public static T InstantiateAndSetup<T>(T _original, GameObject _parent, ISetupSettings _setupSettings) where T : ISetuppable {
-            MonoBehaviour newGOInstance = GameObject.Instantiate<MonoBehaviour>(_original as MonoBehaviour, _parent.transform);
+            MonoBehaviour newGOInstance;
+            Transform parentTransform = null;
+            if (_parent)
+                parentTransform = _parent.transform;
+            newGOInstance = GameObject.Instantiate<MonoBehaviour>(_original as MonoBehaviour, parentTransform);
             T newInstance = newGOInstance.GetComponent<T>();
             if (newInstance == null) {
                 Debug.LogWarningFormat("Prefab {0} don't contain component of type {1}", _original, _original.GetType());
                 return default(T);
             }
+            newInstance.Setup(_setupSettings);
+            return newInstance;
+        }
+
+        /// <summary>
+        /// Create new gameobject and add component of type <typeparamref name="T"/>.
+        /// Then launch <typeparamref name="T"/> Setup with <paramref name="_setupSettings"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="_parent"></param>
+        /// <param name="_setupSettings"></param>
+        /// <returns></returns>
+        public static T InstantiateNewAndSetup<T>(GameObject _parent, ISetupSettings _setupSettings) where T : Component, ISetuppable {
+            GameObject newGameObject = new GameObject();
+            T newInstance = newGameObject.AddComponent<T>();
             newInstance.Setup(_setupSettings);
             return newInstance;
         }
