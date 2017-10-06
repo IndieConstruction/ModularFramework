@@ -22,7 +22,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Assertions;
 using System.Collections.Generic;
 using ModularFramework.Modules;
-using DG.DemiLib.Attributes;
 using System.Linq;
 
 namespace ModularFramework.Core
