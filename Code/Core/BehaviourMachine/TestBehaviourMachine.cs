@@ -31,11 +31,12 @@ namespace ModularFramework.Test {
         // Use this for initialization
         void Start() {
             bm = new BehaviourMachine<TestStateMachine>(new List<IBehaviour> {
-            new TestStateDummy1(),
-            new TestStateDummy2(),
-            new TestStateDummy3(),
-            new TestStateDummy4(),
-        },this);
+                new TestStateDummy1(),
+                new TestStateDummy2(),
+                new TestStateDummy3(),
+                new TestStateDummy4(),
+            },this);
+            bm.Change<TestStateDummy4>();
         }
 
         // Update is called once per frame

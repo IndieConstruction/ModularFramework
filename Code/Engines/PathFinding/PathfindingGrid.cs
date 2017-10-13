@@ -262,18 +262,6 @@ namespace ModularFramework.AI {
         #endregion
     }
 
-    #region structs for grid evn
-
-    public struct Dimension2D {
-        public int x;
-        public int y;
-        public Dimension2D(int _x, int _y) {
-            x = _x;
-            y = _y;
-        }
-
-    }
-
-    #endregion 
+ 
 
 }
