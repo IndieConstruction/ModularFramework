@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using ModularFramework.Core;
+using ModularFramework.GridSystem;
 
 namespace ModularFramework.AI {
 
@@ -44,8 +45,8 @@ namespace ModularFramework.AI {
             
             // variables init
             NodeRadius = level.CellSize.x;
-            GridDimension = new Dimension2d(Mathf.Abs(level.MinGridX) + Mathf.Abs(level.MaxGridX) + 1, Mathf.Abs(level.MinGridY) + Mathf.Abs(level.MaxGridY) + 1);
-            GridOffSet = new Dimension2d(level.MinGridX, level.MinGridY);
+            GridDimension = new Dimension2D(Mathf.Abs(level.MinGridX) + Mathf.Abs(level.MaxGridX) + 1, Mathf.Abs(level.MinGridY) + Mathf.Abs(level.MaxGridY) + 1);
+            GridOffSet = new Dimension2D(level.MinGridX, level.MinGridY);
             //GridCenterOffset = new Vector2(Mathf.RoundToInt(level.ColumnCount * NodeRadius)/2, -Mathf.RoundToInt(level.RowCount * NodeRadius)/2);
             // TODO: leggere dinamicamente
             GridCenterOffset = new Vector2(0, Mathf.RoundToInt(GridDimension.y * NodeRadius) / 2);
@@ -55,11 +56,11 @@ namespace ModularFramework.AI {
             for (int x = 0; x < GridDimension.x; x++) {
                 counter++;
                 for (int y = 0; y < GridDimension.y; y++) {
-                    Position2d normalizedPosition = GetPositionWithOffset(x, y);
+                    Position2D normalizedPosition = GetPositionWithOffset(x, y);
                     if (level.TileExist(normalizedPosition.x, normalizedPosition.y)) {
                         Nodes[x, y] = new Node(
                             level.IsTraversable(normalizedPosition.x, normalizedPosition.y),
-                            new Position2d(normalizedPosition.x, normalizedPosition.y),
+                            new Position2D(normalizedPosition.x, normalizedPosition.y),
                             level.GetTileWorldPosition(normalizedPosition.x, normalizedPosition.y)
                             );
                     } else {

@@ -1,6 +1,26 @@
-﻿using UnityEngine;
+﻿/* --------------------------------------------------------------
+*   Indie Contruction : Modular Framework for Unity
+*   Copyright(c) 2016 Indie Construction / Paolo Bragonzi
+*   All rights reserved. 
+*   For any information refer to http://www.indieconstruction.com
+*   
+*   This library is free software; you can redistribute it and/or
+*   modify it under the terms of the GNU Lesser General Public
+*   License as published by the Free Software Foundation; either
+*   version 3.0 of the License, or(at your option) any later version.
+*   
+*   This library is distributed in the hope that it will be useful,
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+*   Lesser General Public License for more details.
+*   
+*   You should have received a copy of the GNU Lesser General Public
+*   License along with this library.
+* -------------------------------------------------------------- */
+using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using ModularFramework.GridSystem;
 
 namespace ModularFramework.AI {
     /// <summary>
@@ -8,8 +28,8 @@ namespace ModularFramework.AI {
     /// </summary>
     public abstract class PathfindingGrid : MonoBehaviour {
         public LayerMask UnwalkableMask;
-        public Dimension2d GridDimension;
-        public Dimension2d GridOffSet;
+        public Dimension2D GridDimension;
+        public Dimension2D GridOffSet;
         public Vector2 GridWorldSize;
         public Vector2 GridCenterOffset;
         public float NodeRadius;
@@ -113,7 +133,7 @@ namespace ModularFramework.AI {
         /// <param name="y"></param>
         /// <returns></returns>
         public Node GetNode(int x, int y) {
-            Position2d zeroBasedPosition = GetPositionZeroBased(x, y);
+            Position2D zeroBasedPosition = GetPositionZeroBased(x, y);
             // Debug.LogFormat("{0}:{1} ({2}:{3})", zeroBasedPosition.x, zeroBasedPosition.y, x, y);
             Node returnNode = Nodes[zeroBasedPosition.x, zeroBasedPosition.y];
             //Debug.LogFormat("{0}:{1} ({2}:{3}) -> {4}", zeroBasedPosition.x, zeroBasedPosition.y, x, y, returnNode.WorldPosition);
@@ -167,7 +187,7 @@ namespace ModularFramework.AI {
         public Node GetNeighbour(Node _node, GridDirection _direction) {
             Node returnNode = null;
             // tengo conto del possibile indice negativo
-            Position2d realPosition = _node.PositionOnGrid;
+            Position2D realPosition = _node.PositionOnGrid;
             switch (_direction) {
                 case GridDirection.left:
                     if (realPosition.x > 0)
@@ -213,10 +233,10 @@ namespace ModularFramework.AI {
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        protected Position2d GetPositionWithOffset(int x, int y) {
+        protected Position2D GetPositionWithOffset(int x, int y) {
             int _x = x - Mathf.Abs(GridOffSet.x);
             int _y = y - Mathf.Abs(GridOffSet.y);
-            return new Position2d(_x, _y);
+            return new Position2D(_x, _y);
         }
 
         /// <summary>
@@ -225,10 +245,10 @@ namespace ModularFramework.AI {
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        protected Position2d GetPositionZeroBased(int x, int y) {
+        protected Position2D GetPositionZeroBased(int x, int y) {
             int _x = x + Mathf.Abs(GridOffSet.x);
             int _y = y + Mathf.Abs(GridOffSet.y);
-            return new Position2d(_x, _y);
+            return new Position2D(_x, _y);
         }
 
         #endregion
@@ -244,31 +264,10 @@ namespace ModularFramework.AI {
 
     #region structs for grid evn
 
-    public struct Position2d {
+    public struct Dimension2D {
         public int x;
         public int y;
-        public Position2d(int _x, int _y) {
-            x = _x;
-            y = _y;
-        }
-        public override string ToString() {
-            return string.Format("[{0}:{1}]", x, y); 
-        }
-
-        public static bool operator ==(Position2d c1, Position2d c2) {
-            return c1.Equals(c2);
-        }
-
-        public static bool operator !=(Position2d c1, Position2d c2) {
-            return !c1.Equals(c2);
-        }
-
-    }
-
-    public struct Dimension2d {
-        public int x;
-        public int y;
-        public Dimension2d(int _x, int _y) {
+        public Dimension2D(int _x, int _y) {
             x = _x;
             y = _y;
         }

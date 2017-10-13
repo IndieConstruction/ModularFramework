@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using System.Linq;
+using ModularFramework.GridSystem;
 
 namespace ModularFramework.AI {
 
@@ -14,7 +15,7 @@ namespace ModularFramework.AI {
         /// <summary>
         /// Position on grid.
         /// </summary>
-        public Position2d PositionOnGrid;
+        public Position2D PositionOnGrid;
 
         /// <summary>
         /// Position of node in world space.
@@ -48,7 +49,7 @@ namespace ModularFramework.AI {
         /// </summary>
         /// <param name="_isTraversable"></param>
         /// <param name="_position"></param>
-        public Node(bool _isTraversable, Position2d _position, Vector3 _worldPosition) {
+        public Node(bool _isTraversable, Position2D _position, Vector3 _worldPosition) {
             if (_isTraversable)
                 AddTag("traversable");
             PositionOnGrid = _position;
