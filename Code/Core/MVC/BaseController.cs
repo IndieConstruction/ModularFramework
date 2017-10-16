@@ -18,6 +18,8 @@
 *   License along with this library.
 * -------------------------------------------------------------- */
 
+using System;
+
 namespace ModularFramework.Core {
 
     /// <summary>
@@ -25,53 +27,12 @@ namespace ModularFramework.Core {
     /// E' un ISetuppable, quindi le classi che ereditano da questa hanno già tutto il sistema eventi dell'ISetuppable.
     /// </summary>
     /// <typeparam name="M"></typeparam>
-    public abstract class BaseController<M> : ISetuppable {
+    public class BaseController<M> {
 
-        public M Model {
-            get { return _model; }
-            protected set { _model = value; }
-        }
-        private M _model;
+        public static BaseController<M> Instance { get; set; }
 
-        #region ISetuppable
 
-        public class Settings : ISetupSettings {
-            public M model;
-        }
 
-        /// <summary>
-        /// Evento invocato al termine di tutte le operazioni di setup.
-        /// </summary>
-        public event ISetuppableEvents.Event OnSetupCompleted;
-
-        /// <summary>
-        /// Esegue il setup esegue caching del model contenuto in <paramref name="_settings"/>.
-        /// </summary>
-        /// <param name="_settings"></param>
-        /// <returns></returns>
-        public ISetuppable Setup(ISetupSettings _settings) {
-            Settings s = _settings as Settings;
-            Model = s.model;
-            addictionalSetup(_settings);
-            SetupEnded();
-            return this;
-        }
-
-        /// <summary>
-        /// Chiamato al termine del setup base e dell'AddictionalSetup.
-        /// </summary>
-        public void SetupEnded() {
-            if (OnSetupCompleted != null)
-                OnSetupCompleted(this);
-        }
-
-        /// <summary>
-        /// Override di questa funzione per aggiungere azioni da eseguire dopo il setup base che salva il model.
-        /// </summary>
-        /// <param name="_settings"></param>
-        protected virtual void addictionalSetup(ISetupSettings _settings) { }
-
-        #endregion
     }
 
 }

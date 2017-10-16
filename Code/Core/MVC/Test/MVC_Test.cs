@@ -22,16 +22,13 @@ namespace ModularFramework.Core {
     /// Controller.
     /// </summary>
     public class MVC_Test_Controller : BaseController<MVC_Test_Model> {
-        protected override void addictionalSetup(ISetupSettings _settings) {
-            // do some addictional setup instructions...
-        }
 
-        public bool TestNameValidator() {
-            if (Model.ValidName)
+        public bool TestNameValidator(MVC_Test_Model _model) {
+            if (_model.ValidName)
                 Debug.Log("TestName is valid!");
             else
                 Debug.Log("TestName is not valid!");
-            return Model.ValidName;
+            return _model.ValidName;
         }
     }
 
@@ -46,7 +43,7 @@ namespace ModularFramework.Core {
         protected override void dataBindings(ISetupSettings _settings) {
             // do some addictional setup instructions... ex:
             model.ObserveEveryValueChanged(m => m.ValidName).Subscribe(_ => {
-                if (controller.TestNameValidator()) {
+                if (controller.TestNameValidator(model)) {
                     gameObject.name = model.TestName;
                 }
             });
@@ -57,10 +54,8 @@ namespace ModularFramework.Core {
         public string ChildViewName;
 
         private void Start() {
-            MVC_Test_Controller newController = new MVC_Test_Controller().Setup(new MVC_Test_Controller.Settings { model = new MVC_Test_Model() { TestName = ChildViewName } }) as MVC_Test_Controller;
             GenericHelper.InstantiateNewAndSetup<MVC_Test_View>(gameObject, new MVC_Test_View.Settings() {
-                controller = newController,
-                model = newController.Model,
+                model = new MVC_Test_Model() { TestName = ChildViewName },
             });
         }
     }

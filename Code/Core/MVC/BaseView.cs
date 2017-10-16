@@ -52,7 +52,6 @@ namespace ModularFramework.Core {
         public ISetuppable Setup(ISetupSettings _settings) {
             Settings s = _settings as Settings;
             model = s.model;
-            controller = s.controller;
             addictionalSetup(_settings);
             dataBindings(_settings);
             SetupEnded();

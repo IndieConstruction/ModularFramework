@@ -29,4 +29,5 @@ namespace ModularFramework.Core {
     public interface IModel {
 
     }
+
 }
