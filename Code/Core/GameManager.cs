@@ -134,12 +134,13 @@ namespace ModularFramework.Core
 
         #region Event Subscription
 
+        // TODO: https://trello.com/c/fxKJ7DsI
         void OnEnable() {
-            SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+            // SceneManager.sceneLoaded += SceneManager_sceneLoaded;
         }
 
         void OnDisable() {
-            SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
+            // SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
         }
 
 
