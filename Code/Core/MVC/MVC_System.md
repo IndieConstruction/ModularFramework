@@ -3,9 +3,24 @@
 ## Come funziona
 *Vedere file* [***ModularFramework.Core.MVC_Test***](https://github.com/IndieConstruction/ModularFramework/blob/master/Code/Core/MVC/Test/MVC_Test.cs) . 
 
+### Creazione delle classi
+
+importare la libreria ***core*** del modular framework per utilizzare le funzionalità MVC.
+```c#
+using ModularFramework.Core;
+```
+#### Model
+Far ereditare una nuova classe da ***BaseModel***;
+#### Controller
+Far ereditare una nuova classe da ***BaseController< Model >***. Come Model indicare il tipo del model che si intende utilizzare;
+#### View
+Far ereditare una nuova classe da ***BaseModel***;
+
 ### Esempio
 
 #### Creazione nuova view
+
+
 
 ```c#
 

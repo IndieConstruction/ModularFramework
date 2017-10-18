@@ -38,6 +38,10 @@ namespace ModularFramework.Core.BM {
         /// </summary>
         TView view;
 
+        public delegate void StateEventHandler(IBehaviour state);
+
+        public StateMachineBehaviour OnStateEnd;
+
         #region constructors
         /// <summary>
         /// Costruttore. Sarà necessario richiamare la funzione Init prima di utilizzarlo.
