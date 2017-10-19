@@ -11,8 +11,9 @@ Modular Framework for Unity3d
   - Player Profile Module
   - Gameplay Module
 - Module installer
-- [State Machine](Code/Core/BehaviourMachine/FSM.md)
+- [UI System](Code/Core/UI/UISystem.md)
 - [MVC System](Code/Core/MVC/MVC_System.md) 
+- [State Machine](Code/Core/BehaviourMachine/FSM.md)
 
 ## How to add ModularFramework as Submodule in your unity project.
 
