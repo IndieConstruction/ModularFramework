@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using ModularFramework.Helpers;
+using UniRx;
 
 namespace ModularFramework.Core.UISystem {
     /// <summary>
@@ -41,7 +42,7 @@ namespace ModularFramework.Core.UISystem {
             BlackMask.GetComponent<RectTransform>().anchorMin = Vector2.zero;
             BlackMask.GetComponent<RectTransform>().anchorMax = Vector2.one;
             BlackMask.GetComponent<RectTransform>().sizeDelta = Vector2.one;
-            BlackMask.color = GenericHelper.ColorFromRGB(28,28,28,blackMaskFade);
+            BlackMask.color = GenericHelper.ColorFromRGB(28,28,28,0);
 
             genericPopup = Instantiate<PopupView>(PopupViewPrefab, WindowsContainer, false);
             HidePopup();
@@ -53,11 +54,17 @@ namespace ModularFramework.Core.UISystem {
         Sequence seq;
 
         public void ShowPopup(PopupModel popupModel) {
-            if(seq != null) seq.Kill();
+            if (seq != null) seq.Kill();
             seq = DOTween.Sequence();
             genericPopup.UpdateView(popupModel);
-            seq.Append(genericPopup.GetComponent<RectTransform>().DOAnchorPosY(0,animDuration).SetEase(Ease.OutExpo));
-            seq.Insert(0, BlackMask.DOFade(blackMaskFade, animDuration));
+            seq.Append(genericPopup.GetComponent<RectTransform>().DOAnchorPosY(0, animDuration).SetEase(Ease.OutExpo));
+            if (popupModel.Modal)
+                seq.Insert(0, BlackMask.DOFade(blackMaskFade, animDuration));
+            if (popupModel.AutoHideTime > 0) {
+                seq.Append(transform.DOMove(transform.position, popupModel.AutoHideTime).OnComplete(() => {
+                    HidePopup();
+                }));
+            }
         }
 
         public void HidePopup() {

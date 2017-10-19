@@ -9,5 +9,8 @@ namespace ModularFramework.Core {
         public string Title;
         public string Text;
 
+        public bool Modal;
+        public float AutoHideTime;
+
     }
 }
