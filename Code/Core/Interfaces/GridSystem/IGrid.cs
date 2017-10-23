@@ -10,6 +10,4 @@ namespace ModularFramework.GridSystem {
         Vector2 GetWorldPositionFromGrid(Position2D _position, bool _allowOutOfBound);
     }
 
-
-
 }

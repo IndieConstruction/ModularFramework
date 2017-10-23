@@ -29,7 +29,9 @@ namespace ModularFramework.Core {
 
     public abstract class BaseView<M,C> : MonoBehaviour, ISetuppable where M : IModel {
 
-        protected M model;
+        
+
+        protected M Model;
         protected C controller;
 
         #region ISetuppable
@@ -51,7 +53,7 @@ namespace ModularFramework.Core {
         /// <returns></returns>
         public ISetuppable Setup(ISetupSettings _settings) {
             Settings s = _settings as Settings;
-            model = s.model;
+            Model = s.model;
             addictionalSetup(_settings);
             dataBindings(_settings);
             SetupEnded();

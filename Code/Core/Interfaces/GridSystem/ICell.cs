@@ -4,7 +4,7 @@ using DG.Tweening;
 namespace ModularFramework.GridSystem {
 
     public interface ICellModel {
-        Position2D GridPosition { get; }
+        
     }
 
     public interface ICellView {

@@ -27,7 +27,7 @@ namespace ModularFramework.Core {
     /// E' un ISetuppable, quindi le classi che ereditano da questa hanno già tutto il sistema eventi dell'ISetuppable.
     /// </summary>
     /// <typeparam name="M"></typeparam>
-    public class BaseController<M> {
+    public class BaseController<M> where M : BaseModel {
 
         public static BaseController<M> Instance { get; set; }
 

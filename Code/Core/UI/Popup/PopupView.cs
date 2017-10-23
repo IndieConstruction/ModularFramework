@@ -18,9 +18,9 @@ namespace ModularFramework.Core {
         #region API
 
         public virtual void UpdateView(PopupModel _model) {
-            model = _model;
-            Title.text = model.Title;
-            Body.text = model.Text;
+            Model = _model;
+            Title.text = Model.Title;
+            Body.text = Model.Text;
         }
 
         #endregion

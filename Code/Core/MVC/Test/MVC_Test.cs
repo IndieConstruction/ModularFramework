@@ -42,9 +42,9 @@ namespace ModularFramework.Core {
 
         protected override void dataBindings(ISetupSettings _settings) {
             // do some addictional setup instructions... ex:
-            model.ObserveEveryValueChanged(m => m.ValidName).Subscribe(_ => {
-                if (controller.TestNameValidator(model)) {
-                    gameObject.name = model.TestName;
+            Model.ObserveEveryValueChanged(m => m.ValidName).Subscribe(_ => {
+                if (controller.TestNameValidator(Model)) {
+                    gameObject.name = Model.TestName;
                 }
             });
         }
