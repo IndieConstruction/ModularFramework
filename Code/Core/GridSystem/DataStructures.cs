@@ -360,6 +360,15 @@ namespace ModularFramework.GridSystem {
         #endregion
     }
 
+    public struct GridMoveSet {
+        public GridMove Movement;
+        public ICellView Element;
+        public GridMoveSet(GridMove _movement, ICellView _gridElement) {
+            Movement = _movement;
+            Element = _gridElement;
+        }
+    }
+
     /// <summary>
     /// Direzioni possibili nella griglia.
     /// </summary>

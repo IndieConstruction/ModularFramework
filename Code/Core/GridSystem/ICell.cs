@@ -8,6 +8,8 @@ namespace ModularFramework.GridSystem {
     }
 
     public interface ICellView {
+        Position2D Position { get; set; }
+        Vector2 LocalPosition { get; }
         RectTransform RectTransform { get; }
         IGridView Grid { get; set; }
     }
