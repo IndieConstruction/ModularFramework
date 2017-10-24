@@ -29,9 +29,13 @@ namespace ModularFramework.Core {
 
     public abstract class BaseView<M,C> : MonoBehaviour, ISetuppable where M : IModel {
 
-        
+        private M _model;
 
-        protected M Model;
+        public M Model {
+            get { return _model; }
+            protected set { _model = value; }
+        }
+
         protected C controller;
 
         #region ISetuppable
