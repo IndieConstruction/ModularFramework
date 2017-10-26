@@ -125,7 +125,7 @@ namespace ModularFramework.GridSystem {
         /// </summary>
         public List<iGridAction> Actions;
 
-        List<iGridAction> ExecutedAction;
+        public List<iGridAction> ExecutedAction;
 
         IGridView grid;
 

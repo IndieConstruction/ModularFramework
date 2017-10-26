@@ -7,7 +7,7 @@ TODO
 
 ```c#
 
-#region minimal state machine
+    #region minimal state machine
 
         public List<IDisposable> observables = new List<IDisposable>();
 
@@ -100,7 +100,7 @@ TODO
         /// </summary>
         public event StateEventHandler OnStateChanged;
 
-        #endregion
+    #endregion
 
 ```
 
