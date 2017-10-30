@@ -73,7 +73,7 @@ namespace ModularFramework.Helpers {
             }
             return enumList;
         }
-
+        
         #endregion
 
         #region Colors
@@ -138,7 +138,7 @@ namespace ModularFramework.Helpers {
         /// <returns></returns>
         public static T InstantiateNewAndSetup<T>(GameObject _parent, ISetupSettings _setupSettings) where T : Component, ISetuppable {
             GameObject newGameObject = new GameObject();
-            if(_parent)
+            if (_parent)
                 newGameObject.transform.SetParent(_parent.transform);
             T newInstance = newGameObject.AddComponent<T>();
             newInstance.Setup(_setupSettings);
