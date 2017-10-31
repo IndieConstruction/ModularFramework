@@ -59,6 +59,8 @@ namespace ModularFramework.Core
 
         #endregion
 
+        public static GameplayEventsManager GameplayEvents;
+
         [HideInInspector] 
         public ModuleManager Modules = new ModuleManager();
         [HideInInspector]
