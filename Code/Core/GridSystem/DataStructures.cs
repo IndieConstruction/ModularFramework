@@ -258,12 +258,20 @@ namespace ModularFramework.GridSystem {
             switch (_direction) {
                 case GridDirectionMove.up:
                     return new Position2D(_startPosition.x, _startPosition.y + 1);
+                case GridDirectionMove.up_right:
+                    return new Position2D(_startPosition.x + 1, _startPosition.y + 1);
                 case GridDirectionMove.right:
                     return new Position2D(_startPosition.x + 1, _startPosition.y);
+                case GridDirectionMove.right_down:
+                    return new Position2D(_startPosition.x + 1, _startPosition.y - 1);
                 case GridDirectionMove.down:
                     return new Position2D(_startPosition.x, _startPosition.y - 1);
+                case GridDirectionMove.down_left:
+                    return new Position2D(_startPosition.x - 1, _startPosition.y - 1);
                 case GridDirectionMove.left:
                     return new Position2D(_startPosition.x - 1, _startPosition.y);
+                case GridDirectionMove.left_up:
+                    return new Position2D(_startPosition.x - 1, _startPosition.y + 1);
                 case GridDirectionMove.none:
                 default:
                     return _startPosition;
@@ -352,6 +360,21 @@ namespace ModularFramework.GridSystem {
             returnList.Add(new GridMove(_position, GridDirectionMove.left));
             return returnList;
         }
+
+        /// <summary>
+        /// Restitiusce la lista dei 4 movimenti diagonali partendo dalla posizione passata.
+        /// </summary>
+        /// <param name="_position"></param>
+        /// <returns></returns>
+        public static List<GridMove> AllDiagonalsMoves(Position2D _position) {
+            List<GridMove> returnList = new List<GridMove>();
+            returnList.Add(new GridMove(_position, GridDirectionMove.up_right));
+            returnList.Add(new GridMove(_position, GridDirectionMove.right_down));
+            returnList.Add(new GridMove(_position, GridDirectionMove.down_left));
+            returnList.Add(new GridMove(_position, GridDirectionMove.left_up));
+            return returnList;
+        }
+
         /// <summary>
         /// Lista vuota.
         /// </summary>
@@ -378,6 +401,10 @@ namespace ModularFramework.GridSystem {
         right = 2,
         down = 3,
         left = 4,
+        up_right = 5,
+        right_down = 6,
+        down_left = 7,
+        left_up = 8,
     }
     #endregion
 
