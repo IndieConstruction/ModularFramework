@@ -17,15 +17,12 @@
 *   You should have received a copy of the GNU Lesser General Public
 *   License along with this library.
 * -------------------------------------------------------------- */
-using UnityEngine;
-using System;
-using System.Collections.Generic;
 
-/// <summary>
-/// 
-/// </summary>
 namespace ModularFramework.Core {
 
+    /// <summary>
+    /// Interface for MVC model classes.
+    /// </summary>
     public interface IModel {
 
     }

@@ -6,7 +6,7 @@ using UnityEngine;
 using ModularFramework.Core.RewardSystem;
 
 
-namespace ModularFramework.QuestSystem {
+namespace ModularFramework.Core.QuestSystem {
     /// <summary>
     /// Base class for any type of quest:
     /// - 

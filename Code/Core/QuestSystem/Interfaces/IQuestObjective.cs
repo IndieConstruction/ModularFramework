@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ModularFramework.Core.RewardSystem;
 
-namespace ModularFramework.QuestSystem {
+namespace ModularFramework.Core.QuestSystem {
 
     public interface IQuestObjective {
         /// <summary>
@@ -20,7 +20,7 @@ namespace ModularFramework.QuestSystem {
         string Description { get; }
 
         /// <summary>
-        /// IQuestItems da completare per completare l'obbiettivo.
+        /// Collezione di IQuestItems da completare per completare l'obbiettivo.
         /// </summary>
         List<IQuestItem> ObjectiveItems { get; }
 

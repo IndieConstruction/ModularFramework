@@ -10,6 +10,8 @@ Modular Framework for Unity3d
   - Localization Module
   - Player Profile Module
   - Gameplay Module
+  - [Quest System](Code/Core/QuestSystem/QuestSystem.md)
+  - [Reward System](Code/Core/RewardSystem/RewardSystem.md)
 - Module installer
 - [UI System](Code/Core/UI/UISystem.md)
 - [MVC System](Code/Core/MVC/MVC_System.md) 

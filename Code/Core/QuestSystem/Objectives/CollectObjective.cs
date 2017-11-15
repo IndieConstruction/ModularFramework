@@ -5,7 +5,7 @@ using UnityEngine;
 using UniRx;
 using ModularFramework.Core.RewardSystem;
 
-namespace ModularFramework.QuestSystem {
+namespace ModularFramework.Core.QuestSystem {
     /// <summary>
     /// Quest objective with expect to collect a number of items to be completed. 
     /// </summary>
@@ -14,47 +14,64 @@ namespace ModularFramework.QuestSystem {
 
         #region properties
 
-        private string _title;
-
+        /// <summary>
+        /// Titolo dell'obbiettivo.
+        /// </summary>
         public string Title {
             get { return _title; }
             set { _title = value; }
         }
+        private string _title;
 
-        private string _description;
-
+        /// <summary>
+        /// Descrizione dell'obbiettivo.
+        /// </summary>
         public string Description {
             get { return _description; }
             set { _description = value; }
         }
+        private string _description;
 
-        private List<IQuestItem> _itemsCollected;
-
+        /// <summary>
+        /// Collezione di IQuest items che compongono questo obbiettivo.
+        /// </summary>
         public List<IQuestItem> ObjectiveItems {
             get { return _itemsCollected; }
             set { _itemsCollected = value; }
         }
+        private List<IQuestItem> _itemsCollected;
 
+        /// <summary>
+        /// Descrive se questo obbiettivo è obbligatorio per il completamento della quest.
+        /// </summary>
         public bool IsMandatory { get { return true; } }
 
-        private bool _isComplete;
-
+        /// <summary>
+        /// Identifica se l'obbiettivo è completato. Viene impostata automaticamente.
+        /// </summary>
         public bool IsComplete {
             get { return _isComplete; }
             set { _isComplete = value; }
         }
+        private bool _isComplete;
 
-        private IQuest _parentQuest;
-
+        /// <summary>
+        /// Parent quest auto injected during setup.
+        /// </summary>
         public IQuest ParentQuest {
             get { return _parentQuest; }
             set { _parentQuest = value; }
         }
+        private IQuest _parentQuest;
 
+        /// <summary>
+        /// Lista delle eventuali ricompense legate a questo obbiettivo.
+        /// </summary>
         public List<IRewardBehaviour> Rewards { get; set; }
 
-
-
+        /// <summary>
+        /// Evento richiamato quando 
+        /// </summary>
         public event IQuestObjectiveEvents.Event OnCompleted;
         #endregion
 

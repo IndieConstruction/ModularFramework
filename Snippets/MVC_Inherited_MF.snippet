@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>MVCInherited</Title>
+      <Author>[USERNAME]</Author>
+      <Description>
+      </Description>
+      <HelpUrl>
+      </HelpUrl>
+      <Shortcut>_MVCInherited</Shortcut>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal Editable="true">
+          <ID>StructureName</ID>
+          <ToolTip>StructureName</ToolTip>
+          <Default>StructureName</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>Inherited</ID>
+          <ToolTip>Inherited</ToolTip>
+          <Default>Inherited</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>Namespace</ID>
+          <ToolTip>Namespace</ToolTip>
+          <Default>Namespace</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>using_NamespaceToImport</ID>
+          <ToolTip>using_NamespaceToImport</ToolTip>
+          <Default>using_NamespaceToImport</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>NamespaceParent</ID>
+          <ToolTip>NamespaceParent</ToolTip>
+          <Default>NamespaceParent</Default>
+          <Function>
+          </Function>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp" Delimiter="$"><![CDATA[using System;
+using System.Collections.Generic;
+using UnityEngine;
+using ModularFramework.Core;
+$using_NamespaceToImport$
+
+namespace $Namespace$ {
+    [Serializable]
+    public class $StructureName$Model : $Inherited$Model {
+
+        #region serializable variables
+
+        // $StructureName$Model variables here...
+
+        #endregion
+
+        #region non serializable properties
+
+        // $StructureName$Model non serializable properties here...
+
+        #endregion
+
+    }
+
+
+    public class $StructureName$Controller : $Inherited$Controller<$StructureName$Model> {
+
+        #region Controller Singleton
+
+        new public static $StructureName$Controller Instance {
+            get {
+                if (_instance == null) {
+                    _instance = Activator.CreateInstance<$StructureName$Controller>();
+                }
+                return _instance;
+            }
+            private set { _instance = value; }
+        }
+        private static $StructureName$Controller _instance = null;
+
+        #endregion
+
+    }
+
+
+    public class $StructureName$View : $Inherited$View<$StructureName$Model, $StructureName$Controller> {
+
+        #region setup
+
+        // Remove this regione if not needed and remove reference to extraSettings in addictionalSetup
+        #region Etra Setting extensions
+
+        new public class ExtraSettings : $Inherited$View<$StructureName$Model, $StructureName$Controller>.ExtraSettings {
+            // add custom extra settings here...
+        }
+        /// <summary>
+        /// Etra Setting extensions.
+        /// </summary>
+        new protected ExtraSettings extraSettings;
+
+        #endregion
+
+        protected override void addictionalSetup(ISetupSettings _settings) {
+            extraSettings = _settings as ExtraSettings;
+
+            controller = $StructureName$Controller.Instance as $StructureName$Controller;
+            // addictional view setup logic here...
+        }
+
+        #endregion
+
+    }
+}
+
+namespace $NamespaceParent$ {
+    [Serializable]
+    public abstract class $Inherited$Model : BaseModel {
+
+        #region serializable variables
+
+        // $Inherited$Model variables here...
+
+        #endregion
+
+        #region non serializable properties
+
+        // $Inherited$Model non serializable properties here...
+
+        #endregion
+
+    }
+
+    public abstract class $Inherited$Controller<T> : BaseController<$Inherited$Model> {
+
+        #region Controller Singleton
+
+        private static bool instanced = false;
+
+        new public static T Instance {
+            get {
+                if (instanced == false) {
+                    _instance = Activator.CreateInstance<T>();
+                    instanced = true;
+                }
+                return _instance;
+            }
+            private set { _instance = value; }
+        }
+        private static T _instance = default(T);
+
+        #endregion
+
+    }
+
+    public abstract class $Inherited$View<M, C> : BaseView<M, C>
+                                            where M : $Inherited$Model
+                                            where C : $Inherited$Controller<M> {
+
+        #region setup
+
+        // Remove this regione if not needed and remove reference to extraSettings in addictionalSetup
+        #region Etra Setting extensions
+
+        public class ExtraSettings : Settings {
+            // add custom extra settings here...
+        }
+        /// <summary>
+        /// Etra Setting extensions.
+        /// </summary>
+        protected ExtraSettings extraSettings;
+
+        #endregion
+
+        protected override void addictionalSetup(ISetupSettings _settings) {
+            extraSettings = _settings as ExtraSettings;
+
+            // addictional view setup logic here...
+        }
+
+        #endregion
+
+    }
+
+}]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

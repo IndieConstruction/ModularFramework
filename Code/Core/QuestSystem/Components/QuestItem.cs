@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ModularFramework.QuestSystem {
+namespace ModularFramework.Core.QuestSystem {
 
     public class QuestItem : MonoBehaviour, IQuestItem {
 

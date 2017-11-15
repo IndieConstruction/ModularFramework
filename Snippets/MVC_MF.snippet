@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>MVC</Title>
+      <Author>[USERNAME]</Author>
+      <Description>
+      </Description>
+      <HelpUrl>
+      </HelpUrl>
+      <Shortcut>_MVC</Shortcut>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal Editable="true">
+          <ID>NameSpaceName</ID>
+          <ToolTip>NameSpaceName</ToolTip>
+          <Default>NameSpaceName</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>ModelName</ID>
+          <ToolTip>ModelName</ToolTip>
+          <Default>ModelName</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>ControllerName</ID>
+          <ToolTip>ControllerName</ToolTip>
+          <Default>ControllerName</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>ViewName</ID>
+          <ToolTip>ViewName</ToolTip>
+          <Default>ViewName</Default>
+          <Function>
+          </Function>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp" Delimiter="$"><![CDATA[using System;
+using System.Collections.Generic;
+using UnityEngine;
+using ModularFramework.Core;
+
+namespace $NameSpaceName$ {
+
+    public class $ModelName$Model : BaseModel {
+        
+        #region serializable variables
+
+        // $ModelName$Model variables here... 
+
+        #endregion
+
+        #region non serializable properties
+
+        // $ModelName$Model non serializable properties here...
+
+        #endregion
+
+    }
+}
+
+namespace $NameSpaceName$ {
+
+    public class $ModelName$Controller : BaseController<$ModelName$Model> {
+
+        #region Controller Singleton
+
+        new public static $ModelName$Controller Instance {
+            get {
+                if (_instance == null) {
+                    _instance = Activator.CreateInstance<$ModelName$Controller>();
+                }
+                return _instance;
+            }
+            private set { _instance = value; }
+        }
+        private static $ModelName$Controller _instance = null;
+
+        #endregion
+
+    }
+}
+
+namespace $NameSpaceName$ {
+
+    public class $ModelName$View : BaseView<$ModelName$Model, $ModelName$Controller> {
+
+        #region setup
+
+        // Remove this regione if not needed and remove reference to extraSettings in addictionalSetup
+        #region Etra Setting extensions
+
+        public class ExtraSettings : Settings {
+            // add custom extra settings here...
+        }
+        /// <summary>
+        /// Etra Setting extensions.
+        /// </summary>
+        protected ExtraSettings extraSettings;
+
+        #endregion
+
+        protected override void addictionalSetup(ISetupSettings _settings) {
+            extraSettings = _settings as ExtraSettings;
+
+            controller = $ModelName$Controller.Instance as $ModelName$Controller;
+            // addictional view setup logic here...
+        }
+
+        #endregion
+
+    }
+}]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

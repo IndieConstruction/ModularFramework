@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ModularFramework.Core.RewardSystem;
 
-namespace ModularFramework.QuestSystem {
+namespace ModularFramework.Core.QuestSystem {
 
     public interface IQuest {
         // ID

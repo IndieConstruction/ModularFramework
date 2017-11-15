@@ -3,6 +3,8 @@
 ## Come funziona
 *Vedere file* [***ModularFramework.Core.MVC_Test***](https://github.com/IndieConstruction/ModularFramework/blob/master/Code/Core/MVC/Test/MVC_Test.cs) . 
 
+*Usare Snippets:* ***MVC_Inherited_MF*** e ***MVC_MF*** nella cartella *Snippets*.  
+
 ### Creazione delle classi
 
 importare la libreria ***core*** del modular framework per utilizzare le funzionalità MVC.
@@ -47,6 +49,7 @@ GenericHelper.InstantiateNewAndSetup<MVC_Test_View>(
 ```
 
 #### Settings personalizzati
+[TODO: in v.1.1 è stata aggiunta l'ereditarietà degli degli extrasettings per classi derivate. Aggiornare documentazione]
 
 Nella view o nel controller (in quanto ISetuppable) aggiungere l'extra settings come nell'esempio:
 
@@ -71,9 +74,12 @@ protected override void addictionalSetup(ISetupSettings _settings) {
 
 ## Releases
 
+### v.1.1
+- Struttura ereditabile.
+
 ### v.1.0
 - Implementazione MVC pattern.
 
 ## Next Releases
 
-### v.1.1
+### v.1.2

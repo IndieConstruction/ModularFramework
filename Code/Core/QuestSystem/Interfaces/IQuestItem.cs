@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ModularFramework.QuestSystem {
+namespace ModularFramework.Core.QuestSystem {
 
     /// <summary>
     /// Interface for any quest item.
@@ -14,6 +14,10 @@ namespace ModularFramework.QuestSystem {
         /// </summary>
         bool IsCollected { get; set; }
         
+        /// <summary>
+        /// Funzione che definisce le operazioni necessarie per "completare" l'elemento.
+        /// </summary>
+        /// <param name="questItemUse"></param>
         void Complete(IQuestItemUse questItemUse);
 
         /// <summary>

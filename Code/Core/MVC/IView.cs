@@ -18,20 +18,12 @@
 *   License along with this library.
 * -------------------------------------------------------------- */
 
-using System;
-
 namespace ModularFramework.Core {
 
     /// <summary>
-    /// Classe base per tutti i controller che usano il pattern MVC.
-    /// E' un ISetuppable, quindi le classi che ereditano da questa hanno già tutto il sistema eventi dell'ISetuppable.
+    /// Interface for MVC view classes.
     /// </summary>
-    /// <typeparam name="M"></typeparam>
-    public class BaseController<M> : IModel where M : BaseModel {
-
-        public static BaseController<M> Instance { get; set; }
-
-
+    public interface IView {
 
     }
 

@@ -1,4 +1,4 @@
-# Quest System [v.1.1](#releases) - [Bump Up](../ReadMe.md) 
+# Quest System [v.1.1](#releases) - [Modular Framework](../../../ReadMe.md) 
 
 Il quest system è formato dagli elementi di tipo [**IQuest**](#iquest), [**IQuestObjective**](#iquestobjective), [**IQuestItem**](#iquestitem), [**IQuestItemUse**](#iquestitemuse).
 
@@ -61,6 +61,9 @@ Per dichiarare completato un quest item, chiamare la funzione del QuestItem di r
 
 ## Releases
 
+### v.1.2
+- Aggiunta classe base per Quest Objective (MVC + Inheritance).
+
 ### v.1.1
 - Aggiunto IsManadatory in IQuestObjective.
 
@@ -72,5 +75,5 @@ Per dichiarare completato un quest item, chiamare la funzione del QuestItem di r
 
 ## Next Releases
 
-### v.1.2
+### v.1.3
 - 

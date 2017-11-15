@@ -1,4 +1,4 @@
-# Reward System [v.1.0](#releases) - [Bump Up](../ReadMe.md) 
+# Reward System [v.1.0](#releases) - [Modular Framework](../../../ReadMe.md)
 
 Il Reward System permette di gestire tutti i reward all'interno del gioco.
 

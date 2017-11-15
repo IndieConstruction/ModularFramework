@@ -28,7 +28,7 @@ using ModularFramework.GridSystem;
 /// </summary>
 namespace ModularFramework.Core {
 
-    public abstract class BaseView<M,C> : MonoBehaviour, ISetuppable where M : IModel {
+    public abstract class BaseView<M,C> : MonoBehaviour, ISetuppable, IView where M : IModel {
 
         private M _model;
 

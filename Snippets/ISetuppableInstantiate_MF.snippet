@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>ISetuppableInstantiate</Title>
+      <Author>[USERNAME]</Author>
+      <Description>
+      </Description>
+      <HelpUrl>
+      </HelpUrl>
+      <Shortcut>_ISetuppableInstantiate</Shortcut>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal Editable="true">
+          <ID>ISetuppableName</ID>
+          <ToolTip>ISetuppableName</ToolTip>
+          <Default>ISetuppableName</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>PrefabName</ID>
+          <ToolTip>PrefabName</ToolTip>
+          <Default>PrefabName</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>ModelName</ID>
+          <ToolTip>ModelName</ToolTip>
+          <Default>ModelName</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>ParentGO</ID>
+          <ToolTip>ParentGO</ToolTip>
+          <Default>ParentGO</Default>
+          <Function>
+          </Function>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp" Delimiter="$"><![CDATA[        
+        $ISetuppableName$ new$ISetuppableName$ = GenericHelper.InstantiateAndSetup<$ISetuppableName$>(
+            $PrefabName$,
+            $ParentGO$,
+            new $ISetuppableName$.ExtraSettings() {
+                model = $ModelName$,
+            }
+        ); // Create new $ISetuppableName$ instance and call setup with extra settings parameters
+        ]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>
