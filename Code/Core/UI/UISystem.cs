@@ -24,7 +24,10 @@ namespace ModularFramework.Core.UISystem {
         RectTransform WindowsContainer;
 
         /// <summary>
-        /// TODO: sostituire con setup iSetuppable.
+        /// Esegue setup degli elementi comuni della UI:
+        /// - Popup
+        /// - Popup modal
+        /// Crea la finestra per popup modal e non.
         /// </summary>
         public void Setup() {
             GameObject newGO = new GameObject("WindowsContainer", typeof(RectTransform), typeof(Canvas));
