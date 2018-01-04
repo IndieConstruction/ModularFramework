@@ -17,14 +17,26 @@
 *   You should have received a copy of the GNU Lesser General Public
 *   License along with this library.
 * -------------------------------------------------------------- */
+using ModularFramework.Helpers;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-namespace ModularFramework.Core {
+namespace ModularFramework.Core.QuestSystem {
 
-    /// <summary>
-    /// Interface for MVC view classes.
-    /// </summary>
-    public interface IView {
+    public class QuestSystemManager : MonoBehaviour {
+
+        /// <summary>
+        /// Crea e istanzia una quest objective view.
+        /// </summary>
+        public IQuestObjective CreateQuestObjectiveView<T>(ISetupSettings _setupSettings) where T : IQuestObjective {
+            //T newCollectQuestObjectiveView = GenericHelper.InstantiateAndSetup<T>(
+            //    ObjectivePrefab,
+            //    gameObject,
+            //    _setupSettings
+            //); // Create new CollectQuestObjectiveView instance and call setup with extra settings parameters
+            return null;
+        }
 
     }
-
 }

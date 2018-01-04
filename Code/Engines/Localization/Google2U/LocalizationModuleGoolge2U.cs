@@ -1,6 +1,6 @@
 ﻿/* --------------------------------------------------------------
 *   Indie Contruction : Modular Framework for Unity
-*   Copyright(c) 2016 Indie Construction / Paolo Bragonzi
+*   Copyright(c) 2018 Indie Construction / Paolo Bragonzi
 *   All rights reserved. 
 *   For any information refer to http://www.indieconstruction.com
 *   
