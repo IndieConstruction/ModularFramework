@@ -12,6 +12,11 @@ namespace ModularFramework.Core.RewardSystem {
     public interface IRewardBehaviour : ISetuppable {
 
         /// <summary>
+        /// Definisce l'identificativo del Reward.
+        /// </summary>
+        string ID { get; }
+
+        /// <summary>
         /// Se true il reward è già stato riscosso.
         /// </summary>
         bool IsUnlocked { get; set; }
