@@ -41,17 +41,7 @@ namespace ModularFramework.Core.QuestSystem {
         /// <summary>
         /// Collezione di IQuestItems da completare per completare l'obbiettivo.
         /// </summary>
-        List<IQuestItem> ObjectiveItems { get; }
-
-        /// <summary>
-        /// Identifica se l'obbiettivo è completato. Viene impostata automaticamente.
-        /// </summary>
-        bool IsComplete { set; get; }
-
-        /// <summary>
-        /// Indica se l'obbiettivo è obbligatorio per il completamento della quest o se è facoltativo.
-        /// </summary>
-        bool IsMandatory { get; } 
+        List<IQuestItem> ObjectiveItems { get; set; }
 
         /// <summary>
         /// Lista dei rewards riscattabili una volta completata il quest objective.
@@ -59,18 +49,37 @@ namespace ModularFramework.Core.QuestSystem {
         List<IRewardBehaviour> Rewards { get; set; }
 
         /// <summary>
-        /// Richiamata automaticamente al termine del setup.
+        /// Identifica se l'obbiettivo è completato. Viene impostata automaticamente.
         /// </summary>
-        void OnSetupDone();
+        bool IsComplete { get; }
 
-        void UpdateProgress(); // TODO: Serve?
-
-        void CheckProgress();
+        /// <summary>
+        /// Indica se l'obbiettivo è obbligatorio per il completamento della quest o se è facoltativo.
+        /// </summary>
+        bool IsMandatory { get; }
 
         /// <summary>
         /// Evento che viene invocato quando tutti i IQuest Items sono completati e quindi l'obbiettivo è da considerarsi completato.
         /// </summary>
         event IQuestObjectiveEvents.Event OnCompleted;
+
+        /// <summary>
+        /// Richiamata automaticamente al termine del setup.
+        /// </summary>
+        void OnSetupDone();
+
+        /// <summary>
+        /// Usare per eseguire le logica di update dell'obbiettivo.
+        /// Richiamata automaticamente ad ogni IQuestItem completato.
+        /// </summary>
+        void UpdateProgress();
+
+        /// <summary>
+        /// Usare per eseguire la logica dicontrollo dello stato dell'obbiettivo.
+        /// Richiamata automaticamente ad ogni IQuestItem completato. 
+        /// </summary>
+        void CheckProgress();
+        
     }
 
     public static class IQuestObjectiveExtensions {
