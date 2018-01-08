@@ -22,40 +22,35 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ModularFramework.Core.QuestSystem {
-
     /// <summary>
-    /// Interface per tutti i quest items.
+    /// Definisce una risorsa per il quest system.
+    /// Può essere utilizzato sia come risorsa generale della quest che come risorsa dell'objective.
     /// </summary>
-    public interface IQuestItem {
+    public interface IQuestResource {
 
         /// <summary>
-        /// Non è necessario settare questa proprietà, *verrà settata in automatico una volta completato*.
+        /// Funzione public da richiamare per eseguire un utilizzo di questa risorsa.
+        /// Inserire quì le azioni che effettueranno fisicamente l'utilizzo.
         /// </summary>
-        bool IsCollected { get; set; }
-        
-        /// <summary>
-        /// Funzione che definisce le operazioni necessarie per "completare" l'elemento.
-        /// </summary>
-        /// <param name="questItemUse"></param>
-        void Complete(IQuestItemUse questItemUse);
+        void Use();
 
         /// <summary>
-        /// Evento da richiamare per notificare che è terminata la funzione dell'item.
-        /// L'interfaccia obbliga la dichiarazione dell'evento, nella classe implementante devono essere specificate le modalità con cui avviene questo evento.
+        /// Evento scatenato all'utilizzo della risorsa.
         /// </summary>
-        event IQuestItemEvents.Event OnCompleted;
+        event IQuestResourceEvents.Event OnUse;
+
+        /// <summary>
+        /// Evento scatenato all'esaurimento della risorsa.
+        /// </summary>
+        event IQuestResourceEvents.Event OnOver;
 
     }
 
-    public static class IQuestItemExtensions {
-        
-    }
-
-    public static class IQuestItemEvents {
+    public static class IQuestResourceEvents {
         /// <summary>
         /// Dichiarazione della tipologia di delegato.
         /// </summary>
         /// <param name="_item">The item.</param>
-        public delegate void Event(IQuestItem _item);
+        public delegate void Event(IQuestResource _item);
     }
 }

@@ -22,13 +22,28 @@ using ModularFramework.Core.RewardSystem;
 
 namespace ModularFramework.Core.QuestSystem {
 
+    /// <summary>
+    /// Interfaccia per rappresentare una quest.
+    /// </summary>
     public interface IQuest {
         // ID
         string ID { get; }
         // Title
         string Title { get; }
-        // Objectives
+        /// <summary>
+        /// Se true la quest è completata.
+        /// </summary>
+        bool IsCompleted { get; }
+
+        /// <summary>
+        /// Objectives.
+        /// </summary>
         List<IQuestObjective> Objectives { get; }
+
+        /// <summary>
+        /// Resources.
+        /// </summary>
+        List<IQuestResource> Resources { get; }
 
         /// <summary>
         /// Lista dei rewards riscattabili una volta completata la quest.
@@ -39,7 +54,9 @@ namespace ModularFramework.Core.QuestSystem {
         /// Setups the quest.
         /// </summary>
         /// <param name="_objectives">List of objectives to complete the quest.</param>
-        void SetupQuest(List<IQuestObjective> _objectives);
+        void SetupQuest(List<IQuestObjective> objectives, List<IQuestResource> resources, List<IRewardBehaviour> rewards);
+
+        #region Events (chiamata automatica)
 
         /// <summary>
         /// Called when a single objective is completed.
@@ -52,6 +69,8 @@ namespace ModularFramework.Core.QuestSystem {
         /// </summary>
         /// <param name="quest"></param>
         event IQuestEvents.Event OnCompleted;
+
+        #endregion
 
     }
 

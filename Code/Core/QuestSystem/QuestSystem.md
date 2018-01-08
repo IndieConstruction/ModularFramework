@@ -1,11 +1,27 @@
-# Quest System [v.1.1](#releases) - [Modular Framework](../../../ReadMe.md) 
+# Quest System [v.1.3](#releases) - [Modular Framework](../../../ReadMe.md) 
 
 Il quest system è formato dagli elementi di tipo [**IQuest**](#iquest), [**IQuestObjective**](#iquestobjective), [**IQuestItem**](#iquestitem), [**IQuestItemUse**](#iquestitemuse).
 
 ## IQuest
-Rappresenta una quest. 
+Le classi che implementano IQuest rappresentano una quest. 
 
 La **quest** ha una **lista di IQuestObjective**. Al completamento di tutti gli elementi di questa lista, di tipo ***mandatory*** *(IsMandatory = true)*, la quest diventa completata e verrà scatenato *automaticamente* l'evento *IQuestEvents.Event* ***OnCompleted***.
+La quest ha anche una lista di IRewardBehaviour che rappresentano tutti i rewards che sono legati al completamento della stessa (es: sblocco next level, acquisizione stelle, etc.).
+
+
+### BaseQuest
+Per agevolare la creazione delle quest, è stata creata un classe base ***BaseQuest*** che esegue automaticamente le chiamate di setup a tutti gli elementi fondamentali che compongono la quest e il completamento di ogni objectives con disiscrizione automatica agli eventi.
+
+Tramite il costruttore BaseQuest è possibile impostare le informazioni della quest ed eseguire setup in automatico rendendo la quest, gli obbiettivi e gli items reattivi.
+
+### Implementare una nuova quest
+Quando si implementa una nuova quest di deve innanzitutto far ereditare da ***BaseQuest*** la nuova classe.
+
+Se si desidera aggiungere logiche di setup eseguire override del metodo ***AddictionalSetupQuest***. Le operazioni di registrazione eventi etc verranno comunque eseguite in automatico.
+
+Se si desidera implementare delle operazioni accessorie al completamento della quest, eseguire override della funzione ***CompleteQuest***.
+
+Se si desidera implementare delle operazioni accessorie al completamento della quest, eseguire override della funzione ***FailQuest***.
 
 ## IQuestObjective
 Definisce il singolo compito da portare a termine legato alla quest. Spiega in oltre come interagire con i Quest Items.
@@ -61,6 +77,12 @@ Per dichiarare completato un quest item, chiamare la funzione del QuestItem di r
 
 ## Releases
 
+### v.1.3
+- Aggiunta proprietà IQuest IsCompleted e controllo per evitare completamento multiplo.
+- BaseQuest aggiunti metodi AddictionalSetupQuest e CompleteQuest per aggiungere logiche custom.
+- Aggiunte Resources.
+- Aggiunta FailQuest.
+
 ### v.1.2
 - Aggiunta classe base per Quest Objective (MVC + Inheritance).
 
@@ -75,5 +97,5 @@ Per dichiarare completato un quest item, chiamare la funzione del QuestItem di r
 
 ## Next Releases
 
-### v.1.3
+### v.1.4
 - 
