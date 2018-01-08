@@ -14,7 +14,7 @@ namespace ModularFramework.Core.RewardSystem {
         /// <summary>
         /// Definisce l'identificativo del Reward.
         /// </summary>
-        string ID { get; }
+        string RewardID { get; }
 
         /// <summary>
         /// Se true il reward è già stato riscosso.
