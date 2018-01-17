@@ -29,6 +29,12 @@ namespace ModularFramework.Core.QuestSystem {
     public interface IQuestItem {
 
         /// <summary>
+        /// Serve per identificare la tipologia dell'item a cui appartiene.
+        /// Generalmente impostata direttamente nel codice o nel prefab.
+        /// </summary>
+        string TypeID { get; }
+
+        /// <summary>
         /// Non è necessario settare questa proprietà, *verrà settata in automatico una volta completato*.
         /// </summary>
         bool IsCollected { get; set; }

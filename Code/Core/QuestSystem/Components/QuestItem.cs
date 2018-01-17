@@ -23,8 +23,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace ModularFramework.Core.QuestSystem {
-
+    [Serializable]
     public class QuestItem : MonoBehaviour, IQuestItem {
+
+        /// <summary>
+        /// Identifica
+        /// </summary>
+        public string TypeID {
+            get { return _typeID; }
+            set { _typeID = value; }
+        }
+        [SerializeField]
+        protected string _typeID;
 
         public bool IsCollected { get; set; }
 
