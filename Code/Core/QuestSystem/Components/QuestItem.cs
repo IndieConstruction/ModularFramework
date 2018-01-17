@@ -40,8 +40,9 @@ namespace ModularFramework.Core.QuestSystem {
 
         public event IQuestItemEvents.Event OnCompleted;
 
-        public virtual void Complete(IQuestItemUse questItemUse) {
-            questItemUse.UseAction();
+        public virtual void Complete(IQuestItemUse questItemUse = null) {
+            if(questItemUse != null)
+                questItemUse.UseAction();
             IsCollected = true;
             if (OnCompleted != null)
                 OnCompleted(this);
