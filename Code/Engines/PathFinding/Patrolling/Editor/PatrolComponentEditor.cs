@@ -43,7 +43,7 @@ namespace ModularFramework.AI {
             // keyboard shortcut
             Event e = Event.current;
             switch (e.type) {
-                case EventType.mouseDown:
+                case EventType.MouseDown:
                     if (Event.current.control) {
                         AddPatrolPoint(component, true);
                     } else if (Event.current.shift) { 
