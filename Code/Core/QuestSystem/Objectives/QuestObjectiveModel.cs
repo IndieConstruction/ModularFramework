@@ -25,7 +25,7 @@ using System.Linq;
 
 namespace ModularFramework.Core.QuestSystem {
     [Serializable]
-    public abstract class QuestObjectiveModel : BaseModel, IQuestObjective {
+    public abstract class QuestObjectiveModel : BaseModel, IQuestObjectiveData {
 
         #region serializable variables
 
@@ -88,7 +88,7 @@ namespace ModularFramework.Core.QuestSystem {
         /// </summary>
         public bool IsComplete {
             get { return _isComplete; }
-            private set { _isComplete = value; }
+            set { _isComplete = value; }
         }
         private bool _isComplete;
 
@@ -101,43 +101,10 @@ namespace ModularFramework.Core.QuestSystem {
         }
         private List<IRewardBehaviour> _rewards;
 
-        public event IQuestObjectiveEvents.Event OnCompleted;
+        
 
-        /// <summary>
-        /// Richiamata automaticamente al termine del setup.
-        /// Se non sovrascritta non esegue nulla di aggiuntivo al setup.
-        /// </summary>
-        public virtual void OnSetupDone() { }
 
-        /// <summary>
-        /// Usare per eseguire le logica di update dell'obbiettivo.
-        /// Se non sovrascritta non esegue nulla di aggiuntivo al progress.
-        /// Al contrario la funzione interna si occupa di gestire l'item appena completato.
-        /// Richiamata automaticamente ad ogni IQuestItem completato.
-        /// </summary>
-        public virtual void UpdateProgress() { }
-
-        /// <summary>
-        /// Usare per eseguire la logica dicontrollo dello stato dell'obbiettivo. 
-        /// Se non sovrascritta esegue il controllo che non sia già completato l'obbiettivo e che non ci siano items ancora da raccogliere. In caso contrario esegue la funzione "Complete()".
-        /// In caso di Override, in caso di check positivo, richiamare Complete().
-        /// Richiamata automaticamente ad ogni IQuestItem completato. 
-        /// </summary>
-        public virtual void CheckProgress() {
-            if (!IsComplete && ObjectiveItems.FindAll(i => i.IsCollected == false).Count == 0) {
-                Complete();
-            }
-        }
-
-        /// <summary>
-        /// Funzione da richiamare per dichiarare completato l'obbiettivo.
-        /// </summary>
-        protected void Complete() {
-            IsComplete = true;
-            if (OnCompleted != null)
-                OnCompleted(this);
-        }
-
+        
         #endregion
 
     }

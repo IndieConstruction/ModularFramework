@@ -25,18 +25,20 @@ using UniRx;
 using ModularFramework.Core.RewardSystem;
 
 namespace ModularFramework.Core.QuestSystem {
+    // TODO: #13 Non dovrebbe più servire. Verificare ed eliminare.
     /// <summary>
     /// Quest objective with expect to collect a number of items to be completed. 
     /// </summary>
     /// <seealso cref="ModularFramework.QuestSystem.IQuestObjective" />
-    public class CollectObjective : IQuestObjective {
+    public class CollectObjective {
+    //public class CollectObjective : IQuestObjective {
 
-        #region properties
+            #region properties
 
-        /// <summary>
-        /// Titolo dell'obbiettivo.
-        /// </summary>
-        public string Title {
+            /// <summary>
+            /// Titolo dell'obbiettivo.
+            /// </summary>
+            public string Title {
             get { return _title; }
             set { _title = value; }
         }
@@ -101,11 +103,11 @@ namespace ModularFramework.Core.QuestSystem {
         }
 
         public void CheckProgress() {
-            if (!IsComplete && ObjectiveItems.FindAll(i => i.IsCollected == false).Count == 0) {
-                IsComplete = true;
-                if (OnCompleted != null)
-                    OnCompleted(this);
-            }
+            //if (!IsComplete && ObjectiveItems.FindAll(i => i.IsCollected == false).Count == 0) {
+            //    IsComplete = true;
+            //    if (OnCompleted != null)
+            //        OnCompleted(this);
+            //}
         }
 
         public void OnSetupDone() {

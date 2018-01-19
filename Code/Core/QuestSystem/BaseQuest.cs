@@ -144,8 +144,8 @@ namespace ModularFramework.Core.QuestSystem {
         /// <param name="_objective">The objective.</param>
         public virtual void OnObjectiveCompleted(IQuestObjective objective) {
             objective.OnCompleted -= OnObjectiveCompleted;
-            Debug.LogFormat("Objective {0} completed! ", objective.Title);
-            if (Objectives.FindAll(o => o.IsComplete == false || o.IsMandatory == true).Count == 0) {
+            Debug.LogFormat("Objective {0} completed! ", objective.Model.Title);
+            if (Objectives.FindAll(o => o.Model.IsComplete == false || o.Model.IsMandatory == true).Count == 0) {
                 internalCompleteQuest();
             }
         }

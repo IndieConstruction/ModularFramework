@@ -18,45 +18,15 @@
 *   License along with this library.
 * -------------------------------------------------------------- */
 using System.Collections.Generic;
-using ModularFramework.Core.RewardSystem;
 
 namespace ModularFramework.Core.QuestSystem {
 
     public interface IQuestObjective {
-        /// <summary>
-        /// Parent quest auto injected during setup.
-        /// </summary>
-        IQuest ParentQuest { get; set; }
 
         /// <summary>
-        /// Titolo dell'obbiettivo.
+        /// Model.
         /// </summary>
-        string Title { get; }
-
-        /// <summary>
-        /// Descrizione dell'obbiettivo.
-        /// </summary>
-        string Description { get; }
-
-        /// <summary>
-        /// Collezione di IQuestItems da completare per completare l'obbiettivo.
-        /// </summary>
-        List<IQuestItem> ObjectiveItems { get; set; }
-
-        /// <summary>
-        /// Lista dei rewards riscattabili una volta completata il quest objective.
-        /// </summary>
-        List<IRewardBehaviour> Rewards { get; set; }
-
-        /// <summary>
-        /// Identifica se l'obbiettivo è completato. Viene impostata automaticamente.
-        /// </summary>
-        bool IsComplete { get; }
-
-        /// <summary>
-        /// Indica se l'obbiettivo è obbligatorio per il completamento della quest o se è facoltativo.
-        /// </summary>
-        bool IsMandatory { get; }
+        IQuestObjectiveData Model { get; }
 
         /// <summary>
         /// Evento che viene invocato quando tutti i IQuest Items sono completati e quindi l'obbiettivo è da considerarsi completato.
@@ -67,6 +37,12 @@ namespace ModularFramework.Core.QuestSystem {
         /// Richiamata automaticamente al termine del setup.
         /// </summary>
         void OnSetupDone();
+
+        /// <summary>
+        /// Funzione che setta la collezione dei quest items.
+        /// </summary>
+        /// <returns></returns>
+        List<IQuestItem> SetQuestItems();
 
         /// <summary>
         /// Usare per eseguire le logica di update dell'obbiettivo.
@@ -83,15 +59,18 @@ namespace ModularFramework.Core.QuestSystem {
     }
 
     public static class IQuestObjectiveExtensions {
+
         /// <summary>
         /// Setups the specified quest. Auto called from ParentQuest and subscribe it to OnObjectiveCompleted event.
         /// </summary>
         /// <param name="_this">The this.</param>
         /// <param name="_quest">The quest.</param>
+        /// <param name="_getQuestItemsDelegate">Se non nullo, richiama la funzione delegata <paramref name="_getQuestItemsDelegate"/> per caricare gli ObjectiveItems.</param>
         public static void Setup(this IQuestObjective _this, IQuest _quest) {
-            _this.ParentQuest = _quest;
+            _this.Model.ParentQuest = _quest;
             _this.OnCompleted += _quest.OnObjectiveCompleted;
-            foreach (IQuestItem questItem in _this.ObjectiveItems) {
+            _this.SetQuestItems();
+            foreach (IQuestItem questItem in _this.Model.ObjectiveItems) {
                 questItem.OnCompleted += _this.OnItemCompleted;
             }
             _this.OnSetupDone();
