@@ -32,6 +32,11 @@ namespace ModularFramework.Core.QuestSystem {
                                             where M : QuestObjectiveModel
                                             where C : QuestObjectiveController<M> {
 
+        /// <summary>
+        /// Gameobject contenitore che contiene i QuestItems come childs.
+        /// </summary>
+        public GameObject ItemContainer;
+
         #region setup
 
         // Remove this regione if not needed and remove reference to extraSettings in addictionalSetup
@@ -39,6 +44,16 @@ namespace ModularFramework.Core.QuestSystem {
 
         public class ExtraSettings : Settings {
             // add custom extra settings here...
+
+            /// <summary>
+            /// Parent quest.
+            /// </summary>
+            public IQuest ParentQuest;
+            /// <summary>
+            /// Gameobject contenitore che contiene i QuestItems come childs.
+            /// </summary>
+            public GameObject ItemContainer;
+
         }
         /// <summary>
         /// Etra Setting extensions.
@@ -54,11 +69,14 @@ namespace ModularFramework.Core.QuestSystem {
         protected override void addictionalSetup(ISetupSettings _settings) {
             extraSettings = _settings as ExtraSettings;
 
+            ItemContainer = extraSettings.ItemContainer;
+            Model.ParentQuest = extraSettings.ParentQuest;
             // addictional view setup logic here...
+            this.Setup(Model.ParentQuest);
         }
 
         /// <summary>
-        /// Eseguire l'override di questa funzione per specificare come riempire la collezione degli objective items.
+        /// Eseguire l'override di questa funzione e far ritornare la collezione di objective items da salvare nel model.
         /// Se non si esegue l'override verrà utilizzata la collezione del model ObjectiveItems attuale.
         /// </summary>
         /// <returns></returns>

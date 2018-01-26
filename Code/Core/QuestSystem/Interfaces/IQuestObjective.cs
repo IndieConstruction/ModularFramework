@@ -69,7 +69,7 @@ namespace ModularFramework.Core.QuestSystem {
         public static void Setup(this IQuestObjective _this, IQuest _quest) {
             _this.Model.ParentQuest = _quest;
             _this.OnCompleted += _quest.OnObjectiveCompleted;
-            _this.SetQuestItems();
+            _this.Model.ObjectiveItems = _this.SetQuestItems();
             foreach (IQuestItem questItem in _this.Model.ObjectiveItems) {
                 questItem.OnCompleted += _this.OnItemCompleted;
             }
