@@ -234,6 +234,22 @@ namespace ModularFramework.Helpers {
 
         #endregion
 
+        #region Color
+
+        /// <summary>
+        /// Set alpha amount preserving rgb values.
+        /// </summary>
+        /// <param name="_this"></param>
+        /// <param name="alpha"></param>
+        /// <returns></returns>
+        public static Color SetAlphaColor(this Color _this, float alpha) {
+            Color returnColor = new Color(_this.r, _this.g, _this.b, alpha);
+            _this = returnColor;
+            return returnColor; 
+        }
+
+        #endregion
+
         #endregion
 
     }
