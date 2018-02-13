@@ -12,7 +12,7 @@ namespace ModularFramework.Core.UISystem {
     /// </summary>
     public class UISystem : MonoBehaviour {
 
-        public GameObject RootComponent;
+        public GameObject UIRootComponent;
         public PopupView PopupViewPrefab;
         /// <summary>
         /// Maskera che oscura lo sfondo.
@@ -32,7 +32,7 @@ namespace ModularFramework.Core.UISystem {
         public void Setup() {
             GameObject newGO = new GameObject("WindowsContainer", typeof(RectTransform), typeof(Canvas));
             WindowsContainer = newGO.GetComponent<RectTransform>();
-            WindowsContainer.SetParent(RootComponent.transform, false);
+            WindowsContainer.SetParent(UIRootComponent.transform, false);
             WindowsContainer.anchorMin = Vector2.zero;
             WindowsContainer.anchorMax = Vector2.one;
             WindowsContainer.sizeDelta = Vector2.one;
