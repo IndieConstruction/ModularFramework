@@ -56,6 +56,10 @@ namespace ModularFramework.Core.UISystem {
         PopupView genericPopup;
         Sequence seq;
 
+        /// <summary>
+        /// Mostra il popup.
+        /// </summary>
+        /// <param name="popupModel"></param>
         public void ShowPopup(PopupModel popupModel) {
             if (seq != null) seq.Kill();
             seq = DOTween.Sequence();
@@ -70,12 +74,24 @@ namespace ModularFramework.Core.UISystem {
             }
         }
 
+        /// <summary>
+        /// Nasconde il popup.
+        /// </summary>
+        /// <param name="closeCallback"></param>
         public void HidePopup() {
             float animDuration = 1f;
             if (seq != null) seq.Kill();
             seq = DOTween.Sequence();
             seq.Append(genericPopup.GetComponent<RectTransform>().DOAnchorPosY(-Screen.height, animDuration).SetEase(Ease.OutExpo));
             seq.Insert(0, BlackMask.DOFade(0, animDuration));
+            seq.OnComplete(() => { onPopupClosed(); });
+        }
+
+        /// <summary>
+        /// #33 | Ripensare OnPopupClosed callback event
+        /// </summary>
+        void onPopupClosed() {
+            Bolt.CustomEvent.Trigger(gameObject, "OnPopupClosed");
         }
 
         #endregion
