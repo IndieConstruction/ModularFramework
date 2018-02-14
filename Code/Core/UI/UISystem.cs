@@ -48,7 +48,7 @@ namespace ModularFramework.Core.UISystem {
             BlackMask.color = GenericHelper.ColorFromRGB(28,28,28,0);
 
             genericPopup = Instantiate<PopupView>(PopupViewPrefab, WindowsContainer, false);
-            HidePopup(false);
+
         }
 
         #region popup
