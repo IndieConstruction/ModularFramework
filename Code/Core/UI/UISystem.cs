@@ -48,7 +48,7 @@ namespace ModularFramework.Core.UISystem {
             BlackMask.color = GenericHelper.ColorFromRGB(28,28,28,0);
 
             genericPopup = Instantiate<PopupView>(PopupViewPrefab, WindowsContainer, false);
-            HidePopup();
+            HidePopup(false);
         }
 
         #region popup
@@ -60,7 +60,7 @@ namespace ModularFramework.Core.UISystem {
         /// Mostra il popup.
         /// </summary>
         /// <param name="popupModel"></param>
-        public void ShowPopup(PopupModel popupModel) {
+        public void ShowPopup(PopupModel popupModel, bool withCallback = true) {
             if (seq != null) seq.Kill();
             seq = DOTween.Sequence();
             genericPopup.UpdateView(popupModel);
@@ -68,9 +68,12 @@ namespace ModularFramework.Core.UISystem {
             if (popupModel.Modal)
                 seq.Insert(0, BlackMask.DOFade(blackMaskFade, animDuration));
             if (popupModel.AutoHideTime > 0) {
-                seq.Append(transform.DOMove(transform.position, popupModel.AutoHideTime).OnComplete(() => {
-                    HidePopup();
-                }));
+                seq.Append(transform.DOMove(transform.position, popupModel.AutoHideTime));
+                if (withCallback)
+                    seq.OnComplete(() => { onPopupClosed(); });
+            } else {
+                if(withCallback)
+                    seq.OnComplete(() => { onPopupOpened(); });
             }
         }
 
@@ -78,7 +81,7 @@ namespace ModularFramework.Core.UISystem {
         /// Nasconde il popup.
         /// </summary>
         /// <param name="closeCallback"></param>
-        public void HidePopup() {
+        public void HidePopup(bool withCallback = true) {
             float animDuration = 1f;
             if (seq != null) seq.Kill();
             seq = DOTween.Sequence();
@@ -92,6 +95,10 @@ namespace ModularFramework.Core.UISystem {
         /// </summary>
         void onPopupClosed() {
             Bolt.CustomEvent.Trigger(gameObject, "OnPopupClosed");
+        }
+
+        void onPopupOpened() {
+            Bolt.CustomEvent.Trigger(gameObject, "OnPopupOpened");
         }
 
         #endregion
