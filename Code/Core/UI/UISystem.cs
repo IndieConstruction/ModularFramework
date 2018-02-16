@@ -13,13 +13,16 @@ namespace ModularFramework.Core.UISystem {
     public class UISystem : MonoBehaviour {
 
         public GameObject UIRootComponent;
+        [Header("Popup Settings")]
         public PopupView PopupViewPrefab;
         /// <summary>
         /// Maskera che oscura lo sfondo.
         /// </summary>
         public Image BlackMask;
-        float blackMaskFade = 0.7f;
-        float animDuration = 0.5f;
+        public float BlackMaskFade = 0.8f;
+        public float AnimDuration = 0.2f;
+        public Ease OpenEaseCurve = Ease.Linear;
+        public Ease CloseEaseCurve = Ease.Linear;
 
         RectTransform WindowsContainer;
 
@@ -64,9 +67,9 @@ namespace ModularFramework.Core.UISystem {
             if (seq != null) seq.Kill();
             seq = DOTween.Sequence();
             genericPopup.UpdateView(popupModel);
-            seq.Append(genericPopup.GetComponent<RectTransform>().DOAnchorPosY(0, animDuration).SetEase(Ease.OutExpo));
+            seq.Append(genericPopup.GetComponent<RectTransform>().DOAnchorPosY(0, AnimDuration).SetEase(OpenEaseCurve));
             if (popupModel.Modal)
-                seq.Insert(0, BlackMask.DOFade(blackMaskFade, animDuration));
+                seq.Insert(0, BlackMask.DOFade(BlackMaskFade, AnimDuration));
             if (popupModel.AutoHideTime > 0) {
                 seq.Append(transform.DOMove(transform.position, popupModel.AutoHideTime));
                 if (withCallback)
@@ -82,11 +85,10 @@ namespace ModularFramework.Core.UISystem {
         /// </summary>
         /// <param name="closeCallback"></param>
         public void HidePopup(bool withCallback = true) {
-            float animDuration = 1f;
             if (seq != null) seq.Kill();
             seq = DOTween.Sequence();
-            seq.Append(genericPopup.GetComponent<RectTransform>().DOAnchorPosY(-Screen.height, animDuration).SetEase(Ease.OutExpo));
-            seq.Insert(0, BlackMask.DOFade(0, animDuration));
+            seq.Append(genericPopup.GetComponent<RectTransform>().DOAnchorPosY(-Screen.height, AnimDuration).SetEase(CloseEaseCurve));
+            seq.Insert(0, BlackMask.DOFade(0, AnimDuration));
             seq.OnComplete(() => { onPopupClosed(); });
         }
 
