@@ -9,7 +9,7 @@ namespace ModularFramework.GridSystem {
     #region Grid Strutture e Classi
 
     #region Grid
-
+    [Serializable]
     /// <summary>
     /// Rappresenta le coordinate di una posizione sulla grid.
     /// </summary>
