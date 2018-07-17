@@ -5,11 +5,12 @@ using UnityEngine;
 namespace ModularFramework.Core {
 
     public class PopupModel : BaseModel {
-
+         
         public string Title;
         public string Text;
 
         public bool Modal;
+        public bool WithTitle = false;
         public float AutoHideTime;
 
         /// <summary>

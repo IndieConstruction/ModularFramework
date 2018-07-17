@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using ModularFramework.Helpers;
 using UniRx;
-
+ 
 namespace ModularFramework.Core.UISystem {
     /// <summary>
     /// TODO: far ereditare da un'interfaccia che unifichi tutti i moduli core o i system.
@@ -19,6 +19,7 @@ namespace ModularFramework.Core.UISystem {
         /// Maskera che oscura lo sfondo.
         /// </summary>
         public Image BlackMask;
+        public Color BlackMaskColor;
         public float BlackMaskFade = 0.8f;
         public float AnimDuration = 0.2f;
         public Ease OpenEaseCurve = Ease.Linear;
@@ -48,7 +49,7 @@ namespace ModularFramework.Core.UISystem {
             BlackMask.GetComponent<RectTransform>().anchorMin = Vector2.zero;
             BlackMask.GetComponent<RectTransform>().anchorMax = Vector2.one;
             BlackMask.GetComponent<RectTransform>().sizeDelta = Vector2.one;
-            BlackMask.color = GenericHelper.ColorFromRGB(28,28,28,0);
+            BlackMask.color = BlackMaskColor;
 
             genericPopup = Instantiate<PopupView>(PopupViewPrefab, WindowsContainer, false);
 
