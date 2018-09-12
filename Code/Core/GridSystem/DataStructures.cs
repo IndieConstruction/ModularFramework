@@ -88,6 +88,7 @@ namespace ModularFramework.GridSystem {
     public interface iGridAction {
         ActionType GetActionType { get; }
         void DoAction(IGridView _grid);
+        bool IsAutomatic { get; set; }
     }
 
     public enum ActionType {
