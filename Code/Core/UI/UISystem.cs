@@ -88,7 +88,7 @@ namespace ModularFramework.Core.UISystem {
         public void HidePopup(bool withCallback = true) {
             if (seq != null) seq.Kill();
             seq = DOTween.Sequence();
-            seq.Append(genericPopup.GetComponent<RectTransform>().DOAnchorPosY(-Screen.height, AnimDuration).SetEase(CloseEaseCurve));
+            seq.Append(genericPopup.GetComponent<RectTransform>().DOAnchorPosY(-Screen.height * 2, AnimDuration).SetEase(CloseEaseCurve));
             seq.Insert(0, BlackMask.DOFade(0, AnimDuration));
             seq.OnComplete(() => { onPopupClosed(); });
         }
